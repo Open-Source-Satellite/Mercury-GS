@@ -1,3 +1,22 @@
+################################################################################### 
+# @file test_protocolwrapper.py 
+###################################################################################
+#   _  _____ ____  ____  _____
+#  | |/ /_ _/ ___||  _ \| ____|
+#  | ' / | |\___ \| |_) |  _|
+#  | . \ | |___ ) |  __/| |___
+#  |_|\_\___|____/|_|   |_____|
+###################################################################################
+# Copyright (c) 2020 KISPE Space Systems Ltd.
+#
+# Please follow the following link for the license agreement for this code:
+# www.kispe.co.uk/projectlicenses/RA2001001003
+###################################################################################
+#  Created on: 17-Aug-2020 
+#  Unit-test class for ProtocolWrapper 
+#  @author: Ricardo Mota (ricardoflmota@gmail.com)
+###################################################################################
+
 import unittest, re, sys, random
 sys.path.insert(0, '..')
 from protocolwrapper import *
@@ -66,21 +85,23 @@ class TestProtocolWrapper(unittest.TestCase):
 
     def test_chains(self):
         # 3 messages in succession
-        pw = ProtocolWrapper()
-        rc = self.input_seq(pw, [0x81, 0x15, 0x83])
+        pw = ProtocolWrapper(keep_header=True)
+        test_msg = [0x55, 0x12, 0x34, 0x56, 0x77, 0x00, 0x00, 0x00, 0x00]
+        rc = self.input_seq(pw, test_msg)     # test with a 0-byte length payload
         self.assertEqual(rc[-1], ProtocolStatus.MSG_OK)
-        self.assertEqual(pw.last_message, a2s([0x15]))
+        self.assertEqual(pw.last_message, a2s(test_msg))  # check if 
 
-        rc = self.input_seq(pw, [0x81, 0x88, 0x20, 0x83])
+        test_msg = [0x55, 0x12, 0x34, 0x56, 0x77, 0x00, 0x00, 0x00, 0x04, 0xDE, 0xAD, 0xC0, 0xDE]
+        rc = self.input_seq(pw, test_msg)
         self.assertEqual(rc[-1], ProtocolStatus.MSG_OK)
-        self.assertEqual(incoming_bytemessage, a2s([0x88, 0x20]))
+        self.assertEqual(pw.last_message, a2s(test_msg))
 
-        rc = self.input_seq(pw, [0x81, 0x01, 0x83])
-        self.assertEqual(rc[-1], ProtocolStatus.MSG_OK)
+        rc = self.input_seq(pw, [0x55, 0x01, 0x83])
+        self.assertEqual(rc[-1], ProtocolStatus.IN_MSG)
         self.assertEqual(pw.last_message, a2s([0x01]))
 
         # now with some errors between them
-        rc = self.input_seq(pw, [0x01, 0x02, 0x81, 0x12, 0x83])
+        rc = self.input_seq(pw, [0x01, 0x02, 0x55, 0x12, 0x83])
         self.assertEqual(rc[0], ProtocolStatus.ERROR)
         self.assertEqual(rc[-1], ProtocolStatus.MSG_OK)
         self.assertEqual(pw.last_message, a2s([0x12]))

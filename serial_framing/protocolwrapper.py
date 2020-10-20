@@ -1,3 +1,22 @@
+################################################################################### 
+# @file protocolwrapper.py 
+###################################################################################
+#   _  _____ ____  ____  _____
+#  | |/ /_ _/ ___||  _ \| ____|
+#  | ' / | |\___ \| |_) |  _|
+#  | . \ | |___ ) |  __/| |___
+#  |_|\_\___|____/|_|   |_____|
+###################################################################################
+# Copyright (c) 2020 KISPE Space Systems Ltd.
+#
+# Please follow the following link for the license agreement for this code:
+# www.kispe.co.uk/projectlicenses/RA2001001003
+###################################################################################
+#  Created on: 17-Aug-2020 
+#  ProtocolWrapper Class 
+#  @author: Ricardo Mota (ricardoflmota@gmail.com)
+###################################################################################
+
 from construct import *
 from sampleformat import *
 
@@ -31,7 +50,7 @@ class ProtocolWrapper(object):
     """
 
     def __init__(self,
-                 header='\x81',
+                 header='\x55',
                  footer='\x83',
                  dle='\x90',
                  after_dle_func=lambda x: x,
@@ -71,6 +90,10 @@ class ProtocolWrapper(object):
         self.last_message = ''
         self.message_buf = ''
         self.last_error = ''
+        self.payload_data_len = -1
+
+        idx_data_len = list(map(lambda msg_field: msg_field.name, message_format.subcons)).index('data')
+        self.fixed_size_data_len = sum(map(lambda x: x.sizeof(data_length=0), message_format.subcons))
 
     def wrap(self, message):
         """ Wrap a message with header, footer and DLE according
@@ -86,29 +109,25 @@ class ProtocolWrapper(object):
         return wrapped
 
     # internal state
-    (AWAITING_HEADER, RECEIVING_RESERVED_FIELD, RECEIVING_DATA_TYPE_FIELD,
-     RECEIVING_DATA_LEN_FIELD, RECEIVING_DATA_FIELD, AFTER_DLE) = range(6)
-
-    n_received_reserved_field = 0
+    (AWAITING_HEADER, IN_FRAME_HEADER, IN_FRAME_DATA, AFTER_DLE) = range(4)
 
     def input(self, incoming_byte):
         """ Call this method whenever a new byte is received. It
             returns a ProtocolStatus (see documentation of class
             for info).
         """
-        last_state = self.AWAITING_HEADER
 
         if self.state == self.AWAITING_HEADER:
             if incoming_byte == self.header:
                 if self.keep_header:
                     self.message_buf += incoming_byte
-                self.state = self.RECEIVING_RESERVED_FIELD
+                self.state = self.IN_FRAME_HEADER
                 return ProtocolStatus.START_MSG
             else:
                 self.last_error = 'Expected header (0x%02X), got 0x%02X' % (
                     ord(self.header), ord(incoming_byte))
                 return ProtocolStatus.ERROR
-        elif self.state == self.RECEIVING_RESERVED_FIELD:
+        elif self.state == self.IN_FRAME_HEADER:
             if incoming_byte == self.dle:
                 # if it's the firs byte from reserved field, can't have escape value
                 if(len(self.message_buf) == 1):
@@ -118,11 +137,23 @@ class ProtocolWrapper(object):
                     self.state = self.AFTER_DLE
                 return ProtocolStatus.IN_MSG
             else:  # just a regular message byte
-                idx_data_len = list(map(lambda msg_field: msg_field.name, message_format.subcons)).index('data')
-                fixed_size_data_len = sum(map(lambda x: x.sizeof(data_length=0), message_format.subcons))
                 self.message_buf += incoming_byte
-                if len(self.message_buf) < fixed_size_data_len :#+ 
+                if len(self.message_buf) < self.fixed_size_data_len: 
                     return ProtocolStatus.IN_MSG
+                else:
+                    self.state = self.IN_FRAME_DATA
+                    self.payload_data_len = int.from_bytes(self.message_buf[-4:].encode(),byteorder='big')
+                    if self.payload_data_len > 0:
+                        return ProtocolStatus.IN_MSG
+                    else:
+                        return self._finish_msg()
+        elif self.state == self.IN_FRAME_DATA:
+            self.message_buf += incoming_byte
+            if len(self.message_buf) < self.fixed_size_data_len + self.payload_data_len:
+                return ProtocolStatus.IN_MSG
+            else:
+                return self._finish_msg()
+            
         elif self.state == self.AFTER_DLE:
             self.message_buf += self.after_dle_func(incoming_byte)
             self.state = ProtocolStatus.IN_MSG
