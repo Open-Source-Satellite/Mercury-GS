@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -567,6 +567,16 @@
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout"/>
+      </widget>
+      <widget class="QComboBox" name="cb_serialPortSelection">
+       <property name="geometry">
+        <rect>
+         <x>480</x>
+         <y>80</y>
+         <width>151</width>
+         <height>22</height>
+        </rect>
+       </property>
       </widget>
      </widget>
     </widget>

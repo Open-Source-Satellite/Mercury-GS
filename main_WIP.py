@@ -20,6 +20,12 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QWidget
 from PyQt5.QtCore import Qt
+import serial.tools.list_ports
+
+ports = [
+    p.device
+    for p in serial.tools.list_ports.comports()
+]
 
 from platform_comms_app import Ui_Form
 
@@ -32,6 +38,7 @@ class MainWindow(QWidget, Ui_Form):
         # Should do that for all UI items, need to do this in QT designer.
         self.pushButton_2.clicked.connect(self.onClick)
         self.pushButton_3.clicked.connect(self.onClickThisTime)
+        self.cb_serialPortSelection.addItems(ports)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
