@@ -14,17 +14,38 @@
 ###################################################################################
 #  Created on: 17-Aug-2020 
 #  Main app entry point 
-#  @author: Ricardo Mota (ricardoflmota@gmail.com)
+#  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QWidget
+from PyQt5.QtCore import Qt
 
-Form, Window = uic.loadUiType("platform-comms-app.ui")
+from platform_comms_app import Ui_Form
+
+class MainWindow(QWidget, Ui_Form):
+    def __init__(self, *args, obj=None, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self)
+
+        # Should do that for all UI items, need to do this in QT designer.
+        self.pushButtonSendPcTime.clicked.connect(self.onClick)
+        self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
+
+    # TODO: I think there is a better way to handle events
+    # There is event handlers and signals, not sure what to use.
+    # https://www.learnpyqt.com/tutorials/signals-slots-events/
+    def onClick(self, event):
+        print('Clicked: Send PC Time')
+    
+    def onClickThisTime(self, event):
+        # Just a test so see how we can get data from other UI items.
+        timeFromUI = self.dateTimeEditSendThisTime.dateTime()
+        timeString = timeFromUI.toString(self.dateTimeEditSendThisTime.displayFormat())
+        print('Clicked: Send This Time')
+        print(timeString)
 
 app = QApplication([])
-window = Window()
-form = Form()
-form.setupUi(window)
+window = MainWindow()
 window.show()
 app.exec_()
