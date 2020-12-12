@@ -1,1 +1,6 @@
 __pycache__
+.DEV/
+
+# Not sure if this should be in git or not.
+# I do not understand it fully. (@dennisoline)
+venv/
