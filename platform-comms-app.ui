@@ -67,7 +67,7 @@
            </layout>
           </item>
           <item row="5" column="0" colspan="3" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="pushButtonSendTCReq">
             <property name="text">
              <string>Send TC REQ</string>
             </property>
@@ -80,7 +80,7 @@
               <property name="title">
                <string>Time Commands</string>
               </property>
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="pushButtonSendPcTime">
                <property name="geometry">
                 <rect>
                  <x>9</x>
@@ -104,7 +104,7 @@
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <item>
-                 <widget class="QPushButton" name="pushButton_3">
+                 <widget class="QPushButton" name="pushButtonSendThisTime">
                   <property name="text">
                    <string>Send this Time :</string>
                   </property>
@@ -113,10 +113,10 @@
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_2">
                   <item alignment="Qt::AlignLeft">
-                   <widget class="QDateEdit" name="dateEdit"/>
+                   <widget class="QDateEdit" name="dateEditSendThisTime"/>
                   </item>
                   <item>
-                   <widget class="QDateTimeEdit" name="dateTimeEdit">
+                   <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
                     <property name="displayFormat">
                      <string>HH:mm:ss.zzz</string>
                     </property>
@@ -135,7 +135,7 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
-                <layout class="QFormLayout" name="formLayout_3">
+                <layout class="QFormLayout" name="formLayoutTCN">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_3">
                    <property name="text">
@@ -153,7 +153,7 @@
                 </layout>
                </item>
                <item row="0" column="1">
-                <layout class="QFormLayout" name="formLayout_7">
+                <layout class="QFormLayout" name="formLayoutTimeOuts">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_7">
                    <property name="text">
@@ -171,7 +171,7 @@
                 </layout>
                </item>
                <item row="1" column="0">
-                <layout class="QFormLayout" name="formLayout_8">
+                <layout class="QFormLayout" name="formLayoutResponse">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_5">
                    <property name="text">
@@ -194,14 +194,14 @@
            </layout>
           </item>
           <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="checkBoxTelemetryContinuous">
             <property name="text">
              <string>Continuous?</string>
             </property>
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QComboBox" name="comboBox"/>
+           <widget class="QComboBox" name="comboBoxTelemetry"/>
           </item>
           <item row="0" column="1">
            <layout class="QFormLayout" name="formLayout_2">
@@ -249,7 +249,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QFormLayout" name="formLayout_4">
+           <layout class="QFormLayout" name="formLayoutTLMCH">
             <item row="0" column="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
@@ -282,7 +282,7 @@
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="QPushButton" name="pushButton_5">
+                <widget class="QPushButton" name="pushButtonSendTlmReq">
                  <property name="text">
                   <string>Send TLM REQ</string>
                  </property>
@@ -291,7 +291,7 @@
                <item row="0" column="6">
                 <layout class="QFormLayout" name="formLayout_10">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_13">
+                  <widget class="QLabel" name="labelTimeOuts">
                    <property name="text">
                     <string>TIMEOUTS:</string>
                    </property>
@@ -320,10 +320,10 @@
                 </spacer>
                </item>
                <item row="0" column="2">
-                <widget class="QLineEdit" name="lineEdit"/>
+                <widget class="QLineEdit" name="lineEditChannel"/>
                </item>
                <item row="1" column="0">
-                <widget class="QCheckBox" name="checkBox_3">
+                <widget class="QCheckBox" name="checkBoxLastReqContinuous">
                  <property name="text">
                   <string>Continuous?</string>
                  </property>
@@ -375,12 +375,12 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandData_2"/>
+             <widget class="QLineEdit" name="inputTelecommandDataUploadFrom"/>
             </item>
            </layout>
           </item>
           <item row="5" column="0" colspan="2" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="pushButtonUploadSendTcReq">
             <property name="text">
              <string>Send TC REQ</string>
             </property>
@@ -405,7 +405,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandN_2">
+             <widget class="QLineEdit" name="inputTelecommandNUploadTo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -478,7 +478,7 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_7">
                <item row="0" column="0">
-                <layout class="QFormLayout" name="formLayout_6">
+                <layout class="QFormLayout" name="formLayoutUploadTC">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_10">
                    <property name="text">
@@ -496,7 +496,7 @@
                 </layout>
                </item>
                <item row="0" column="1">
-                <layout class="QFormLayout" name="formLayout_9">
+                <layout class="QFormLayout" name="formLayoutUploadTimeOuts">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_12">
                    <property name="text">
@@ -514,7 +514,7 @@
                 </layout>
                </item>
                <item row="1" column="0">
-                <layout class="QFormLayout" name="formLayout_11">
+                <layout class="QFormLayout" name="formLayoutUploadRes">
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_16">
                    <property name="text">
