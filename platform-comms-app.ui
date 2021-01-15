@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabTelecommanding">
       <attribute name="title">
@@ -39,7 +39,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Telecommanding</string>
+          <string>Telemetry</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -48,14 +48,42 @@
           <item>
            <layout class="QFormLayout" name="formLayoutTLMCH">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="labelTlmChOne">
               <property name="text">
-               <string>TLM CH #</string>
+               <string>TLM CH 1</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="label_9">
+             <widget class="QLabel" name="labelTlmChOneValue">
+              <property name="text">
+               <string>N/A</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="labelTlmChTwo">
+              <property name="text">
+               <string>TLM CH 2</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelTlmChThree">
+              <property name="text">
+               <string>TLM CH 3</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="labelTlmChTwoValue">
+              <property name="text">
+               <string>N/A</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="labelTlmChThreeValue">
               <property name="text">
                <string>N/A</string>
               </property>
@@ -68,7 +96,7 @@
             <item>
              <widget class="QGroupBox" name="groupBox_6">
               <property name="title">
-               <string>Last Response</string>
+               <string>Ad-hoc Request</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
                <item row="0" column="1">
@@ -119,7 +147,66 @@
                <item row="0" column="2">
                 <widget class="QLineEdit" name="lineEditChannel"/>
                </item>
-               <item row="1" column="0">
+               <item row="5" column="1" rowspan="2" colspan="6">
+                <widget class="QGroupBox" name="groupBox_9">
+                 <property name="title">
+                  <string>Last Failure</string>
+                 </property>
+                 <widget class="QLabel" name="label_2">
+                  <property name="geometry">
+                   <rect>
+                    <x>20</x>
+                    <y>40</y>
+                    <width>60</width>
+                    <height>16</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Channel #</string>
+                  </property>
+                 </widget>
+                 <widget class="QLabel" name="labelTlmErrChannel">
+                  <property name="geometry">
+                   <rect>
+                    <x>90</x>
+                    <y>40</y>
+                    <width>60</width>
+                    <height>16</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>N/A</string>
+                  </property>
+                 </widget>
+                 <widget class="QLabel" name="label_6">
+                  <property name="geometry">
+                   <rect>
+                    <x>180</x>
+                    <y>40</y>
+                    <width>60</width>
+                    <height>16</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Reason</string>
+                  </property>
+                 </widget>
+                 <widget class="QLabel" name="labelTlmErrReason">
+                  <property name="geometry">
+                   <rect>
+                    <x>230</x>
+                    <y>40</y>
+                    <width>60</width>
+                    <height>16</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>N/A</string>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item row="5" column="0">
                 <widget class="QCheckBox" name="checkBoxLastReqContinuous">
                  <property name="text">
                   <string>Continuous?</string>
