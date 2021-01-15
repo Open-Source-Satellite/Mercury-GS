@@ -41,11 +41,15 @@ class MainWindow(QWidget, Ui_Form):
         print('Clicked: Send PC Time')
     
     def onClickThisTime(self, event):
-        # Just a test so see how we can get data from other UI items.
+        dateFromUi = self.dateEditSendThisTime.dateTime()
+        dateString = dateFromUi.toString(self.dateEditSendThisTime.displayFormat())
+        
         timeFromUI = self.dateTimeEditSendThisTime.dateTime()
         timeString = timeFromUI.toString(self.dateTimeEditSendThisTime.displayFormat())
+        
         print('Clicked: Send This Time')
-        print(timeString)
+        print('Date: {}'.format(dateString))
+        print('Time: {}'.format(timeString))
 
     def onClickSendTCReq(self, event):
         tc = self.inputTelecommandN.text()
