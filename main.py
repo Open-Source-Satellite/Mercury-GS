@@ -29,14 +29,15 @@ class MainWindow(QWidget, Ui_Form):
         self.setupUi(self)
 
         # Should do that for all UI items, need to do this in QT designer.
-        self.pushButtonSendPcTime.clicked.connect(self.onClick)
+        self.pushButtonSendPcTime.clicked.connect(self.onSendPcTime)
         self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
         self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
-    def onClick(self, event):
+    def onSendPcTime(self, event):
+        # TODO: get pc time and send it.
         print('Clicked: Send PC Time')
     
     def onClickThisTime(self, event):
