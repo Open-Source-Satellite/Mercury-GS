@@ -31,6 +31,7 @@ class MainWindow(QWidget, Ui_Form):
         # Should do that for all UI items, need to do this in QT designer.
         self.pushButtonSendPcTime.clicked.connect(self.onClick)
         self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
+        self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -44,6 +45,20 @@ class MainWindow(QWidget, Ui_Form):
         timeString = timeFromUI.toString(self.dateTimeEditSendThisTime.displayFormat())
         print('Clicked: Send This Time')
         print(timeString)
+
+    def onClickSendTCReq(self, event):
+        tc = self.inputTelecommandN.text()
+        data = self.inputTelecommandData.text()
+        # Text value of the comboBox. see: https://doc.qt.io/qt-5/qcombobox.html#currentData-prop
+        comboBox = self.comboBoxTelemetry.currentText()
+
+        # It returns 2 for true, and 0 for false. Is this normal in py? 0/1 is what i would expect.
+        isContinuous = self.checkBoxTelemetryContinuous.checkState() == 2
+
+        print('TC: {}'.format(tc))
+        print('Data: {}'.format(data))
+        print('ComboBox: {}'.format(comboBox))
+        print('Is continuous: {}'.format(isContinuous))
 
 app = QApplication([])
 window = MainWindow()
