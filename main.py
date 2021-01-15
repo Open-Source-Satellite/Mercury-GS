@@ -18,8 +18,9 @@
 ###################################################################################
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QWidget
+from PyQt5.QtWidgets import QFileDialog, QApplication, QLabel, QMainWindow, QWidget
 from PyQt5.QtCore import Qt
+
 
 from platform_comms_app import Ui_Form
 
@@ -33,6 +34,9 @@ class MainWindow(QWidget, Ui_Form):
         self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
         self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq)
         self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq)
+        
+        self.pushButtonOpenFileUploadFrom.clicked.connect(self.onClickUploadOpen)
+        self.pushButtonOpenFileDownloadTo.clicked.connect(self.onClickDownloadOpen)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -76,6 +80,24 @@ class MainWindow(QWidget, Ui_Form):
 
         print('Channel: {}'.format(tlmChannel))
         print('Is continuous: {}'.format(isContinuous))
+
+    def onClickUploadOpen(self, event):
+        fileDialog = QFileDialog(self)
+        fileDialog.show()
+
+        filePath = fileDialog.getOpenFileName()[0];
+        fileDialog.hide()
+        
+        self.lineEditUploadFrom.setText(filePath)
+
+    def onClickDownloadOpen(self, event):
+        fileDialog = QFileDialog(self)
+        fileDialog.show()
+
+        filePath = fileDialog.getOpenFileName()[0];
+        fileDialog.hide()
+        
+        self.lineEditDownloadTo.setText(filePath)
 
 app = QApplication([])
 window = MainWindow()
