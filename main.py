@@ -32,6 +32,7 @@ class MainWindow(QWidget, Ui_Form):
         self.pushButtonSendPcTime.clicked.connect(self.onSendPcTime)
         self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
         self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq)
+        self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -63,6 +64,17 @@ class MainWindow(QWidget, Ui_Form):
         print('TC: {}'.format(tc))
         print('Data: {}'.format(data))
         print('ComboBox: {}'.format(comboBox))
+        print('Is continuous: {}'.format(isContinuous))
+
+    def onClickSendTLMReq(self, event):
+        # labelTimeOuts
+        tlmChannel = self.lineEditChannel.text()
+        isContinuous = self.checkBoxLastReqContinuous.checkState() == 2
+        
+        # Set the TIMEOUTS value here;
+        self.labelTLMTimeouts.setText('hello')
+
+        print('Channel: {}'.format(tlmChannel))
         print('Is continuous: {}'.format(isContinuous))
 
 app = QApplication([])
