@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -455,14 +455,14 @@
                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <item row="0" column="0">
-               <widget class="QLabel" name="lblTelecommandN_2">
+               <widget class="QLabel" name="labelUploadTo">
                 <property name="text">
                  <string>Upload to:</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="inputTelecommandNUploadTo">
+               <widget class="QLineEdit" name="lineEditUploadTo">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -472,7 +472,7 @@
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="lblTelecommandData_2">
+               <widget class="QLabel" name="labelUploadFrom">
                 <property name="text">
                  <string>Upload from:</string>
                 </property>
@@ -481,7 +481,7 @@
               <item row="1" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_24">
                 <item>
-                 <widget class="QLineEdit" name="inputTelecommandDataUploadFrom"/>
+                 <widget class="QLineEdit" name="lineEditUploadFrom"/>
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButtonOpenFileUploadFrom">
@@ -497,14 +497,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
-               <widget class="QPushButton" name="pushButton_8">
+               <widget class="QPushButton" name="pushButtonUploadFile">
                 <property name="text">
                  <string>Upload Now</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_13">
+               <widget class="QPushButton" name="pushButtonAbortUploadFile">
                 <property name="text">
                  <string>Abort Upload</string>
                 </property>
@@ -526,7 +526,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QProgressBar" name="progressBar">
+             <widget class="QProgressBar" name="progressBarUpload">
               <property name="value">
                <number>24</number>
               </property>
@@ -558,14 +558,14 @@
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lblTelecommandN_3">
+             <widget class="QLabel" name="labelDownloadFrom">
               <property name="text">
                <string>Download from:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandNUploadTo_2">
+             <widget class="QLineEdit" name="lineEditDownloadFrom">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -575,7 +575,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="lblTelecommandData_3">
+             <widget class="QLabel" name="labelDownloadTo">
               <property name="text">
                <string>Download to:</string>
               </property>
@@ -584,7 +584,7 @@
             <item row="1" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_26">
               <item>
-               <widget class="QLineEdit" name="inputTelecommandDataUploadFrom_2"/>
+               <widget class="QLineEdit" name="lineEditDownloadTo"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonOpenFileDownloadTo">
@@ -600,7 +600,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QPushButton" name="pushButton_15">
+             <widget class="QPushButton" name="pushButtonRequestDownload">
               <property name="text">
                <string>Request Download</string>
               </property>
@@ -622,7 +622,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QProgressBar" name="progressBar_2">
+           <widget class="QProgressBar" name="progressBarDownload">
             <property name="value">
              <number>24</number>
             </property>
