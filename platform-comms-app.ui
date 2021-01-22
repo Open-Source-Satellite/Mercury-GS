@@ -7,18 +7,302 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>443</height>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OSSAT Platform Computer Comms</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
+     <widget class="QWidget" name="tabTelemetry">
+      <attribute name="title">
+       <string>TELECOMMANDING</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>251</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>999999</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Telemetry</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0" columnminimumwidth="0,0,0">
+          <item row="0" column="1">
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblTelecommandData">
+              <property name="text">
+               <string>Data</string>
+              </property>
+              <property name="buddy">
+               <cstring>inputTelecommandData</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="inputTelecommandData"/>
+            </item>
+           </layout>
+          </item>
+          <item row="8" column="0" colspan="3">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Time Commands</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButtonSendPcTime">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Send PC Time</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="pushButtonSendThisTime">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Send this Time :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QDateEdit" name="dateEditSendThisTime"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
+                 <property name="displayFormat">
+                  <string>HH:mm:ss.zzz</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>ms</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>dateTimeEditSendThisTime</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="4">
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>127</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Last Response</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <layout class="QFormLayout" name="formLayout_6">
+                 <property name="labelAlignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="formAlignment">
+                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                 </property>
+                 <property name="horizontalSpacing">
+                  <number>15</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>TC #</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>N</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_5">
+                   <property name="text">
+                    <string>Response</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>N/A</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="1">
+                <layout class="QFormLayout" name="formLayout_4">
+                 <property name="formAlignment">
+                  <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+                 </property>
+                 <property name="rightMargin">
+                  <number>15</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>TIMEOUTS :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="label_8">
+                   <property name="text">
+                    <string>N/A</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="2">
+           <widget class="QComboBox" name="comboBoxTelemetry">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="currentText">
+             <string/>
+            </property>
+            <property name="currentIndex">
+             <number>-1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>String</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Integer</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Floating Point</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblTelecommandN">
+              <property name="text">
+               <string>TC #</string>
+              </property>
+              <property name="buddy">
+               <cstring>inputTelecommandN</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="inputTelecommandN">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButtonSendTCReq">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Send TC REQ</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" alignment="Qt::AlignHCenter">
+           <widget class="QCheckBox" name="checkBoxTelemetryContinuous">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Continuous?</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabTelecommanding">
       <attribute name="title">
        <string>TELEMETRY</string>
@@ -39,7 +323,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Telemetry</string>
+          <string>Telecommanding</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -48,42 +332,14 @@
           <item>
            <layout class="QFormLayout" name="formLayoutTLMCH">
             <item row="0" column="0">
-             <widget class="QLabel" name="labelTlmChOne">
+             <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>TLM CH 1</string>
+               <string>TLM CH #</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="labelTlmChOneValue">
-              <property name="text">
-               <string>N/A</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="labelTlmChTwo">
-              <property name="text">
-               <string>TLM CH 2</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="labelTlmChThree">
-              <property name="text">
-               <string>TLM CH 3</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="labelTlmChTwoValue">
-              <property name="text">
-               <string>N/A</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="labelTlmChThreeValue">
+             <widget class="QLabel" name="label_9">
               <property name="text">
                <string>N/A</string>
               </property>
@@ -96,7 +352,7 @@
             <item>
              <widget class="QGroupBox" name="groupBox_6">
               <property name="title">
-               <string>Ad-hoc Request</string>
+               <string>Last Response</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
                <item row="0" column="1">
@@ -123,7 +379,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTLMTimeouts">
+                  <widget class="QLabel" name="label_14">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -131,7 +387,24 @@
                  </item>
                 </layout>
                </item>
-               <item row="0" column="5">
+               <item row="0" column="2">
+                <widget class="QLineEdit" name="lineEditChannel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QCheckBox" name="checkBoxLastReqContinuous">
+                 <property name="text">
+                  <string>Continuous?</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3" colspan="2">
                 <spacer name="horizontalSpacer">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -144,75 +417,6 @@
                  </property>
                 </spacer>
                </item>
-               <item row="0" column="2">
-                <widget class="QLineEdit" name="lineEditChannel"/>
-               </item>
-               <item row="5" column="1" rowspan="2" colspan="6">
-                <widget class="QGroupBox" name="groupBox_9">
-                 <property name="title">
-                  <string>Last Failure</string>
-                 </property>
-                 <widget class="QLabel" name="label_2">
-                  <property name="geometry">
-                   <rect>
-                    <x>20</x>
-                    <y>40</y>
-                    <width>60</width>
-                    <height>16</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>Channel #</string>
-                  </property>
-                 </widget>
-                 <widget class="QLabel" name="labelTlmErrChannel">
-                  <property name="geometry">
-                   <rect>
-                    <x>90</x>
-                    <y>40</y>
-                    <width>60</width>
-                    <height>16</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>N/A</string>
-                  </property>
-                 </widget>
-                 <widget class="QLabel" name="label_6">
-                  <property name="geometry">
-                   <rect>
-                    <x>180</x>
-                    <y>40</y>
-                    <width>60</width>
-                    <height>16</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>Reason</string>
-                  </property>
-                 </widget>
-                 <widget class="QLabel" name="labelTlmErrReason">
-                  <property name="geometry">
-                   <rect>
-                    <x>230</x>
-                    <y>40</y>
-                    <width>60</width>
-                    <height>16</height>
-                   </rect>
-                  </property>
-                  <property name="text">
-                   <string>N/A</string>
-                  </property>
-                 </widget>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QCheckBox" name="checkBoxLastReqContinuous">
-                 <property name="text">
-                  <string>Continuous?</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -223,349 +427,91 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>TELECOMMANDING</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>251</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>999999</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Telecommanding</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblTelecommandN">
-              <property name="text">
-               <string>TC #</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandN">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="5" column="0" colspan="3" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButtonSendTCReq">
-            <property name="text">
-             <string>Send TC REQ</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="3">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QGroupBox" name="groupBox_2">
-              <property name="title">
-               <string>Time Commands</string>
-              </property>
-              <widget class="QPushButton" name="pushButtonSendPcTime">
-               <property name="geometry">
-                <rect>
-                 <x>9</x>
-                 <y>29</y>
-                 <width>128</width>
-                 <height>32</height>
-                </rect>
-               </property>
-               <property name="text">
-                <string>Send PC Time</string>
-               </property>
-              </widget>
-              <widget class="QWidget" name="layoutWidget">
-               <property name="geometry">
-                <rect>
-                 <x>10</x>
-                 <y>60</y>
-                 <width>377</width>
-                 <height>38</height>
-                </rect>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QPushButton" name="pushButtonSendThisTime">
-                  <property name="text">
-                   <string>Send this Time :</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
-                  <item alignment="Qt::AlignLeft">
-                   <widget class="QDateEdit" name="dateEditSendThisTime"/>
-                  </item>
-                  <item>
-                   <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
-                    <property name="displayFormat">
-                     <string>HH:mm:ss.zzz</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="groupBox_3">
-              <property name="title">
-               <string>Last Response</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_5">
-               <item row="0" column="0">
-                <layout class="QFormLayout" name="formLayoutTCN">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_3">
-                   <property name="text">
-                    <string>TC #</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCRes">
-                   <property name="text">
-                    <string>N</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="1">
-                <layout class="QFormLayout" name="formLayoutTimeOuts">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_7">
-                   <property name="text">
-                    <string>TIMEOUTS :</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCResTimeouts">
-                   <property name="text">
-                    <string>N/A</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="1" column="0">
-                <layout class="QFormLayout" name="formLayoutResponse">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_5">
-                   <property name="text">
-                    <string>Response</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCResStatus">
-                   <property name="text">
-                    <string>N/A</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBoxTelemetryContinuous">
-            <property name="text">
-             <string>Continuous?</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="comboBoxTelemetry"/>
-          </item>
-          <item row="0" column="1">
-           <layout class="QFormLayout" name="formLayout_2">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblTelecommandData">
-              <property name="text">
-               <string>Data</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandData"/>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="widget">
+     <widget class="QWidget" name="tabFileTransfer">
       <attribute name="title">
        <string>FILE TRANSFER</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_5">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_7">
          <property name="title">
           <string>To Upload</string>
          </property>
-         <widget class="QWidget" name="gridLayoutWidget_2">
-          <property name="geometry">
-           <rect>
-            <x>-1</x>
-            <y>19</y>
-            <width>601</width>
-            <height>171</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEditUploadFrom"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelUploadTo">
-             <property name="text">
-              <string>Upload to:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="2">
-            <widget class="QLineEdit" name="lineEditUploadTo"/>
-           </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="pushButtonOpenFileUploadFrom">
-             <property name="text">
-              <string>Open</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelUploadFrom">
-             <property name="text">
-              <string>Upload from:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="3">
-            <layout class="QGridLayout" name="gridLayout_7">
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="1" column="0" colspan="3">
-              <widget class="QProgressBar" name="progressBarUpload">
-               <property name="value">
-                <number>24</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="pushButtonAbortUploadFile">
-               <property name="text">
-                <string>Abort Upload</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QPushButton" name="pushButtonUploadFile">
-               <property name="text">
-                <string>Upload Now</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QGroupBox" name="groupBox_8">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>190</y>
-            <width>600</width>
-            <height>189</height>
-           </rect>
-          </property>
-          <property name="title">
-           <string>To Download</string>
-          </property>
-          <widget class="QWidget" name="gridLayoutWidget_4">
-           <property name="geometry">
-            <rect>
-             <x>-1</x>
-             <y>19</y>
-             <width>601</width>
-             <height>171</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_8">
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEditDownloadTo"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="labelDownloadFrom">
-              <property name="text">
-               <string>Download from:</string>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <layout class="QFormLayout" name="formLayout_5">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::ExpandingFieldsGrow</enum>
               </property>
-             </widget>
-            </item>
-            <item row="0" column="1" colspan="2">
-             <widget class="QLineEdit" name="lineEditDownloadFrom"/>
-            </item>
-            <item row="1" column="2">
-             <widget class="QPushButton" name="pushButtonOpenFileDownloadTo">
-              <property name="text">
-               <string>Open</string>
+              <property name="rowWrapPolicy">
+               <enum>QFormLayout::DontWrapRows</enum>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="labelDownloadTo">
-              <property name="text">
-               <string>Download to:</string>
+              <property name="labelAlignment">
+               <set>Qt::AlignCenter</set>
               </property>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="3">
-             <layout class="QGridLayout" name="gridLayout_10">
+              <property name="formAlignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblTelecommandN_2">
+                <property name="text">
+                 <string>Upload to:</string>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="1">
-               <spacer name="horizontalSpacer_3">
+               <widget class="QLineEdit" name="inputTelecommandNUploadTo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblTelecommandData_2">
+                <property name="text">
+                 <string>Upload from:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <layout class="QHBoxLayout" name="horizontalLayout_24">
+                <item>
+                 <widget class="QLineEdit" name="inputTelecommandDataUploadFrom"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButtonOpenFileUploadFrom">
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="pushButton_8">
+                <property name="text">
+                 <string>Upload Now</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_13">
+                <property name="text">
+                 <string>Abort Upload</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -577,113 +523,471 @@
                 </property>
                </spacer>
               </item>
-              <item row="0" column="0">
-               <widget class="QPushButton" name="pushButtonRequestDownload">
-                <property name="text">
-                 <string>Request Download</string>
-                </property>
-               </widget>
+             </layout>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="progressBar">
+              <property name="value">
+               <number>24</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="title">
+          <string>To Download</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <layout class="QFormLayout" name="formLayout_8">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
+            <property name="rowWrapPolicy">
+             <enum>QFormLayout::DontWrapRows</enum>
+            </property>
+            <property name="labelAlignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="formAlignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblTelecommandN_3">
+              <property name="text">
+               <string>Download from:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="inputTelecommandNUploadTo_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblTelecommandData_3">
+              <property name="text">
+               <string>Download to:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_26">
+              <item>
+               <widget class="QLineEdit" name="inputTelecommandDataUploadFrom_2"/>
               </item>
-              <item row="1" column="0" colspan="2">
-               <widget class="QProgressBar" name="progressBarDownload">
-                <property name="value">
-                 <number>24</number>
+              <item>
+               <widget class="QPushButton" name="pushButtonOpenFileDownloadTo">
+                <property name="text">
+                 <string>...</string>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
            </layout>
-          </widget>
-         </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="pushButton_15">
+              <property name="text">
+               <string>Request Download</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_2">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
-      <attribute name="title">
-       <string>LOG</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tabConfig">
       <attribute name="title">
        <string>CONFIG</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox_7">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>641</width>
-         <height>401</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Config</string>
-       </property>
-       <widget class="QWidget" name="gridLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>1</x>
-          <y>30</y>
-          <width>641</width>
-          <height>271</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>TC/TLM Timeout (ms)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QLineEdit" name="lineEditConfigFilePath"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Config File</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="4">
-          <widget class="QPushButton" name="pushButton">
-           <property name="text">
-            <string>Open</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="comboBoxCommsBaud"/>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Comms baud</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4">
-          <widget class="QLineEdit" name="lineEditTcTlmTimeout"/>
-         </item>
-         <item row="1" column="3">
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Config</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayout_3">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>Comms baud</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QComboBox" name="comboBox">
+                <item>
+                 <property name="text">
+                  <string>9600</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>19200</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>38400</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>57600</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>115200</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>230400</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>460800</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>921600</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_25">
+                <property name="text">
+                 <string>TC/TLM Timeout (ms)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_8">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_24">
+              <property name="text">
+               <string>Config file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,0">
+              <item>
+               <widget class="QLineEdit" name="lineEdit_7"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_2">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabTest">
+      <property name="minimumSize">
+       <size>
+        <width>640</width>
+        <height>0</height>
+       </size>
+      </property>
+      <attribute name="title">
+       <string>TEST</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>Test</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayout_7">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="newFrameDelimiterLabel">
+              <property name="text">
+               <string>New Frame Delimiter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="newFrameDelimiterLineEdit">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="reservedBytesLabel">
+              <property name="text">
+               <string>RESERVED Bytes</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_22">
+              <item>
+               <widget class="QLineEdit" name="newFrameDelimiterLineEdit_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="newFrameDelimiterLineEdit_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="newFrameDelimiterLineEdit_4">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_16">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="dataTypeLabel">
+              <property name="text">
+               <string>Data Type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="newFrameDelimiterLineEdit_5">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="dataLengthLabel">
+              <property name="text">
+               <string>Data Length</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_23">
+              <item>
+               <widget class="QLineEdit" name="newFrameDelimiterLineEdit_6">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_15">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_11">
+                <property name="text">
+                 <string>Transmit</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="dataFieldLabel">
+              <property name="text">
+               <string>Data Field</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QPlainTextEdit" name="plainTextEdit_3"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="responseLabel">
+              <property name="text">
+               <string>Response</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QPlainTextEdit" name="plainTextEdit_4"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
