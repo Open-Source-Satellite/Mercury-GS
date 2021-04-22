@@ -3,6 +3,7 @@
 - [Mercury-GS](#mercury-gs)
   - [Development Setup](#development-setup)
   - [Build](#build)
+  - [Running The GUI](#running-the-gui)
 
 ## Development Setup
 
