@@ -2,7 +2,7 @@
 
 A good example of a pair of Python scripts, one which writes to a serial port and a second which reads from a serial port and presents the data in a GUI.
 
-Orginally taken from <br />
+Originally taken from <br />
  https://eli.thegreenplace.net/2009/08/07/a-live-data-monitor-with-python-pyqt-and-pyserial/ <br />
 Sources at
  https://github.com/eliben/code-for-blog/tree/master/2009/plotting_data_monitor
