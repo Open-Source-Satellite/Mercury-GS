@@ -3,6 +3,7 @@
 - [Mercury-GS](#mercury-gs)
   - [Development Setup](#development-setup)
   - [Build](#build)
+  - [Running The GUI](#running-the-gui)
 
 ## Development Setup
 
@@ -22,3 +23,6 @@ For *Qt Designer* install, it's suggested to download package from [here](https:
 To use the qt ui file from the Qt designer, we need to build it to a python file.
 You can do that by running: `pyuic5 platform-comms-app.ui -o platform_comms_app.py`
 Or by running the build script form the root of the project by running: `bash scripts/build-ui.sh`
+
+## Running The GUI
+To run the python built by the last step, run "main.py" either via command line or through a Python compatible IDE
