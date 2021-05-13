@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabTelecommanding">
       <attribute name="title">
@@ -784,5 +784,144 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButtonSendPcTime</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onSendPcTime()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>-65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSendThisTime</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickThisTime()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>126</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>-12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSendTCReq</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickSendTCReq()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>344</x>
+     <y>-71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSendTlmReq</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickSendTLMReq()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>76</x>
+     <y>-47</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonUploadFile</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickUploadOpen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>89</x>
+     <y>-78</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonRequestDownload</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickDownloadOpen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>36</x>
+     <y>-82</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonAbortUploadFile</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>onClickUploadAbort()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>110</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxCommsBaud</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>onBaudRateChange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>83</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onSendPcTime()</slot>
+  <slot>onClickThisTime()</slot>
+  <slot>onClickSendTCReq()</slot>
+  <slot>onClickSendTLMReq()</slot>
+  <slot>onClickUploadOpen()</slot>
+  <slot>onClickDownloadOpen()</slot>
+  <slot>onClickUploadAbort()</slot>
+  <slot>onBaudRateChange()</slot>
+ </slots>
 </ui>
