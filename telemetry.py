@@ -25,9 +25,8 @@ def register_callback(tlm_update_function_ptr):
     callback_telemetry_response_update = tlm_update_function_ptr
 
 
-def tlm_request_send():
-    TLM_REQUEST = "TEST"
-    low_level.send(TLM_REQUEST)
+def tlm_request_send(tlm_channel, is_continuous):
+    packet.packetize(tlm_channel, packet.DataType.TELEMETRY_REQUEST.value)
 
 
 def tlm_response(telemetry_packet):

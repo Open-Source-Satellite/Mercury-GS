@@ -18,7 +18,7 @@
 ###################################################################################
 
 from construct import *
-from sampleformat import *
+from serial_framing.sampleformat import *
 
 # The response type returned by ProtocolWrapper
 class ProtocolStatus(object):

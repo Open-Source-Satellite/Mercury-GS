@@ -3,7 +3,7 @@ from construct import *
 
 # message_crc = Struct('message_crc', ULInt32('crc'))
 
-PROTOCOL_HEADER = 0x55
+PROTOCOL_DELIMITER = 0x55
 
 # %%
 telecommand_request_format = Struct(
@@ -33,7 +33,7 @@ telecommand_response_format = Struct(
 )
 
 message_format = Struct(
-    "header" / Const(b'\x55'),
+    "header" / Const(PROTOCOL_DELIMITER),
     "reserved" / Array(3, Byte),
     "data_type" / data_type,
     "data_length" / Int32ub,
@@ -44,7 +44,7 @@ message_format = Struct(
 if __name__ == "__main__":
 
     container = Container(
-        header=b'\x55',
+        header=PROTOCOL_DELIMITER,
         reserved=[0x55, 0x69, 0x96],
         data_type="TELEMETRY_DATA",
         data_length=4,

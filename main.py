@@ -47,7 +47,7 @@ class MainWindow(QWidget, Ui_Form):
         # Register all callbacks
         telemetry.register_callback(self.telemetryReceive)
         packet.register_callback(telemetry.tlm_response, telecommand.tc_response)
-        low_level.register_callback(packet.unpacketize)
+        low_level.register_callback(packet.packet_handler_thread_start)
         # Set COMMS Baud Rate
         config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
 
@@ -96,7 +96,7 @@ class MainWindow(QWidget, Ui_Form):
         print('Channel: {}'.format(tlmChannel))
         print('Is continuous: {}'.format(isContinuous))
 
-        telemetry.tlm_request_send()
+        telemetry.tlm_request_send(tlmChannel, isContinuous)
 
 
     def onClickUploadOpen(self, event):
