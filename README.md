@@ -36,3 +36,4 @@ Download a program like [com0com](http://com0com.sourceforge.net/), create a vir
 ## Sending and Receiving
 A telemetry request can be sent by typing the requested channel into the "Channel #" box and hitting "Send TLM REQ". The request is then packetised in the frameformat denoted in the spec and sends it over COM19. This should show on TeraTerm over COM20.
 To send a message back, on TeraTerm click "File -> Send File" and navigate to the "Test Frames" folder within the repo. Select "Telemetry Request" and make sure that the "Binary" box is ticked before pressing "Open". This should send a formatted frame back to Mercury GS over COM20 -> COM19. The frame is then parsed and then displayed as a value of 1 under the "Telemetry" Section of the GUI under TLM CH 1.
+I used [HHD Free Hex Editor](https://www.hhdsoftware.com/free-hex-editor) to create these "Test Frames".
