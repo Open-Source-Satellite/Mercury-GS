@@ -17,17 +17,22 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 
-import packet
-import low_level
+from packet import packetize, DataType, data_format
+from serial_framing.frameformat import telemetry_request_builder, telemetry_response_builder
 
-def register_callback(tlm_update_function_ptr):
+
+def telemetry_register_callback(tlm_update_function_ptr):
     global callback_telemetry_response_update
     callback_telemetry_response_update = tlm_update_function_ptr
 
 
 def tlm_request_send(tlm_channel, is_continuous):
-    packet.packetize(tlm_channel, packet.DataType.TELEMETRY_REQUEST.value)
+    data = data_format([int(tlm_channel)], telemetry_request_builder)
+    packetize(data, DataType.TELEMETRY_REQUEST.value)
 
 
 def tlm_response(telemetry_packet):
-    callback_telemetry_response_update(telemetry_packet)
+    telemetry_response = telemetry_response_builder.unpack(telemetry_packet)
+    tlm_channel = telemetry_response[0]
+    tlm_data = telemetry_response[1]
+    callback_telemetry_response_update(tlm_channel, str(tlm_data))

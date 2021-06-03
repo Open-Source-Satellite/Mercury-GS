@@ -17,10 +17,16 @@
 #  @author: Ricardo Mota (ricardoflmota@gmail.com)
 ###################################################################################
 from enum import Enum
+import struct
 
 PROTOCOL_DELIMITER = 0x55
-RESERVED = [0xDE, 0xAD, 0xBE]
+RESERVED = bytearray.fromhex("DE AD BE")
 MAX_DATA_TYPES = 6
+
+telecommand_request_builder = struct.Struct("! I 8B")
+telecommand_response_builder = struct.Struct("! I B")
+telemetry_request_builder = struct.Struct("! I")
+telemetry_response_builder = struct.Struct("! I Q")
 
 
 class MessageFormat:
@@ -29,10 +35,10 @@ class MessageFormat:
     reserved2 = RESERVED[1]
     reserved3 = RESERVED[2]
 
-    def __init__(self, data, data_length, data_type):
-        self.data_length = data_length
-        self.data_type = data_type
-        self.data = data
+    def __init__(self, message_data, message_data_length, message_data_type):
+        self.data_length = message_data_length
+        self.data_type = message_data_type
+        self.data = message_data
 
 
 class DataType(Enum):
@@ -42,30 +48,17 @@ class DataType(Enum):
     TELEMETRY_REQUEST = 0x04
     FILE_UPLOAD = 0x05
     FILE_DOWNLOAD = 0x06
-
-class telecommand_request_format():
-    pass
-
-# "telecommand_number" / Int32ub,
-# "telecommand_data" / Array(8, Byte),
+    TELEMETRY_REQUEST_REJECTION = 0x07
 
 
-class telecommand_response(Enum):
+class TelecommandResponseState(Enum):
     SUCCESS = 0x00
     FAILED = 0x01
-    INVALID_CMD = 0x02
+    INVALID_LENGTH = 0x02
+    COMMAND_NOT_SUPPORTED = 0x03
+    INVALID_COMMAND_ARGUMENT = 0x04
 
 
-class telecommand_response_format():
-    pass
-
-# "telecommand_number" / Int32ub,
-# "telecommand_response" / telecommand_response,
-
-# %%
-if __name__ == "__main__":
-    header = b'\x55'
-    reserved = [0x55, 0x69, 0x96]
-    data_type = "TELEMETRY_DATA"
-    data_length = 4
-    data = [0xDE, 0xAD, 0xBE, 0xEF]
+class TelemetryResponseState(Enum):
+    SUCCESS = 0x00
+    FAILED = 0x01

@@ -1,10 +1,10 @@
-from low_level import frame_queue, send, register_callback
-from serial_framing.frameformat import MessageFormat, DataType
-import struct
+from low_level import frame_queue, send, low_level_register_callback
+from serial_framing.frameformat import MessageFormat, DataType, struct
 import threading
+import binascii
 
 
-def register_callback(tlm_function_ptr, tc_function_ptr):
+def packet_register_callback(tlm_function_ptr, tc_function_ptr):
     global callback_telemetry_response
     global callback_telecommand_response
     callback_telemetry_response = tlm_function_ptr
@@ -13,17 +13,20 @@ def register_callback(tlm_function_ptr, tc_function_ptr):
 
 def unpacketize(packet_to_data):
     frame_header_bytes = packet_to_data[:4]
-    frame_data_type_bytes = packet_to_data[4]
+    frame_data_type = packet_to_data[4]
     frame_data_length_bytes = packet_to_data[5:9]
-    frame_data_length = struct.unpack("!L", b"".join(frame_data_length_bytes))[0]
+    frame_data_length = struct.unpack("!L", frame_data_length_bytes)[0]
     frame_data_bytes = packet_to_data[9:]
-    frame_data = int.from_bytes(frame_data_bytes[0], "little")
+    # frame_data = int.from_bytes(frame_data_bytes, "big")
 
-    callback_telemetry_response(str(frame_data))
+    if frame_data_type == DataType.TELEMETRY_DATA.value:
+        callback_telemetry_response(frame_data_bytes)
+    elif frame_data_type == DataType.TELECOMMAND_RESPONSE.value:
+        callback_telecommand_response(frame_data_bytes)
 
 
 def packet_init():
-    register_callback(packet_init, packet_handler)
+    low_level_register_callback(packet_init, packet_handler)
 
 
 def packet_handler_thread_start():
@@ -40,6 +43,11 @@ def packet_handler():
 rx_packet_handler_thread = threading.Thread(target=packet_handler, args=())
 
 
+def data_format(data_to_format, data_format_builder):
+    formatted_data = data_format_builder.pack(*data_to_format)
+    return formatted_data
+
+
 def packetize(data_to_packet, data_type):
     packet_class = MessageFormat(data_to_packet, len(data_to_packet), data_type)
     packet_builder = struct.Struct("! 5B I")
@@ -50,9 +58,9 @@ def packetize(data_to_packet, data_type):
                                                   packet_class.data_type,
                                                   packet_class.data_length))
 
-    packet_packed.append(int(packet_class.data))
+    packet_packed.extend(packet_class.data)
 
-    packet = x55_scan(bytearray(packet_packed))
+    packet = x55_scan(packet_packed)
     send(packet)
 
 

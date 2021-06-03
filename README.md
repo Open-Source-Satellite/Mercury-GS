@@ -19,8 +19,6 @@ python3 -m pip install PyQt5
 
 For *Qt Designer* install, it's suggested to download package from [here](https://build-system.fman.io/qt-designer-download), it is used to edit the UI layout - [platform-comms-app.ui](platform-comms-app.ui)
 
-[serial_framing](serial_framing/) includes logic for frame parsing of protocol, the folder includes some unit test cases for testing message parsing - [test_protocolwrapper.py](serial_framing/test_protocolwrapper.py)
-
 ## Build
 To use the qt ui file from the Qt designer, we need to build it to a python file.
 You can do that by running: `pyuic5 platform-comms-app.ui -o platform_comms_app.py`

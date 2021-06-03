@@ -37,14 +37,14 @@ READING_DATA = 2
 packet_buffer = None
 
 
-def register_callback(packet_handler_thread_start_ptr):
+def low_level_register_callback(packet_handler_thread_start_ptr):
     global callback_packet_handler_thread_start
     callback_packet_handler_thread_start = packet_handler_thread_start_ptr
 
 
 def rx_listener(com):
     while True:
-        frame = [bytes([0])]
+        frame = bytearray()
         switch_states(PENDING_FRAME, com, frame)
 
 
@@ -88,41 +88,42 @@ def change_baud_rate(requested_baud_rate):
 def pending_frame(com, header_data):
     # Check if there is incoming data
     if com.in_waiting != 0:
+
+        # Clear the received data buffer if it's 2 bytes
+        if len(header_data) == 2:
+            header_data.clear()
+
         # Read a byte
         rx_byte = read_byte(com)
-        try:
-            delimiter_test = int.from_bytes(header_data[0], "little")
-            # Check if we have received a 0x55 followed by a non-0x55
-            if (PROTOCOL_DELIMITER == delimiter_test) and (rx_byte != PROTOCOL_DELIMITER):
-                # This is the start of a new frame!
-                # Collect first two bytes of header
-                header_data = [bytes([PROTOCOL_DELIMITER]), rx_byte]
-                # Switch state to GATHERING_DATA and pass the 2 bytes of header data
-                switch_states(GATHERING_DATA, com, header_data)
-            # Save the previous byte received if start of frame not detected
-        finally:
-            header_data[0] = rx_byte
-            switch_states(PENDING_FRAME, com, header_data)
+        header_data += rx_byte
+        # Check if we have received a 0x55 followed by a non-0x55
+        if (PROTOCOL_DELIMITER == header_data[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
+            # This is the start of a new frame!
+            # Switch state to GATHERING_DATA and pass the 2 bytes of header data
+            switch_states(GATHERING_DATA, com, header_data)
+        # Save the previous byte received if start of frame not detected
+        switch_states(PENDING_FRAME, com, header_data)
 
 
 def gathering_header(com, header_data):
     # Initialise Header Buffer
     header_size = 3
-    gathered_header = [0, 0, 0]
-    delimiter_byte_received = False
-    count = 0
+    gathered_header = bytearray()
+    delimiter_byte_discarded = False
+    header_count = 0
 
     # Iterate over Header bytes
-    while count < header_size:
+    while header_count < header_size:
         # Read a byte into Header Buffer
-        gathered_header[count] = read_byte(com)
+        gathered_header += read_byte(com)
         # Scan byte and previous byte for start of frame, pop off any double delimiter values
-        gathered_header, count, delimiter_byte_received = x55_scan(gathered_header, count, delimiter_byte_received, com)
+        gathered_header, header_count, delimiter_byte_discarded = x55_scan(gathered_header, header_count,
+                                                                           delimiter_byte_discarded, com)
 
     # Append gathered header onto first 2 bytes passed into this state
     header_data.extend(gathered_header)
     # Check if Data Type is within range
-    if int.from_bytes(header_data[4], "little") in range(MAX_DATA_TYPES):
+    if header_data[4] in range(MAX_DATA_TYPES):
         # Data Type within range, switch to READING_DATA state and pass header data
         switch_states(READING_DATA, com, header_data)
     else:
@@ -132,39 +133,38 @@ def gathering_header(com, header_data):
 
 def reading_data(com, data):
     # Create data length bitfield buffer
-    data_length_bytes = [0, 0, 0, 0]
-    delimiter_byte_received = False
     data_length_size = 4
+    data_length_bytes = bytearray()
     data_length_count = 0
     data_count = 0
+    delimiter_byte_discarded = False
 
     # Iterate over Data Length Bytes
     while data_length_count < data_length_size:
         # Read a byte into Data Length Buffer
-        data_length_bytes[data_length_count] = read_byte(com)
+        data_length_bytes += read_byte(com)
         # Scan byte and previous byte for start of frame, pop off any double delimiter values
-        data_length_bytes, data_length_count, delimiter_byte_received = x55_scan(data_length_bytes, data_length_count,
-                                                                                 delimiter_byte_received, com)
+        data_length_bytes, data_length_count, delimiter_byte_discarded = x55_scan(data_length_bytes, data_length_count,
+                                                                                  delimiter_byte_discarded, com)
 
-    data_length = struct.unpack("!L", b"".join(data_length_bytes))[0]
+    data_length = struct.unpack("!L", data_length_bytes)[0]
 
-    delimiter_byte_received = False
-    data_bytes = [0] * data_length
+    delimiter_byte_discarded = False
+    data_bytes = bytearray()
 
     # Iterate over Data Bytes
     while data_count < data_length:
         # Read a byte into Data Buffer
-        data_bytes[data_count] = read_byte(com)
+        data_bytes += read_byte(com)
         # Scan byte and previous byte for start of frame, pop off any double delimiter values
-        data_bytes, data_count, delimiter_byte_received = x55_scan(data_bytes, data_count, delimiter_byte_received, com)
+        data_bytes, data_count, delimiter_byte_discarded = x55_scan(data_bytes, data_count, delimiter_byte_discarded,
+                                                                    com)
 
     data.extend(data_length_bytes + data_bytes)
 
     frame_queue.put(data)
     time.sleep(1)
     callback_packet_handler_thread_start()
-
-    switch_states(PENDING_FRAME, com)
 
 
 state_switch = {
@@ -178,23 +178,24 @@ def switch_states(switch, com, data=None):
     state_switch[switch](com, data)
 
 
-def x55_scan(buffer, index, delimiter_received, com):
-    # If byte is Header Value 0x55
-    if PROTOCOL_DELIMITER in buffer[index]:
-        # Check if this is the first byte
-        if buffer[index] > 0:
-            if (PROTOCOL_DELIMITER in buffer[index - 1]) and delimiter_received is False:
-                # A delimiter byte has been received, but the last byte was not a delimiter.
-                delimiter_byte_received = True
-            elif (PROTOCOL_DELIMITER in buffer[index - 1]) and delimiter_received is True:
-                # A delimiter byte has been received, and the last byte was also a delimiter.
-                # So Discard the byte
-                buffer.pop(index)
-                # Rewind indexer to maintain stepping
-                index -= 1
-            elif PROTOCOL_DELIMITER in buffer[index - 1]:
-                # Start of Frame detected
-                switch_states(GATHERING_DATA, com, [PROTOCOL_DELIMITER, buffer[index]])
+def x55_scan(buffer, index, delimiter_discarded, com):
+    # Check if this is the first byte
+    if index > 0:
+        # If byte is Header Value 0x55 and previous bytes is also 0x55
+        if PROTOCOL_DELIMITER is buffer[index] and PROTOCOL_DELIMITER is buffer[index - 1]:
+            # A delimiter byte has been received, and the last byte was also a delimiter.
+            # So Discard the byte
+            buffer.pop(index)
+            # Rewind indexer to maintain stepping
+            index -= 1
+            delimiter_discarded = True
+        # If previous byte is a delimiter and we haven't discarded a byte
+        elif PROTOCOL_DELIMITER is buffer[index - 1] and delimiter_discarded is False:
+            # Start of Frame detected, discard message and start again
+            switch_states(GATHERING_DATA, com, buffer)
+        else:
+            delimiter_discarded = False
+    # Increment the index
     index += 1
 
-    return buffer, index, delimiter_received
+    return buffer, index, delimiter_discarded

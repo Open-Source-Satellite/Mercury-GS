@@ -17,6 +17,11 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 
+def telecommand_register_callback(tc_update_function_ptr):
+    global callback_telecommand_response_update
+    callback_telecommand_response_update = tc_update_function_ptr
+
+
 def tc_request_send():
     pass
 

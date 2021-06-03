@@ -19,7 +19,6 @@
 
 from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
 
-import packet
 import telemetry
 import telecommand
 import config
@@ -45,9 +44,13 @@ class MainWindow(QWidget, Ui_Form):
         import low_level
         low_level.init()
         # Register all callbacks
-        telemetry.register_callback(self.telemetryReceive)
-        packet.register_callback(telemetry.tlm_response, telecommand.tc_response)
-        low_level.register_callback(packet.packet_handler_thread_start)
+        from telemetry import telemetry_register_callback
+        from telecommand import telecommand_register_callback
+        from packet import packet_register_callback, low_level_register_callback, packet_handler_thread_start
+        telemetry_register_callback(self.telemetryReceive)
+        telecommand_register_callback(self.telecommandReceive)
+        packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
+        low_level_register_callback(packet_handler_thread_start)
         # Set COMMS Baud Rate
         config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
 
@@ -120,8 +123,13 @@ class MainWindow(QWidget, Ui_Form):
     def onBaudRateChange(self, event):
         config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
 
-    def telemetryReceive(self, telemetry_data):
-        self.labelTlmChOneValue.setText(telemetry_data)
+    def telemetryReceive(self, telemetry_channel, telemetry_data):
+        if telemetry_channel == 1:
+            self.labelTlmChOneValue.setText(telemetry_data)
+        elif telemetry_channel == 2:
+            self.labelTlmChTwoValue.setText(telemetry_data)
+        elif telemetry_channel == 3:
+            self.labelTlmChThreeValue.setText(telemetry_data)
 
     def telecommandReceive(self, telecommand_data):
         pass
