@@ -19,27 +19,20 @@
 import queue
 import threading
 import time
-
 import serial
-
-frame_queue = queue.Queue()
-
 import config
 from serial_framing.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 import struct
 
 frame_queue = queue.Queue()
 
+LOCK = threading.Lock()
+
 ser = serial.Serial()
 PENDING_FRAME = 0
 GATHERING_DATA = 1
 READING_DATA = 2
 packet_buffer = None
-
-
-def low_level_register_callback(packet_handler_thread_start_ptr):
-    global callback_packet_handler_thread_start
-    callback_packet_handler_thread_start = packet_handler_thread_start_ptr
 
 
 def rx_listener(com):
@@ -75,7 +68,6 @@ def init():
     if not ser.is_open:
         ser.open()
 
-    print(ser.is_open)
     if not rx_listener_thread.is_alive():
         rx_listener_thread.start()
 
@@ -164,7 +156,8 @@ def reading_data(com, data):
 
     frame_queue.put(data)
     time.sleep(1)
-    callback_packet_handler_thread_start()
+    # LOCK.acquire()
+    rx_listener(com)
 
 
 state_switch = {

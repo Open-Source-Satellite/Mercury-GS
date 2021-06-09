@@ -19,13 +19,13 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tabTelecommanding">
+     <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
        <string>TELEMETRY</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="groupBoxTlmCh">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -46,7 +46,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QFormLayout" name="formLayoutTLMCH">
+           <layout class="QFormLayout" name="formLayoutTlmCh">
             <item row="0" column="0">
              <widget class="QLabel" name="labelTlmChOne">
               <property name="text">
@@ -92,9 +92,9 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
+           <layout class="QVBoxLayout" name="boxLayoutAdHocReq">
             <item>
-             <widget class="QGroupBox" name="groupBox_6">
+             <widget class="QGroupBox" name="groupBoxAdHocReq">
               <property name="title">
                <string>Ad-hoc Request</string>
               </property>
@@ -398,14 +398,14 @@
            </layout>
           </item>
           <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBoxTelemetryContinuous">
+           <widget class="QCheckBox" name="checkBoxTelecommandContinuous">
             <property name="text">
              <string>Continuous?</string>
             </property>
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QComboBox" name="comboBoxTelemetry"/>
+           <widget class="QComboBox" name="comboBoxTelecommandDataType"/>
           </item>
           <item row="0" column="1">
            <layout class="QFormLayout" name="formLayout_2">

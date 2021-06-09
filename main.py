@@ -46,11 +46,11 @@ class MainWindow(QWidget, Ui_Form):
         # Register all callbacks
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
-        from packet import packet_register_callback, low_level_register_callback, packet_handler_thread_start
+        from packet import packet_register_callback, packet_init
         telemetry_register_callback(self.telemetryReceive)
         telecommand_register_callback(self.telecommandReceive)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
-        low_level_register_callback(packet_handler_thread_start)
+        packet_init()
         # Set COMMS Baud Rate
         config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
 
@@ -86,7 +86,7 @@ class MainWindow(QWidget, Ui_Form):
         print('ComboBox: {}'.format(comboBox))
         print('Is continuous: {}'.format(isContinuous))
 
-        telecommand.tlc_request_send()
+        telecommand.tc_request_send(tc, data, )
 
     def onClickSendTLMReq(self, event):
         # labelTimeOuts
@@ -94,7 +94,7 @@ class MainWindow(QWidget, Ui_Form):
         isContinuous = self.checkBoxLastReqContinuous.checkState() == 2
 
         # Set the TIMEOUTS value here;
-        self.labelTLMTimeouts.setText('hello')
+        self.labelTLMTimeouts.setText('0')
 
         print('Channel: {}'.format(tlmChannel))
         print('Is continuous: {}'.format(isContinuous))

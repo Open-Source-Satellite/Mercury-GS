@@ -1,7 +1,6 @@
-from low_level import frame_queue, send, low_level_register_callback
+from low_level import frame_queue, send
 from serial_framing.frameformat import MessageFormat, DataType, struct
 import threading
-import binascii
 
 
 def packet_register_callback(tlm_function_ptr, tc_function_ptr):
@@ -26,16 +25,12 @@ def unpacketize(packet_to_data):
 
 
 def packet_init():
-    low_level_register_callback(packet_init, packet_handler)
-
-
-def packet_handler_thread_start():
     if not rx_packet_handler_thread.is_alive():
         rx_packet_handler_thread.start()
 
 
 def packet_handler():
-    while frame_queue.qsize() > 0:
+    while True:
         frame = frame_queue.get()
         unpacketize(frame)
 
