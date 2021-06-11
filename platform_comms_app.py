@@ -377,14 +377,14 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
         self.tabWidget.setCurrentIndex(1)
-        self.pushButtonSendPcTime.clicked.connect(Form.onSendPcTime)
-        self.pushButtonSendThisTime.clicked.connect(Form.onClickThisTime)
-        self.pushButtonSendTCReq.clicked.connect(Form.onClickSendTCReq)
-        self.pushButtonSendTlmReq.clicked.connect(Form.onClickSendTLMReq)
-        self.pushButtonUploadFile.clicked.connect(Form.onClickUploadOpen)
-        self.pushButtonRequestDownload.clicked.connect(Form.onClickDownloadOpen)
-        self.pushButtonAbortUploadFile.clicked.connect(Form.onClickUploadAbort)
-        self.comboBoxCommsBaud.currentTextChanged['QString'].connect(Form.onBaudRateChange)
+        self.pushButtonSendPcTime.clicked.connect(Form.on_send_pc_time)
+        self.pushButtonSendThisTime.clicked.connect(Form.on_click_this_time)
+        self.pushButtonSendTCReq.clicked.connect(Form.on_click_send_telecommand_request)
+        self.pushButtonSendTlmReq.clicked.connect(Form.on_click_send_telemetry_request)
+        self.pushButtonUploadFile.clicked.connect(Form.on_click_upload_open)
+        self.pushButtonRequestDownload.clicked.connect(Form.on_click_download_open)
+        self.pushButtonAbortUploadFile.clicked.connect(Form.on_click_upload_abort)
+        self.comboBoxCommsBaud.currentTextChanged['QString'].connect(Form.on_baud_rate_change)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

@@ -31,14 +31,14 @@ class MainWindow(QWidget, Ui_Form):
         self.setupUi(self)
 
         # Should do that for all UI items, need to do this in QT designer.
-        self.pushButtonSendPcTime.clicked.connect(self.onSendPcTime)
-        self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
+        self.pushButtonSendPcTime.clicked.connect(self.on_send_pc_time)
+        self.pushButtonSendThisTime.clicked.connect(self.on_click_this_time)
         # self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq) AUTOCONNECTED
         # self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq) AUTOCONNECTED
 
-        self.pushButtonOpenFileUploadFrom.clicked.connect(self.onClickUploadOpen)
-        self.pushButtonOpenFileDownloadTo.clicked.connect(self.onClickDownloadOpen)
-        self.comboBoxCommsBaud.currentTextChanged.connect(self.onBaudRateChange)
+        self.pushButtonOpenFileUploadFrom.clicked.connect(self.on_click_upload_open)
+        self.pushButtonOpenFileDownloadTo.clicked.connect(self.on_click_download_open)
+        self.comboBoxCommsBaud.currentTextChanged.connect(self.on_baud_rate_change)
 
         # Init UART
         import low_level
@@ -47,8 +47,8 @@ class MainWindow(QWidget, Ui_Form):
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
         from packet import packet_register_callback, packet_init
-        telemetry_register_callback(self.telemetryReceive)
-        telecommand_register_callback(self.telecommandReceive)
+        telemetry_register_callback(self.telemetry_response_receive)
+        telecommand_register_callback(self.telecommand_response_receive)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
         packet_init()
         # Set COMMS Baud Rate
@@ -57,75 +57,75 @@ class MainWindow(QWidget, Ui_Form):
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
-    def onSendPcTime(self, event):
+    def on_send_pc_time(self, event):
         # TODO: get pc time and send it.
         print('Clicked: Send PC Time')
 
-    def onClickThisTime(self, event):
-        dateFromUi = self.dateEditSendThisTime.dateTime()
-        dateString = dateFromUi.toString(self.dateEditSendThisTime.displayFormat())
+    def on_click_this_time(self, event):
+        date_from_ui = self.dateEditSendThisTime.dateTime()
+        date_string = date_from_ui.toString(self.dateEditSendThisTime.displayFormat())
 
-        timeFromUI = self.dateTimeEditSendThisTime.dateTime()
-        timeString = timeFromUI.toString(self.dateTimeEditSendThisTime.displayFormat())
+        time_from_ui = self.dateTimeEditSendThisTime.dateTime()
+        time_string = time_from_ui.toString(self.dateTimeEditSendThisTime.displayFormat())
 
         print('Clicked: Send This Time')
-        print('Date: {}'.format(dateString))
-        print('Time: {}'.format(timeString))
+        print('Date: {}'.format(date_string))
+        print('Time: {}'.format(time_string))
 
-    def onClickSendTCReq(self, event):
+    def on_click_send_telecommand_request(self, event):
         tc = self.inputTelecommandNumber.text()
         data = self.inputTelecommandData.text()
         # Text value of the comboBox. see: https://doc.qt.io/qt-5/qcombobox.html#currentData-prop
         datatype = self.comboBoxTelecommandDataType.currentText()
 
         # It returns 2 for true, and 0 for false. Is this normal in py? 0/1 is what i would expect.
-        isContinuous = self.checkBoxTelecommandContinuous.checkState() == 2
+        is_continuous = self.checkBoxTelecommandContinuous.checkState() == 2
 
         print('TC: {}'.format(tc))
         print('Data: {}'.format(data))
         print('DataType: {}'.format(datatype))
-        print('Is continuous: {}'.format(isContinuous))
+        print('Is continuous: {}'.format(is_continuous))
 
         telecommand.tc_request_send(tc, data, datatype)
 
-    def onClickSendTLMReq(self, event):
+    def on_click_send_telemetry_request(self, event):
         # labelTimeOuts
-        tlmChannel = self.lineEditChannel.text()
-        isContinuous = self.checkBoxLastReqContinuous.checkState() == 2
+        tlm_channel = self.lineEditChannel.text()
+        is_continuous = self.checkBoxLastReqContinuous.checkState() == 2
 
         # Set the TIMEOUTS value here;
         self.labelTlmTimeoutValue.setText('0')
 
-        print('Channel: {}'.format(tlmChannel))
-        print('Is continuous: {}'.format(isContinuous))
+        print('Channel: {}'.format(tlm_channel))
+        print('Is continuous: {}'.format(is_continuous))
 
-        telemetry.tlm_request_send(tlmChannel, isContinuous)
+        telemetry.tlm_request_send(tlm_channel, is_continuous)
 
-    def onClickUploadOpen(self, event):
-        fileDialog = QFileDialog(self)
-        fileDialog.show()
+    def on_click_upload_open(self, event):
+        file_dialog = QFileDialog(self)
+        file_dialog.show()
 
-        filePath = fileDialog.getOpenFileName()[0]
-        fileDialog.hide()
+        file_path = file_dialog.getOpenFileName()[0]
+        file_dialog.hide()
 
-        self.lineEditUploadFrom.setText(filePath)
+        self.lineEditUploadFrom.setText(file_path)
 
-    def onClickUploadAbort(self, event):
+    def on_click_upload_abort(self, event):
         pass
 
-    def onClickDownloadOpen(self, event):
-        fileDialog = QFileDialog(self)
-        fileDialog.show()
+    def on_click_download_open(self, event):
+        file_dialog = QFileDialog(self)
+        file_dialog.show()
 
-        filePath = fileDialog.getOpenFileName()[0]
-        fileDialog.hide()
+        file_path = file_dialog.getOpenFileName()[0]
+        file_dialog.hide()
 
-        self.lineEditDownloadTo.setText(filePath)
+        self.lineEditDownloadTo.setText(file_path)
 
-    def onBaudRateChange(self, event):
+    def on_baud_rate_change(self, event):
         config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
 
-    def telemetryReceive(self, telemetry_channel, telemetry_data):
+    def telemetry_response_receive(self, telemetry_channel, telemetry_data):
         if telemetry_channel == 1:
             self.labelTlmChOneValue.setText(telemetry_data)
         elif telemetry_channel == 2:
@@ -133,8 +133,9 @@ class MainWindow(QWidget, Ui_Form):
         elif telemetry_channel == 3:
             self.labelTlmChThreeValue.setText(telemetry_data)
 
-    def telecommandReceive(self, telecommand_data):
-        pass
+    def telecommand_response_receive(self, telecommand_number, telecommand_data):
+        self.labelTelecommandResNumberValue.setText(telecommand_number)
+        self.labelTelecommandResStatus.setText(telecommand_data)
 
 
 app = QApplication([])

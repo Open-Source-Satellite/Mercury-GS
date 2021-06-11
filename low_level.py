@@ -26,7 +26,7 @@ import struct
 
 frame_queue = queue.Queue()
 
-LOCK = threading.Lock()
+# CONDITION = threading.Condition()
 
 ser = serial.Serial()
 PENDING_FRAME = 0
@@ -36,7 +36,7 @@ packet_buffer = None
 
 
 def rx_listener(com):
-    LOCK.acquire()
+    # CONDITION.wait()
     while True:
         frame = bytearray()
         switch_states(PENDING_FRAME, com, frame)
@@ -82,9 +82,13 @@ def pending_frame(com, header_data):
     # Check if there is incoming data
     if com.in_waiting != 0:
 
+        try:
         # Clear the received data buffer if it's 2 bytes
-        if len(header_data) == 2:
-            header_data.clear()
+            if len(header_data) == 2:
+                header_data.clear()
+        except TypeError as err:
+            print("ERROR: ", err)
+            print("FIRST PASS")
 
         # Read a byte
         rx_byte = read_byte(com)
@@ -157,7 +161,7 @@ def reading_data(com, data):
 
     frame_queue.put(data)
     time.sleep(1)
-    LOCK.acquire()
+    # CONDITION.wait()
     rx_listener(com)
 
 

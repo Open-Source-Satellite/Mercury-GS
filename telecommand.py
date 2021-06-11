@@ -18,7 +18,7 @@
 ###################################################################################
 from packet import packetize, DataType, data_format, struct
 from serial_framing.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
-    telecommand_request_builder_float
+    telecommand_request_builder_float, telecommand_response_builder, TelecommandResponseState
 
 
 def telecommand_register_callback(tc_update_function_ptr):
@@ -64,4 +64,18 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type)
 
 
 def tc_response(telecommand_packet):
-    pass
+    telecommand_data = telecommand_response_builder.unpack(telecommand_packet)
+    telecommand_number = telecommand_data[0]
+    telecommand_response = telecommand_data[1]
+    if telecommand_response == TelecommandResponseState.SUCCESS.value:
+        telecommand_response_status = TelecommandResponseState.SUCCESS.name
+    elif telecommand_response == TelecommandResponseState.FAILED.value:
+        telecommand_response_status = TelecommandResponseState.FAILED.name
+    elif telecommand_response == TelecommandResponseState.INVALID_LENGTH.value:
+        telecommand_response_status = TelecommandResponseState.INVALID_LENGTH.name
+    elif telecommand_response == TelecommandResponseState.COMMAND_NOT_SUPPORTED.value:
+        telecommand_response_status = TelecommandResponseState.COMMAND_NOT_SUPPORTED.name
+    elif telecommand_response == TelecommandResponseState.INVALID_COMMAND_ARGUMENT.value:
+        telecommand_response_status = TelecommandResponseState.INVALID_COMMAND_ARGUMENT.name
+
+    callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
