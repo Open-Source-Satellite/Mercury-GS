@@ -23,7 +23,9 @@ PROTOCOL_DELIMITER = 0x55
 RESERVED = bytearray.fromhex("DE AD BE")
 MAX_DATA_TYPES = 6
 
-telecommand_request_builder = struct.Struct("! I 8B")
+telecommand_request_builder_string = struct.Struct("! I 8B")
+telecommand_request_builder_integer = struct.Struct("! I q")
+telecommand_request_builder_float = struct.Struct("! I d")
 telecommand_response_builder = struct.Struct("! I B")
 telemetry_request_builder = struct.Struct("! I")
 telemetry_response_builder = struct.Struct("! I Q")

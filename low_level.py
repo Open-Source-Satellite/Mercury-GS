@@ -36,6 +36,7 @@ packet_buffer = None
 
 
 def rx_listener(com):
+    LOCK.acquire()
     while True:
         frame = bytearray()
         switch_states(PENDING_FRAME, com, frame)
@@ -156,7 +157,7 @@ def reading_data(com, data):
 
     frame_queue.put(data)
     time.sleep(1)
-    # LOCK.acquire()
+    LOCK.acquire()
     rx_listener(com)
 
 

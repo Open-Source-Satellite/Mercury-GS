@@ -16,6 +16,7 @@
 #  Mercury GS Telemetry Handler
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
+import struct
 
 from packet import packetize, DataType, data_format
 from serial_framing.frameformat import telemetry_request_builder, telemetry_response_builder
@@ -27,9 +28,15 @@ def telemetry_register_callback(tlm_update_function_ptr):
 
 
 def tlm_request_send(tlm_channel, is_continuous):
-    data = data_format([int(tlm_channel)], telemetry_request_builder)
-    packetize(data, DataType.TELEMETRY_REQUEST.value)
-
+    try:
+        data = data_format([int(tlm_channel)], telemetry_request_builder)
+        packetize(data, DataType.TELEMETRY_REQUEST.value)
+    except UnboundLocalError as err:
+        print("ERROR: ", err)
+        print("Could not format message")
+    except ValueError as err:
+        print("ERROR: ", err)
+        print("Telemetry Request Channel is invalid")
 
 def tlm_response(telemetry_packet):
     telemetry_response = telemetry_response_builder.unpack(telemetry_packet)

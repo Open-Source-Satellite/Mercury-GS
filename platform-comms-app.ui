@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -100,7 +100,7 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
                <item row="0" column="1">
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="labelTlmAdHocChannel">
                  <property name="text">
                   <string>Channel #</string>
                  </property>
@@ -114,16 +114,16 @@
                 </widget>
                </item>
                <item row="0" column="6">
-                <layout class="QFormLayout" name="formLayout_10">
+                <layout class="QFormLayout" name="formLayoutTlmTimeouts">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="labelTimeOuts">
+                  <widget class="QLabel" name="labelTimeouts">
                    <property name="text">
                     <string>TIMEOUTS:</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTLMTimeouts">
+                  <widget class="QLabel" name="labelTlmTimeoutValue">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -148,11 +148,11 @@
                 <widget class="QLineEdit" name="lineEditChannel"/>
                </item>
                <item row="5" column="1" rowspan="2" colspan="6">
-                <widget class="QGroupBox" name="groupBox_9">
+                <widget class="QGroupBox" name="groupBoxTlmErr">
                  <property name="title">
                   <string>Last Failure</string>
                  </property>
-                 <widget class="QLabel" name="label_2">
+                 <widget class="QLabel" name="labelTlmErrChannel">
                   <property name="geometry">
                    <rect>
                     <x>20</x>
@@ -165,7 +165,7 @@
                    <string>Channel #</string>
                   </property>
                  </widget>
-                 <widget class="QLabel" name="labelTlmErrChannel">
+                 <widget class="QLabel" name="labelTlmErrChannelValue">
                   <property name="geometry">
                    <rect>
                     <x>90</x>
@@ -178,7 +178,7 @@
                    <string>N/A</string>
                   </property>
                  </widget>
-                 <widget class="QLabel" name="label_6">
+                 <widget class="QLabel" name="labelTlmErrReason">
                   <property name="geometry">
                    <rect>
                     <x>180</x>
@@ -191,7 +191,7 @@
                    <string>Reason</string>
                   </property>
                  </widget>
-                 <widget class="QLabel" name="labelTlmErrReason">
+                 <widget class="QLabel" name="labelTlmErrReasonValue">
                   <property name="geometry">
                    <rect>
                     <x>230</x>
@@ -223,13 +223,13 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabTelecommand">
       <attribute name="title">
        <string>TELECOMMANDING</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="groupBoxTelecommand">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -250,16 +250,16 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <layout class="QFormLayout" name="formLayout">
+           <layout class="QFormLayout" name="formLayoutTelecommand">
             <item row="0" column="0">
-             <widget class="QLabel" name="lblTelecommandN">
+             <widget class="QLabel" name="labelTelecommandNumber">
               <property name="text">
                <string>TC #</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandN">
+             <widget class="QLineEdit" name="inputTelecommandNumber">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -280,7 +280,7 @@
           <item row="6" column="0" colspan="3">
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QGroupBox" name="groupBox_2">
+             <widget class="QGroupBox" name="groupBoxTimeCommands">
               <property name="title">
                <string>Time Commands</string>
               </property>
@@ -306,7 +306,7 @@
                  <height>38</height>
                 </rect>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <layout class="QHBoxLayout" name="horizontalLayoutSendTime">
                 <item>
                  <widget class="QPushButton" name="pushButtonSendThisTime">
                   <property name="text">
@@ -315,7 +315,7 @@
                  </widget>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <layout class="QHBoxLayout" name="horizontalLayoutSendTime_2">
                   <item alignment="Qt::AlignLeft">
                    <widget class="QDateEdit" name="dateEditSendThisTime"/>
                   </item>
@@ -333,22 +333,22 @@
              </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="groupBox_3">
+             <widget class="QGroupBox" name="groupBoxLastResponse">
               <property name="title">
                <string>Last Response</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
-                <layout class="QFormLayout" name="formLayoutTCN">
+                <layout class="QFormLayout" name="formLayoutTelecommandN">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_3">
+                  <widget class="QLabel" name="labelTelecommandResNumber">
                    <property name="text">
                     <string>TC #</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCRes">
+                  <widget class="QLabel" name="labelTelecommandResNumberValue">
                    <property name="text">
                     <string>N</string>
                    </property>
@@ -359,14 +359,14 @@
                <item row="0" column="1">
                 <layout class="QFormLayout" name="formLayoutTimeOuts">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_7">
+                  <widget class="QLabel" name="labelTelecommandResTimeouts">
                    <property name="text">
                     <string>TIMEOUTS :</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCResTimeouts">
+                  <widget class="QLabel" name="labelTelecommandResTimeoutsValue">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -377,14 +377,14 @@
                <item row="1" column="0">
                 <layout class="QFormLayout" name="formLayoutResponse">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="label_5">
+                  <widget class="QLabel" name="labelTelecommandRes">
                    <property name="text">
                     <string>Response</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTCResStatus">
+                  <widget class="QLabel" name="labelTelecommandResStatus">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -405,10 +405,26 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QComboBox" name="comboBoxTelecommandDataType"/>
+           <widget class="QComboBox" name="comboBoxTelecommandDataType">
+            <item>
+             <property name="text">
+              <string>String</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Integer</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Floating Point</string>
+             </property>
+            </item>
+           </widget>
           </item>
           <item row="0" column="1">
-           <layout class="QFormLayout" name="formLayout_2">
+           <layout class="QFormLayout" name="formLayoutTelecommandData">
             <item row="0" column="0">
              <widget class="QLabel" name="lblTelecommandData">
               <property name="text">

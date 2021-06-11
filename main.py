@@ -33,8 +33,8 @@ class MainWindow(QWidget, Ui_Form):
         # Should do that for all UI items, need to do this in QT designer.
         self.pushButtonSendPcTime.clicked.connect(self.onSendPcTime)
         self.pushButtonSendThisTime.clicked.connect(self.onClickThisTime)
-        self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq)
-        self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq)
+        # self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq) AUTOCONNECTED
+        # self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq) AUTOCONNECTED
 
         self.pushButtonOpenFileUploadFrom.clicked.connect(self.onClickUploadOpen)
         self.pushButtonOpenFileDownloadTo.clicked.connect(self.onClickDownloadOpen)
@@ -73,20 +73,20 @@ class MainWindow(QWidget, Ui_Form):
         print('Time: {}'.format(timeString))
 
     def onClickSendTCReq(self, event):
-        tc = self.inputTelecommandN.text()
+        tc = self.inputTelecommandNumber.text()
         data = self.inputTelecommandData.text()
         # Text value of the comboBox. see: https://doc.qt.io/qt-5/qcombobox.html#currentData-prop
-        comboBox = self.comboBoxTelemetry.currentText()
+        datatype = self.comboBoxTelecommandDataType.currentText()
 
         # It returns 2 for true, and 0 for false. Is this normal in py? 0/1 is what i would expect.
-        isContinuous = self.checkBoxTelemetryContinuous.checkState() == 2
+        isContinuous = self.checkBoxTelecommandContinuous.checkState() == 2
 
         print('TC: {}'.format(tc))
         print('Data: {}'.format(data))
-        print('ComboBox: {}'.format(comboBox))
+        print('DataType: {}'.format(datatype))
         print('Is continuous: {}'.format(isContinuous))
 
-        telecommand.tc_request_send(tc, data, )
+        telecommand.tc_request_send(tc, data, datatype)
 
     def onClickSendTLMReq(self, event):
         # labelTimeOuts
@@ -94,13 +94,12 @@ class MainWindow(QWidget, Ui_Form):
         isContinuous = self.checkBoxLastReqContinuous.checkState() == 2
 
         # Set the TIMEOUTS value here;
-        self.labelTLMTimeouts.setText('0')
+        self.labelTlmTimeoutValue.setText('0')
 
         print('Channel: {}'.format(tlmChannel))
         print('Is continuous: {}'.format(isContinuous))
 
         telemetry.tlm_request_send(tlmChannel, isContinuous)
-
 
     def onClickUploadOpen(self, event):
         fileDialog = QFileDialog(self)
@@ -110,6 +109,9 @@ class MainWindow(QWidget, Ui_Form):
         fileDialog.hide()
 
         self.lineEditUploadFrom.setText(filePath)
+
+    def onClickUploadAbort(self, event):
+        pass
 
     def onClickDownloadOpen(self, event):
         fileDialog = QFileDialog(self)
