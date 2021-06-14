@@ -31,28 +31,29 @@ class MainWindow(QWidget, Ui_Form):
         self.setupUi(self)
 
         # Should do that for all UI items, need to do this in QT designer.
-        self.pushButtonSendPcTime.clicked.connect(self.on_send_pc_time)
-        self.pushButtonSendThisTime.clicked.connect(self.on_click_this_time)
+        # self.pushButtonSendPcTime.clicked.connect(self.on_send_pc_time)
+        # self.pushButtonSendThisTime.clicked.connect(self.on_click_this_time)
         # self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq) AUTOCONNECTED
         # self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq) AUTOCONNECTED
-
-        self.pushButtonOpenFileUploadFrom.clicked.connect(self.on_click_upload_open)
-        self.pushButtonOpenFileDownloadTo.clicked.connect(self.on_click_download_open)
-        self.comboBoxCommsBaud.currentTextChanged.connect(self.on_baud_rate_change)
+        # self.pushButtonOpenFileUploadFrom.clicked.connect(self.on_click_upload_open)
+        # self.pushButtonOpenFileDownloadTo.clicked.connect(self.on_click_download_open)
+        # self.comboBoxCommsBaudValue.currentTextChanged.connect(self.on_baud_rate_change)
 
         # Init UART
-        import low_level
-        low_level.init()
+        from low_level.serial_comms import serial_comms_init
+        serial_comms_init()
         # Register all callbacks
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
-        from packet import packet_register_callback, packet_init
+        from low_level.packet import packet_register_callback, packet_init
         telemetry_register_callback(self.telemetry_response_receive)
         telecommand_register_callback(self.telecommand_response_receive)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
         packet_init()
         # Set COMMS Baud Rate
-        config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
+        config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
+        # Set TC_TLM Rate
+        config.TC_TLM_RATE = self.spinBoxTcTlmRateValue.value()
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -73,13 +74,13 @@ class MainWindow(QWidget, Ui_Form):
         print('Time: {}'.format(time_string))
 
     def on_click_send_telecommand_request(self, event):
-        tc = self.inputTelecommandNumber.text()
-        data = self.inputTelecommandData.text()
+        tc = self.spinBoxTcNumberValue.value()
+        data = self.inputTcData.text()
         # Text value of the comboBox. see: https://doc.qt.io/qt-5/qcombobox.html#currentData-prop
-        datatype = self.comboBoxTelecommandDataType.currentText()
+        datatype = self.comboBoxTcDataType.currentText()
 
         # It returns 2 for true, and 0 for false. Is this normal in py? 0/1 is what i would expect.
-        is_continuous = self.checkBoxTelecommandContinuous.checkState() == 2
+        is_continuous = self.checkBoxTcReqContinuous.checkState() == 2
 
         print('TC: {}'.format(tc))
         print('Data: {}'.format(data))
@@ -90,8 +91,8 @@ class MainWindow(QWidget, Ui_Form):
 
     def on_click_send_telemetry_request(self, event):
         # labelTimeOuts
-        tlm_channel = self.lineEditChannel.text()
-        is_continuous = self.checkBoxLastReqContinuous.checkState() == 2
+        tlm_channel = self.spinBoxTlmAdHocChValue.value()
+        is_continuous = self.checkBoxTlmReqContinuous.checkState() == 2
 
         # Set the TIMEOUTS value here;
         self.labelTlmTimeoutValue.setText('0')
@@ -123,7 +124,10 @@ class MainWindow(QWidget, Ui_Form):
         self.lineEditDownloadTo.setText(file_path)
 
     def on_baud_rate_change(self, event):
-        config.BAUD_RATE = self.comboBoxCommsBaud.currentText()
+        config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
+
+    def on_tc_tlm_rate_change(self, event):
+        config.TC_TLM_RATE = self.spinBoxTcTlmRateValue.value()
 
     def telemetry_response_receive(self, telemetry_channel, telemetry_data):
         if telemetry_channel == 1:

@@ -1,5 +1,5 @@
 ###################################################################################
-# @file low_level.py
+# @file serial_comms.py
 ###################################################################################
 #   _  _____ ____  ____  _____
 #  | |/ /_ _/ ___||  _ \| ____|
@@ -17,12 +17,12 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 import queue
+import struct
 import threading
 import time
 import serial
 import config
-from serial_framing.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
-import struct
+from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
 frame_queue = queue.Queue()
 
@@ -57,7 +57,7 @@ def send(data_to_send):
     ser.write(bytearray(str(data_to_send), "utf8"))
 
 
-def init():
+def serial_comms_init():
     change_baud_rate(config.BAUD_RATE)
     ser.port = 'COM19'
     ser.bytesize = 8
@@ -83,7 +83,7 @@ def pending_frame(com, header_data):
     if com.in_waiting != 0:
 
         try:
-        # Clear the received data buffer if it's 2 bytes
+            # Clear the received data buffer if it's 2 bytes
             if len(header_data) == 2:
                 header_data.clear()
         except TypeError as err:

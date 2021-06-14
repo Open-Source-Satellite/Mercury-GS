@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>Form</class>
  <widget class="QWidget" name="Form">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>670</width>
-    <height>443</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>OSSAT Platform Computer Comms</string>
   </property>
@@ -17,7 +9,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -25,7 +17,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QGroupBox" name="groupBoxTlmCh">
+        <widget class="QGroupBox" name="groupBoxTlm">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -99,55 +91,7 @@
                <string>Ad-hoc Request</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
-               <item row="0" column="1">
-                <widget class="QLabel" name="labelTlmAdHocChannel">
-                 <property name="text">
-                  <string>Channel #</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="pushButtonSendTlmReq">
-                 <property name="text">
-                  <string>Send TLM REQ</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="6">
-                <layout class="QFormLayout" name="formLayoutTlmTimeouts">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="labelTimeouts">
-                   <property name="text">
-                    <string>TIMEOUTS:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="labelTlmTimeoutValue">
-                   <property name="text">
-                    <string>N/A</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="5">
-                <spacer name="horizontalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLineEdit" name="lineEditChannel"/>
-               </item>
-               <item row="5" column="1" rowspan="2" colspan="6">
+               <item row="5" column="1" rowspan="2" colspan="5">
                 <widget class="QGroupBox" name="groupBoxTlmErr">
                  <property name="title">
                   <string>Last Failure</string>
@@ -206,10 +150,74 @@
                  </widget>
                 </widget>
                </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButtonSendTlmReq">
+                 <property name="text">
+                  <string>Send TLM REQ</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="labelTlmAdHocChannel">
+                 <property name="text">
+                  <string>Channel #</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <layout class="QFormLayout" name="formLayoutTlmTimeouts">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="labelTlmTimeouts">
+                   <property name="text">
+                    <string>TIMEOUTS:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="labelTlmTimeoutValue">
+                   <property name="text">
+                    <string>N/A</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="4">
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
                <item row="5" column="0">
-                <widget class="QCheckBox" name="checkBoxLastReqContinuous">
+                <widget class="QCheckBox" name="checkBoxTlmReqContinuous">
                  <property name="text">
                   <string>Continuous?</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QSpinBox" name="spinBoxTlmAdHocChValue">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::NoButtons</enum>
+                 </property>
+                 <property name="showGroupSeparator" stdset="0">
+                  <bool>false</bool>
+                 </property>
+                 <property name="value">
+                  <number>0</number>
                  </property>
                 </widget>
                </item>
@@ -223,13 +231,13 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabTelecommand">
+     <widget class="QWidget" name="tabTelecommanding">
       <attribute name="title">
        <string>TELECOMMANDING</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBoxTelecommand">
+        <widget class="QGroupBox" name="groupBoxTelecommanding">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -250,35 +258,41 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <layout class="QFormLayout" name="formLayoutTelecommand">
+           <layout class="QFormLayout" name="formLayoutTc">
             <item row="0" column="0">
-             <widget class="QLabel" name="labelTelecommandNumber">
+             <widget class="QLabel" name="labelTcNumber">
               <property name="text">
                <string>TC #</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandNumber">
+             <widget class="QSpinBox" name="spinBoxTcNumberValue">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhNone</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
              </widget>
             </item>
            </layout>
           </item>
           <item row="5" column="0" colspan="3" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButtonSendTCReq">
+           <widget class="QPushButton" name="pushButtonSendTcReq">
             <property name="text">
              <string>Send TC REQ</string>
             </property>
            </widget>
           </item>
           <item row="6" column="0" colspan="3">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayoutTimeCommands">
             <item>
              <widget class="QGroupBox" name="groupBoxTimeCommands">
               <property name="title">
@@ -315,9 +329,9 @@
                  </widget>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayoutSendTime_2">
+                 <layout class="QHBoxLayout" name="horizontalLayoutSendTimeValues">
                   <item alignment="Qt::AlignLeft">
-                   <widget class="QDateEdit" name="dateEditSendThisTime"/>
+                   <widget class="QDateEdit" name="dateEditSendThisDate"/>
                   </item>
                   <item>
                    <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
@@ -339,16 +353,16 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
-                <layout class="QFormLayout" name="formLayoutTelecommandN">
+                <layout class="QFormLayout" name="formLayoutTcN">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="labelTelecommandResNumber">
+                  <widget class="QLabel" name="labelTcResNumber">
                    <property name="text">
                     <string>TC #</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTelecommandResNumberValue">
+                  <widget class="QLabel" name="labelTcResNumberValue">
                    <property name="text">
                     <string>N</string>
                    </property>
@@ -357,16 +371,16 @@
                 </layout>
                </item>
                <item row="0" column="1">
-                <layout class="QFormLayout" name="formLayoutTimeOuts">
+                <layout class="QFormLayout" name="formLayoutTimeouts">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="labelTelecommandResTimeouts">
+                  <widget class="QLabel" name="labelTcResTimeouts">
                    <property name="text">
                     <string>TIMEOUTS :</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTelecommandResTimeoutsValue">
+                  <widget class="QLabel" name="labelTcResTimeoutsValue">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -375,16 +389,16 @@
                 </layout>
                </item>
                <item row="1" column="0">
-                <layout class="QFormLayout" name="formLayoutResponse">
+                <layout class="QFormLayout" name="formLayoutTcResponse">
                  <item row="0" column="0">
-                  <widget class="QLabel" name="labelTelecommandRes">
+                  <widget class="QLabel" name="labelTcRes">
                    <property name="text">
                     <string>Response</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTelecommandResStatus">
+                  <widget class="QLabel" name="labelTcResStatus">
                    <property name="text">
                     <string>N/A</string>
                    </property>
@@ -398,14 +412,14 @@
            </layout>
           </item>
           <item row="1" column="1">
-           <widget class="QCheckBox" name="checkBoxTelecommandContinuous">
+           <widget class="QCheckBox" name="checkBoxTcReqContinuous">
             <property name="text">
              <string>Continuous?</string>
             </property>
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QComboBox" name="comboBoxTelecommandDataType">
+           <widget class="QComboBox" name="comboBoxTcDataType">
             <item>
              <property name="text">
               <string>String</string>
@@ -424,16 +438,20 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <layout class="QFormLayout" name="formLayoutTelecommandData">
+           <layout class="QFormLayout" name="formLayoutTcData">
             <item row="0" column="0">
-             <widget class="QLabel" name="lblTelecommandData">
+             <widget class="QLabel" name="labelTcData">
               <property name="text">
                <string>Data</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTelecommandData"/>
+             <widget class="QLineEdit" name="inputTcData">
+              <property name="inputMethodHints">
+               <set>Qt::ImhNone</set>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -448,15 +466,15 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_7">
+        <widget class="QGroupBox" name="groupBoxToUpload">
          <property name="title">
           <string>To Upload</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
+           <layout class="QVBoxLayout" name="verticalLayoutToUpload">
             <item>
-             <layout class="QFormLayout" name="formLayout_5">
+             <layout class="QFormLayout" name="formLayoutUploadToFrom">
               <property name="fieldGrowthPolicy">
                <enum>QFormLayout::ExpandingFieldsGrow</enum>
               </property>
@@ -494,7 +512,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_24">
+               <layout class="QHBoxLayout" name="horizontalLayoutUploadFrom">
                 <item>
                  <widget class="QLineEdit" name="lineEditUploadFrom"/>
                 </item>
@@ -553,13 +571,13 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_12">
+        <widget class="QGroupBox" name="groupBoxToDownload">
          <property name="title">
           <string>To Download</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <layout class="QFormLayout" name="formLayout_8">
+           <layout class="QFormLayout" name="formLayoutDownloadFromTo">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::ExpandingFieldsGrow</enum>
             </property>
@@ -597,7 +615,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_26">
+             <layout class="QHBoxLayout" name="horizontalLayoutDownloadTo">
               <item>
                <widget class="QLineEdit" name="lineEditDownloadTo"/>
               </item>
@@ -613,7 +631,7 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="horizontalLayoutRequestDownload">
             <item>
              <widget class="QPushButton" name="pushButtonRequestDownload">
               <property name="text">
@@ -622,7 +640,7 @@
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_3">
+             <spacer name="horizontalSpacerRequestDownload">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -659,18 +677,18 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_9">
+        <widget class="QGroupBox" name="groupBoxConfig">
          <property name="title">
           <string>Config</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_10">
           <item row="0" column="0">
-           <layout class="QFormLayout" name="formLayout_3">
+           <layout class="QFormLayout" name="formLayoutConfig">
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::ExpandingFieldsGrow</enum>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_23">
+             <widget class="QLabel" name="labelCommsBaud">
               <property name="text">
                <string>Comms baud</string>
               </property>
@@ -679,7 +697,7 @@
             <item row="0" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
-               <widget class="QComboBox" name="comboBoxCommsBaud">
+               <widget class="QComboBox" name="comboBoxCommsBaudValue">
                 <item>
                  <property name="text">
                   <string>9600</string>
@@ -723,6 +741,42 @@
                </widget>
               </item>
               <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelTcTlmRate">
+                <property name="text">
+                 <string>TC/TLM Rate (per second)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBoxTcTlmRateValue">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::NoButtons</enum>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="horizontalSpacer_4">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -736,40 +790,22 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLabel" name="label_25">
+               <widget class="QLabel" name="labelTcTlmTimeout">
                 <property name="text">
                  <string>TC/TLM Timeout (ms)</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEditTcTlmTimeOut">
+               <widget class="QSpinBox" name="spinBoxTcTlmTimeoutValue">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_24">
-              <property name="text">
-               <string>Config file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,0">
-              <item>
-               <widget class="QLineEdit" name="lineEditConfigFilePath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButtonOpenConfigFilePath">
-                <property name="text">
-                 <string>...</string>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::NoButtons</enum>
                 </property>
                </widget>
               </item>
@@ -788,6 +824,27 @@
               </property>
              </spacer>
             </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelConfigFile">
+              <property name="text">
+               <string>Config file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
+              <item>
+               <widget class="QLineEdit" name="lineEditConfigFilePath"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonOpenConfigFilePath">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
            </layout>
           </item>
          </layout>
@@ -805,7 +862,7 @@
    <sender>pushButtonSendPcTime</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onSendPcTime()</slot>
+   <slot>on_send_pc_time()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>98</x>
@@ -813,7 +870,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
-     <y>-65</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -821,7 +878,7 @@
    <sender>pushButtonSendThisTime</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickThisTime()</slot>
+   <slot>on_click_this_time()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>126</x>
@@ -829,23 +886,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
-     <y>-12</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>pushButtonSendTCReq</sender>
+   <sender>pushButtonSendTcReq</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickSendTCReq()</slot>
+   <slot>on_click_send_telecommand_request()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>340</x>
+     <x>251</x>
      <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>344</x>
-     <y>-71</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -853,15 +910,15 @@
    <sender>pushButtonSendTlmReq</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickSendTLMReq()</slot>
+   <slot>on_click_send_telemetry_request()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>257</y>
+     <x>90</x>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
      <x>76</x>
-     <y>-47</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -869,15 +926,15 @@
    <sender>pushButtonUploadFile</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickUploadOpen()</slot>
+   <slot>on_click_upload_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>159</y>
+     <x>77</x>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
      <x>89</x>
-     <y>-78</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -885,15 +942,15 @@
    <sender>pushButtonRequestDownload</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickDownloadOpen()</slot>
+   <slot>on_click_download_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>360</y>
+     <x>67</x>
+     <y>286</y>
     </hint>
     <hint type="destinationlabel">
      <x>36</x>
-     <y>-82</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -901,23 +958,23 @@
    <sender>pushButtonAbortUploadFile</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>onClickUploadAbort()</slot>
+   <slot>on_click_upload_abort()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>158</y>
+     <x>138</x>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
-     <y>-6</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>comboBoxCommsBaud</sender>
+   <sender>comboBoxCommsBaudValue</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>Form</receiver>
-   <slot>onBaudRateChange()</slot>
+   <slot>on_baud_rate_change()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
@@ -925,19 +982,36 @@
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
-     <y>-2</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxTcTlmRateValue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Form</receiver>
+   <slot>on_tc_tlm_rate_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>294</x>
+     <y>59</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>287</x>
+     <y>-10</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>onSendPcTime()</slot>
-  <slot>onClickThisTime()</slot>
-  <slot>onClickSendTCReq()</slot>
-  <slot>onClickSendTLMReq()</slot>
-  <slot>onClickUploadOpen()</slot>
-  <slot>onClickDownloadOpen()</slot>
-  <slot>onClickUploadAbort()</slot>
-  <slot>onBaudRateChange()</slot>
+  <slot>on_send_pc_time()</slot>
+  <slot>on_click_this_time()</slot>
+  <slot>on_click_send_telecommand_request()</slot>
+  <slot>on_click_send_telemetry_request()</slot>
+  <slot>on_click_upload_open()</slot>
+  <slot>on_click_download_open()</slot>
+  <slot>on_click_upload_abort()</slot>
+  <slot>on_baud_rate_change()</slot>
+  <slot>on_tc_tlm_rate_change()</slot>
  </slots>
 </ui>

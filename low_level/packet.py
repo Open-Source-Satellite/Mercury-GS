@@ -1,6 +1,8 @@
-from low_level import frame_queue, send
-from serial_framing.frameformat import MessageFormat, DataType, struct
+from low_level.serial_comms import frame_queue, send
+from low_level.frameformat import MessageFormat, DataType, struct
 import threading
+import config
+from low_level.continuous import continuous_sender, register_continuous
 
 
 def packet_register_callback(tlm_function_ptr, tc_function_ptr):
@@ -43,7 +45,7 @@ def data_format(data_to_format, data_format_builder):
     return formatted_data
 
 
-def packetize(data_to_packet, data_type):
+def packetize(data_to_packet, data_type, is_continuous):
     packet_class = MessageFormat(data_to_packet, len(data_to_packet), data_type)
     packet_builder = struct.Struct("! 5B I")
     packet_packed = bytearray(packet_builder.pack(packet_class.header,
@@ -56,7 +58,10 @@ def packetize(data_to_packet, data_type):
     packet_packed.extend(packet_class.data)
 
     packet = x55_scan(packet_packed)
-    send(packet)
+    if is_continuous is True:
+        register_continuous(config.TC_TLM_RATE, continuous_sender, packet)
+    else:
+        send(packet)
 
 
 def x55_scan(data_to_scan):

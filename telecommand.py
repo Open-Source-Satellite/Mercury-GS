@@ -16,8 +16,8 @@
 #  Mercury GS Telecommand Handler
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
-from packet import packetize, DataType, data_format, struct
-from serial_framing.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
+from low_level.packet import packetize, DataType, data_format
+from low_level.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
     telecommand_request_builder_float, telecommand_response_builder, TelecommandResponseState
 
 
@@ -33,34 +33,35 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type)
             while len(telecommand_data) < 8:
                 telecommand_data = " " + telecommand_data
             # Format the data as an 8 byte string
-            data = data_format([int(telecommand_number), *bytes(telecommand_data, "ascii")],
+            data = data_format([telecommand_number, *bytes(telecommand_data, "ascii")],
                                telecommand_request_builder_string)
         try:
-            if telecommand_data_type == "Integer" and telecommand_data:
+            if telecommand_data_type == "Integer":
                 # Format the data as a 64 bit signed integer
-                data = data_format([int(telecommand_number), int(telecommand_data)],
+                data = data_format([telecommand_number, int(telecommand_data)],
                                    telecommand_request_builder_integer)
         except ValueError as err:
             # Handle exception if data is not an integer
             print("ERROR: ", err)
-            print("Telecommand Data value is not Integer")
+            print("INFO: Telecommand Data value is not Integer")
         try:
             if telecommand_data_type == "Floating Point":
                 # Format the data as a double
-                data = data_format([int(telecommand_number), float(telecommand_data)],
+                data = data_format([telecommand_number, float(telecommand_data)],
                                    telecommand_request_builder_float)
         except ValueError as err:
             # Handle exception if data is not a float
             print("ERROR: ", err)
-            print("Telecommand Data value is not Floating Point Number")
-            # Format the telecommand as a frame and send
-            packetize(data, DataType.TELECOMMAND_REQUEST.value)
+            print("INFO: Telecommand Data value is not Floating Point Number")
+
+        # Format the telecommand as a frame and send
+        packetize(data, DataType.TELECOMMAND_REQUEST.value)
     except UnboundLocalError as err:
         print("ERROR: ", err)
-        print("Could not format message")
+        print("INFO: Could not format message")
     except ValueError as err:
         print("ERROR: ", err)
-        print("Telecommand Request Channel is invalid")
+        print("INFO: Telecommand Request Channel is invalid")
 
 
 def tc_response(telecommand_packet):
