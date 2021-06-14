@@ -19,6 +19,7 @@
 
 from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
 
+import low_level.continuous
 import telemetry
 import telecommand
 import config
@@ -87,7 +88,7 @@ class MainWindow(QWidget, Ui_Form):
         print('DataType: {}'.format(datatype))
         print('Is continuous: {}'.format(is_continuous))
 
-        telecommand.tc_request_send(tc, data, datatype)
+        telecommand.tc_request_send(tc, data, datatype, is_continuous)
 
     def on_click_send_telemetry_request(self, event):
         # labelTimeOuts
@@ -128,6 +129,11 @@ class MainWindow(QWidget, Ui_Form):
 
     def on_tc_tlm_rate_change(self, event):
         config.TC_TLM_RATE = self.spinBoxTcTlmRateValue.value()
+        low_level.continuous.adjust_continuous(config.TC_TLM_RATE)
+
+    def on_continuous_toggle(self, is_continuous):
+        if is_continuous is False:
+            low_level.continuous.continuous_stop()
 
     def telemetry_response_receive(self, telemetry_channel, telemetry_data):
         if telemetry_channel == 1:

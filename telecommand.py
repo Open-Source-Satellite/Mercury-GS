@@ -26,7 +26,7 @@ def telecommand_register_callback(tc_update_function_ptr):
     callback_telecommand_response_update = tc_update_function_ptr
 
 
-def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type):
+def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type, is_continuous):
     try:
         if telecommand_data_type == "String":
             # Prepend whitespace until string is 8 chars
@@ -55,7 +55,7 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type)
             print("INFO: Telecommand Data value is not Floating Point Number")
 
         # Format the telecommand as a frame and send
-        packetize(data, DataType.TELECOMMAND_REQUEST.value)
+        packetize(data, DataType.TELECOMMAND_REQUEST.value, is_continuous)
     except UnboundLocalError as err:
         print("ERROR: ", err)
         print("INFO: Could not format message")

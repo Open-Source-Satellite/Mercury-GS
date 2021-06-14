@@ -9,7 +9,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -1002,6 +1002,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBoxTlmReqContinuous</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Form</receiver>
+   <slot>on_continuous_toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>235</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxTcReqContinuous</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Form</receiver>
+   <slot>on_continuous_toggle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>233</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>on_send_pc_time()</slot>
@@ -1013,5 +1045,6 @@
   <slot>on_click_upload_abort()</slot>
   <slot>on_baud_rate_change()</slot>
   <slot>on_tc_tlm_rate_change()</slot>
+  <slot>on_continuous_toggle()</slot>
  </slots>
 </ui>

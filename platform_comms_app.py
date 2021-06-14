@@ -401,7 +401,7 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.tabWidget)
 
         self.retranslateUi(Form)
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(1)
         self.pushButtonSendPcTime.clicked.connect(Form.on_send_pc_time)
         self.pushButtonSendThisTime.clicked.connect(Form.on_click_this_time)
         self.pushButtonSendTcReq.clicked.connect(Form.on_click_send_telecommand_request)
@@ -411,6 +411,8 @@ class Ui_Form(object):
         self.pushButtonAbortUploadFile.clicked.connect(Form.on_click_upload_abort)
         self.comboBoxCommsBaudValue.currentTextChanged['QString'].connect(Form.on_baud_rate_change)
         self.spinBoxTcTlmRateValue.valueChanged['int'].connect(Form.on_tc_tlm_rate_change)
+        self.checkBoxTlmReqContinuous.clicked['bool'].connect(Form.on_continuous_toggle)
+        self.checkBoxTcReqContinuous.clicked['bool'].connect(Form.on_continuous_toggle)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
