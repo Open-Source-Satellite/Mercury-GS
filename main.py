@@ -16,8 +16,10 @@
 #  Main app entry point 
 #  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
-
+import PyQt5.QtCore
 from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
+from PyQt5.QtGui import QRegExpValidator, QIntValidator, QDoubleValidator
+from PyQt5.QtCore import QRegExp
 
 import low_level.continuous
 import telemetry
@@ -40,6 +42,13 @@ class MainWindow(QWidget, Ui_Form):
         # self.pushButtonOpenFileDownloadTo.clicked.connect(self.on_click_download_open)
         # self.comboBoxCommsBaudValue.currentTextChanged.connect(self.on_baud_rate_change)
 
+        # Set validators for GUI elements
+        self.inputTcTlmRateValue.setValidator(QIntValidator(0, 999, self.inputTcTlmRateValue))
+        self.inputTcNumberValue.setValidator(QIntValidator(0, 999, self.inputTcNumberValue))
+        self.inputTcTlmTimeoutValue.setValidator(QIntValidator(0, 999, self.inputTcTlmTimeoutValue))
+        self.inputTlmAdHocChannelValue.setValidator(QIntValidator(0, 999, self.inputTlmAdHocChannelValue))
+        self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]*"), self.inputTcDataValue))
+
         # Init UART
         from low_level.serial_comms import serial_comms_init
         serial_comms_init()
@@ -54,7 +63,7 @@ class MainWindow(QWidget, Ui_Form):
         # Set COMMS Baud Rate
         config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
         # Set TC_TLM Rate
-        config.TC_TLM_RATE = self.spinBoxTcTlmRateValue.value()
+        config.TC_TLM_RATE = self.inputTcTlmRateValue.text()
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -75,8 +84,8 @@ class MainWindow(QWidget, Ui_Form):
         print('Time: {}'.format(time_string))
 
     def on_click_send_telecommand_request(self, event):
-        tc = self.spinBoxTcNumberValue.value()
-        data = self.inputTcData.text()
+        tc = self.inputTcNumberValue.text()
+        data = self.inputTcDataValue.text()
         # Text value of the comboBox. see: https://doc.qt.io/qt-5/qcombobox.html#currentData-prop
         datatype = self.comboBoxTcDataType.currentText()
 
@@ -92,11 +101,11 @@ class MainWindow(QWidget, Ui_Form):
 
     def on_click_send_telemetry_request(self, event):
         # labelTimeOuts
-        tlm_channel = self.spinBoxTlmAdHocChValue.value()
+        tlm_channel = self.inputTlmAdHocChValue.text()
         is_continuous = self.checkBoxTlmReqContinuous.checkState() == 2
 
         # Set the TIMEOUTS value here;
-        self.labelTlmTimeoutValue.setText('0')
+        # self.labelTlmTimeoutValue.setText('0') TODO: update in separate function
 
         print('Channel: {}'.format(tlm_channel))
         print('Is continuous: {}'.format(is_continuous))
@@ -110,7 +119,7 @@ class MainWindow(QWidget, Ui_Form):
         file_path = file_dialog.getOpenFileName()[0]
         file_dialog.hide()
 
-        self.lineEditUploadFrom.setText(file_path)
+        self.inputUploadFrom.setText(file_path)
 
     def on_click_upload_abort(self, event):
         pass
@@ -122,18 +131,28 @@ class MainWindow(QWidget, Ui_Form):
         file_path = file_dialog.getOpenFileName()[0]
         file_dialog.hide()
 
-        self.lineEditDownloadTo.setText(file_path)
+        self.inputDownloadTo.setText(file_path)
 
     def on_baud_rate_change(self, event):
         config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
 
     def on_tc_tlm_rate_change(self, event):
-        config.TC_TLM_RATE = self.spinBoxTcTlmRateValue.value()
+        config.TC_TLM_RATE = self.inputTcTlmRateValue.text()
         low_level.continuous.adjust_continuous(config.TC_TLM_RATE)
 
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:
             low_level.continuous.continuous_stop()
+
+    def on_select_tc_datatype(self):
+        self.inputTcDataValue.setValidator(None)
+        self.inputTcDataValue.clear()
+        if self.comboBoxTcDataType.currentText() == "String":
+            self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]*"), self.inputTcDataValue))
+        elif self.comboBoxTcDataType.currentText() == "Integer":
+            self.inputTcDataValue.setValidator(QIntValidator(0, 999, self.inputTcDataValue))
+        elif self.comboBoxTcDataType.currentText() == "Floating Point":
+            self.inputTcDataValue.setValidator(QDoubleValidator(0, 999, self.inputTcDataValue))
 
     def telemetry_response_receive(self, telemetry_channel, telemetry_data):
         if telemetry_channel == 1:

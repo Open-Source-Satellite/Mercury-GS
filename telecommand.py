@@ -28,6 +28,12 @@ def telecommand_register_callback(tc_update_function_ptr):
 
 def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type, is_continuous):
     try:
+        telecommand_number = int(telecommand_number)
+    except ValueError as err:
+        print("ERROR: ", err)
+        print("INFO: Telecommand Request Channel is invalid")
+
+    try:
         if telecommand_data_type == "String":
             # Prepend whitespace until string is 8 chars
             while len(telecommand_data) < 8:
@@ -59,9 +65,6 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
     except UnboundLocalError as err:
         print("ERROR: ", err)
         print("INFO: Could not format message")
-    except ValueError as err:
-        print("ERROR: ", err)
-        print("INFO: Telecommand Request Channel is invalid")
 
 
 def tc_response(telecommand_packet):

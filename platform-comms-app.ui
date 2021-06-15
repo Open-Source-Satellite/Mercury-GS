@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>Form</class>
  <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>492</width>
+    <height>356</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>OSSAT Platform Computer Comms</string>
   </property>
@@ -91,7 +99,7 @@
                <string>Ad-hoc Request</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
-               <item row="5" column="1" rowspan="2" colspan="5">
+               <item row="5" column="1" rowspan="2" colspan="4">
                 <widget class="QGroupBox" name="groupBoxTlmErr">
                  <property name="title">
                   <string>Last Failure</string>
@@ -150,13 +158,6 @@
                  </widget>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="pushButtonSendTlmReq">
-                 <property name="text">
-                  <string>Send TLM REQ</string>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="1">
                 <widget class="QLabel" name="labelTlmAdHocChannel">
                  <property name="text">
@@ -164,7 +165,14 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="5">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButtonSendTlmReq">
+                 <property name="text">
+                  <string>Send TLM REQ</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
                 <layout class="QFormLayout" name="formLayoutTlmTimeouts">
                  <item row="0" column="0">
                   <widget class="QLabel" name="labelTlmTimeouts">
@@ -182,7 +190,7 @@
                  </item>
                 </layout>
                </item>
-               <item row="0" column="4">
+               <item row="0" column="3">
                 <spacer name="horizontalSpacer">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -202,24 +210,8 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="3">
-                <widget class="QSpinBox" name="spinBoxTlmAdHocChValue">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="buttonSymbols">
-                  <enum>QAbstractSpinBox::NoButtons</enum>
-                 </property>
-                 <property name="showGroupSeparator" stdset="0">
-                  <bool>false</bool>
-                 </property>
-                 <property name="value">
-                  <number>0</number>
-                 </property>
-                </widget>
+               <item row="0" column="2">
+                <widget class="QLineEdit" name="inputTlmAdHocChannelValue"/>
                </item>
               </layout>
              </widget>
@@ -267,20 +259,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBoxTcNumberValue">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="inputMethodHints">
-               <set>Qt::ImhNone</set>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::NoButtons</enum>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="inputTcNumberValue"/>
             </item>
            </layout>
           </item>
@@ -447,7 +426,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="inputTcData">
+             <widget class="QLineEdit" name="inputTcDataValue">
               <property name="inputMethodHints">
                <set>Qt::ImhNone</set>
               </property>
@@ -495,7 +474,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEditUploadTo">
+               <widget class="QLineEdit" name="inputUploadTo">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -514,7 +493,7 @@
               <item row="1" column="1">
                <layout class="QHBoxLayout" name="horizontalLayoutUploadFrom">
                 <item>
-                 <widget class="QLineEdit" name="lineEditUploadFrom"/>
+                 <widget class="QLineEdit" name="inputUploadFrom"/>
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButtonOpenFileUploadFrom">
@@ -598,7 +577,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEditDownloadFrom">
+             <widget class="QLineEdit" name="inputDownloadFrom">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -617,7 +596,7 @@
             <item row="1" column="1">
              <layout class="QHBoxLayout" name="horizontalLayoutDownloadTo">
               <item>
-               <widget class="QLineEdit" name="lineEditDownloadTo"/>
+               <widget class="QLineEdit" name="inputDownloadTo"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonOpenFileDownloadTo">
@@ -695,7 +674,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <layout class="QHBoxLayout" name="horizontalLayoutConfig">
               <item>
                <widget class="QComboBox" name="comboBoxCommsBaudValue">
                 <item>
@@ -741,7 +720,7 @@
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_5">
+               <spacer name="horizontalSpacerBaudTcTlmRate">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -761,23 +740,10 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxTcTlmRateValue">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::NoButtons</enum>
-                </property>
-                <property name="value">
-                 <number>1</number>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="inputTcTlmRateValue"/>
               </item>
               <item>
-               <spacer name="horizontalSpacer_4">
+               <spacer name="horizontalSpacerRateTimeout">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -797,17 +763,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBoxTcTlmTimeoutValue">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::NoButtons</enum>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="inputTcTlmTimeoutValue"/>
               </item>
              </layout>
             </item>
@@ -832,9 +788,9 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
+             <layout class="QHBoxLayout" name="horizontalLayoutConfigFile" stretch="0,0">
               <item>
-               <widget class="QLineEdit" name="lineEditConfigFilePath"/>
+               <widget class="QLineEdit" name="inputConfigFilePath"/>
               </item>
               <item>
                <widget class="QPushButton" name="pushButtonOpenConfigFilePath">
@@ -987,22 +943,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>spinBoxTcTlmRateValue</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>Form</receiver>
-   <slot>on_tc_tlm_rate_change()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>294</x>
-     <y>59</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>287</x>
-     <y>-10</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>checkBoxTlmReqContinuous</sender>
    <signal>clicked(bool)</signal>
    <receiver>Form</receiver>
@@ -1034,6 +974,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>comboBoxTcDataType</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>on_select_tc_datatype()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>427</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>on_send_pc_time()</slot>
@@ -1046,5 +1002,6 @@
   <slot>on_baud_rate_change()</slot>
   <slot>on_tc_tlm_rate_change()</slot>
   <slot>on_continuous_toggle()</slot>
+  <slot>on_select_tc_datatype()</slot>
  </slots>
 </ui>
