@@ -16,16 +16,55 @@
 #  Main app entry point 
 #  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
-import PyQt5.QtCore
 from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
-from PyQt5.QtGui import QRegExpValidator, QIntValidator, QDoubleValidator
+from PyQt5.QtGui import QRegExpValidator, QIntValidator, QDoubleValidator, QValidator
 from PyQt5.QtCore import QRegExp
-
 import low_level.continuous
 import telemetry
 import telecommand
 import config
 from platform_comms_app import Ui_Form
+
+UINT_MAX = 4294967295
+UINT_MIN = 0
+S64INT_MAX = 9223372036854775807
+S64INT_MIN = -9223372036854775808
+
+
+# Validator for unsigned 32 bit integer
+class UIntValidator(QValidator):
+    def __init__(self, parent):
+        QValidator.__init__(self, parent)
+
+    def validate(self, s, pos):
+        try:
+            if s == "":
+                # Backspace or delete
+                return QValidator.Acceptable, s, pos
+            if int(s) > UINT_MAX or int(s) < UINT_MIN:
+                return QValidator.Invalid, s, pos
+        except ValueError:
+            return QValidator.Invalid, s, pos
+
+        return QValidator.Acceptable, s, pos
+
+
+# Validator for signed 64 bit integer
+class SixtyFourBitIntValidator(QValidator):
+    def __init__(self, parent):
+        QValidator.__init__(self, parent)
+
+    def validate(self, s, pos):
+        try:
+            if s == "" or s == "-":
+                # Backspace or delete or minus
+                return QValidator.Acceptable, s, pos
+            if int(s) > S64INT_MAX or int(s) < S64INT_MIN:
+                return QValidator.Invalid, s, pos
+        except ValueError:
+            return QValidator.Invalid, s, pos
+
+        return QValidator.Acceptable, s, pos
 
 
 class MainWindow(QWidget, Ui_Form):
@@ -33,21 +72,12 @@ class MainWindow(QWidget, Ui_Form):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        # Should do that for all UI items, need to do this in QT designer.
-        # self.pushButtonSendPcTime.clicked.connect(self.on_send_pc_time)
-        # self.pushButtonSendThisTime.clicked.connect(self.on_click_this_time)
-        # self.pushButtonSendTCReq.clicked.connect(self.onClickSendTCReq) AUTOCONNECTED
-        # self.pushButtonSendTlmReq.clicked.connect(self.onClickSendTLMReq) AUTOCONNECTED
-        # self.pushButtonOpenFileUploadFrom.clicked.connect(self.on_click_upload_open)
-        # self.pushButtonOpenFileDownloadTo.clicked.connect(self.on_click_download_open)
-        # self.comboBoxCommsBaudValue.currentTextChanged.connect(self.on_baud_rate_change)
-
         # Set validators for GUI elements
-        self.inputTcTlmRateValue.setValidator(QIntValidator(0, 999, self.inputTcTlmRateValue))
-        self.inputTcNumberValue.setValidator(QIntValidator(0, 999, self.inputTcNumberValue))
-        self.inputTcTlmTimeoutValue.setValidator(QIntValidator(0, 999, self.inputTcTlmTimeoutValue))
-        self.inputTlmAdHocChannelValue.setValidator(QIntValidator(0, 999, self.inputTlmAdHocChannelValue))
-        self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]*"), self.inputTcDataValue))
+        self.inputTcTlmRateValue.setValidator(QIntValidator(0, 1000, self.inputTcTlmRateValue))
+        self.inputTcNumberValue.setValidator(UIntValidator(self.inputTcNumberValue))
+        self.inputTcTlmTimeoutValue.setValidator(QIntValidator(0, 1000, self.inputTcTlmTimeoutValue))
+        self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
+        self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
 
         # Init UART
         from low_level.serial_comms import serial_comms_init
@@ -148,11 +178,11 @@ class MainWindow(QWidget, Ui_Form):
         self.inputTcDataValue.setValidator(None)
         self.inputTcDataValue.clear()
         if self.comboBoxTcDataType.currentText() == "String":
-            self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]*"), self.inputTcDataValue))
+            self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
         elif self.comboBoxTcDataType.currentText() == "Integer":
-            self.inputTcDataValue.setValidator(QIntValidator(0, 999, self.inputTcDataValue))
+            self.inputTcDataValue.setValidator(SixtyFourBitIntValidator(self.inputTcDataValue))
         elif self.comboBoxTcDataType.currentText() == "Floating Point":
-            self.inputTcDataValue.setValidator(QDoubleValidator(0, 999, self.inputTcDataValue))
+            self.inputTcDataValue.setValidator(QDoubleValidator())
 
     def telemetry_response_receive(self, telemetry_channel, telemetry_data):
         if telemetry_channel == 1:
