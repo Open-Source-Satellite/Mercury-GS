@@ -21,7 +21,7 @@ import struct
 import threading
 import time
 import serial
-import config
+from config import BAUD_RATE
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
 frame_queue = queue.Queue()
@@ -51,14 +51,18 @@ rx_listener_thread = threading.Thread(target=rx_listener, args=(ser,))
 
 
 def send(data_to_send):
-    ser.write(bytearray(str(data_to_send), "utf8"))
+    try:
+        ser.write(bytearray(str(data_to_send), "utf8"))
+    except serial.serialutil.SerialTimeoutException as err:
+        print(repr(err))
+        print("ERROR: Write Has Timed Out")
 
 
 def serial_comms_init():
-    change_baud_rate(config.BAUD_RATE)
+    change_baud_rate(BAUD_RATE)
     ser.port = 'COM19'
     ser.bytesize = 8
-    # ser.write_timeout = 5
+    ser.write_timeout = 5
 
     if ser.is_open:
         ser.close()

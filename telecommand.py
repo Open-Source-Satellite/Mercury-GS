@@ -16,7 +16,7 @@
 #  Mercury GS Telecommand Handler
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
-import config
+from config import TIMEOUT
 from low_level.packet import packetize, DataType, data_format
 from low_level.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
     telecommand_request_builder_float, telecommand_response_builder, TelecommandResponseState
@@ -84,7 +84,7 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
             print("ERROR: Telecommand Data value is not Floating Point Number")
 
         # Format the telecommand as a frame and send
-        telecommand_database.append(Telecommand(telecommand_number, config.TIMEOUT))
+        telecommand_database.append(Telecommand(telecommand_number, TIMEOUT))
         packetize(data, DataType.TELECOMMAND_REQUEST.value, is_continuous, telecommand_database, telecommand_database[-1])
     except UnboundLocalError as err:
         print(repr(err))
@@ -106,7 +106,7 @@ def tc_response(telecommand_packet):
     telecommand_response = telecommand_data[1]
 
     telecommand_database[:] = [telecommand for telecommand in telecommand_database if
-                               not tc_search_for_id_match(telecommand, telecommand_number, "STOP")]
+                               not tc_search_for_id_match(telecommand, telecommand_number, "STOP_TIMEOUT")]
 
     if telecommand_response == TelecommandResponseState.SUCCESS.value:
         telecommand_response_status = TelecommandResponseState.SUCCESS.name

@@ -2,7 +2,7 @@
 
 - [Mercury-GS](#mercury-gs)
   - [Development Setup](#development-setup)
-  - [Build](#build)
+  - [Building the GUI](#building-the-gui)
   - [Running The GUI](#running-the-gui)
   - [Serial Comms Setup](#serial-comms-setup)
   - [Sending And Receiving](#sending-and-receiving)
@@ -27,10 +27,11 @@ python3 -m pip install QtPy
 ```
 For *Qt Designer* install, it's suggested to download package from [here](https://build-system.fman.io/qt-designer-download), it is used to edit the UI layout - [platform-comms-app.ui](platform-comms-app.ui)
 
-## Build
+## Building the GUI
 To use the qt ui file from the Qt designer, we need to build it to a python file.
 You can do that by running: `pyuic5 platform-comms-app.ui -o platform_comms_app.py`
 Or by running the build script form the root of the project by running: `bash scripts/build-ui.sh`
+The built code of the current version of Mercury GS is included in the repo, so you will only need to rebuild the GUI if you make changes to it
 
 ## Running The GUI
 To run the python built by the last step, run "main.py" either via command line or through a Python compatible IDE

@@ -1,6 +1,6 @@
-import config
+from config import TIMEOUT
 from low_level.serial_comms import send
-import threading
+from threading import Timer
 import time
 
 rt = None
@@ -25,7 +25,7 @@ class RepeatedTimer(object):
     def start(self):
         if not self.is_running:
             self.next_call += self.interval
-            self._timer = threading.Timer(self.next_call - time.time(), self._run)
+            self._timer = Timer(self.next_call - time.time(), self._run)
             self._timer.start()
             self.is_running = True
 
@@ -42,7 +42,7 @@ def register_continuous(calls_per_second, callback, data_to_send, message_object
 
 def adjust_continuous(calls_per_second):
     global rt
-    if rt is RepeatedTimer:
+    if isinstance(rt, RepeatedTimer):
         frequency = 1.0 / calls_per_second
         rt.interval = frequency
         rt.stop()
@@ -54,7 +54,7 @@ def continuous_stop():
 
 
 def continuous_sender(frame, message_object_database, latest_message_object):
-    new_object = latest_message_object.__class__(latest_message_object.ID, config.TIMEOUT)
+    new_object = latest_message_object.__class__(latest_message_object.ID, TIMEOUT)
     message_object_database.append(new_object)
     new_object.start_timer()
     send(frame)

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -182,7 +182,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QLabel" name="labelTlmTimeoutValue">
+                  <widget class="QLabel" name="labelTlmTimeoutsValue">
                    <property name="text">
                     <string>0</string>
                    </property>
@@ -343,7 +343,7 @@
                  <item row="0" column="1">
                   <widget class="QLabel" name="labelTcResNumberValue">
                    <property name="text">
-                    <string>N</string>
+                    <string>N/A</string>
                    </property>
                   </widget>
                  </item>

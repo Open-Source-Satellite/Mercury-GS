@@ -86,7 +86,7 @@ class MainWindow(QWidget, Ui_Form):
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
         from low_level.packet import packet_register_callback, packet_init
-        telemetry_register_callback(self.telemetry_response_receive)
+        telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout)
         telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
         packet_init()
@@ -129,7 +129,7 @@ class MainWindow(QWidget, Ui_Form):
 
     def on_click_send_telemetry_request(self, event):
         # labelTimeOuts
-        tlm_channel = self.inputTlmAdHocChValue.text()
+        tlm_channel = self.inputTlmAdHocChannelValue.text()
         is_continuous = self.checkBoxTlmReqContinuous.checkState() == 2
 
         print('Channel: {}'.format(tlm_channel))
@@ -195,6 +195,10 @@ class MainWindow(QWidget, Ui_Form):
     def telecommand_response_receive(self, telecommand_number, telecommand_data):
         self.labelTcResNumberValue.setText(telecommand_number)
         self.labelTcResStatus.setText(telecommand_data)
+
+    def telemetry_timeout(self):
+        timeout_count = int(self.labelTlmTimeoutsValue.text()) + 1
+        self.labelTlmTimeoutsValue.setText(str(timeout_count))
 
     def telecommand_timeout(self):
         timeout_count = int(self.labelTcResTimeoutsValue.text()) + 1
