@@ -16,7 +16,15 @@ python3 -m venv venv
 source venv/bin/activate # or "call venv\Scripts\activate.bat" on Windows for initialize virtual environment
 python3 -m pip install PyQt5
 ```
-
+It is recommended to check for the following packages and install them if missing
+```bash
+# pyserial
+python3 -m pip install pyserial
+# PyQt5-tools
+python3 -m pip install PyQt5-tools
+# QtPy
+python3 -m pip install QtPy
+```
 For *Qt Designer* install, it's suggested to download package from [here](https://build-system.fman.io/qt-designer-download), it is used to edit the UI layout - [platform-comms-app.ui](platform-comms-app.ui)
 
 ## Build
