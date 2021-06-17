@@ -45,7 +45,7 @@ def data_format(data_to_format, data_format_builder):
     return formatted_data
 
 
-def packetize(data_to_packet, data_type, is_continuous):
+def packetize(data_to_packet, data_type, is_continuous, message_object_database, latest_message_object):
     packet_class = MessageFormat(data_to_packet, len(data_to_packet), data_type)
     packet_builder = struct.Struct("! 5B I")
     packet_packed = bytearray(packet_builder.pack(packet_class.header,
@@ -58,10 +58,16 @@ def packetize(data_to_packet, data_type, is_continuous):
     packet_packed.extend(packet_class.data)
 
     packet = x55_scan(packet_packed)
+    latest_message_object.start_timer()
+    send(packet)
+
     if is_continuous is True:
-        register_continuous(config.TC_TLM_RATE, continuous_sender, packet)
-    else:
-        send(packet)
+        try:
+            register_continuous(config.TC_TLM_RATE, continuous_sender, packet, message_object_database,
+                                latest_message_object)
+        except ZeroDivisionError as err:
+            print("\n", repr(err))
+            print("ERROR: Rate is 0, cannot run continuously")
 
 
 def x55_scan(data_to_scan):

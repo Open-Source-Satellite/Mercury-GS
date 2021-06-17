@@ -87,13 +87,11 @@ class MainWindow(QWidget, Ui_Form):
         from telecommand import telecommand_register_callback
         from low_level.packet import packet_register_callback, packet_init
         telemetry_register_callback(self.telemetry_response_receive)
-        telecommand_register_callback(self.telecommand_response_receive)
+        telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
         packet_init()
         # Set COMMS Baud Rate
         config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
-        # Set TC_TLM Rate
-        config.TC_TLM_RATE = self.inputTcTlmRateValue.text()
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -134,9 +132,6 @@ class MainWindow(QWidget, Ui_Form):
         tlm_channel = self.inputTlmAdHocChValue.text()
         is_continuous = self.checkBoxTlmReqContinuous.checkState() == 2
 
-        # Set the TIMEOUTS value here;
-        # self.labelTlmTimeoutValue.setText('0') TODO: update in separate function
-
         print('Channel: {}'.format(tlm_channel))
         print('Is continuous: {}'.format(is_continuous))
 
@@ -154,7 +149,7 @@ class MainWindow(QWidget, Ui_Form):
     def on_click_upload_abort(self, event):
         pass
 
-    def on_click_download_open(self, event):
+    def on_click_download_open(self):
         file_dialog = QFileDialog(self)
         file_dialog.show()
 
@@ -163,12 +158,17 @@ class MainWindow(QWidget, Ui_Form):
 
         self.inputDownloadTo.setText(file_path)
 
-    def on_baud_rate_change(self, event):
+    def on_baud_rate_change(self):
         config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
 
-    def on_tc_tlm_rate_change(self, event):
-        config.TC_TLM_RATE = self.inputTcTlmRateValue.text()
-        low_level.continuous.adjust_continuous(config.TC_TLM_RATE)
+    def on_tc_tlm_rate_change(self):
+        if self.inputTcTlmRateValue.text() != "":
+            config.TC_TLM_RATE = int(self.inputTcTlmRateValue.text())
+            low_level.continuous.adjust_continuous(config.TC_TLM_RATE)
+
+    def on_timeout_change(self):
+        if self.inputTcTlmTimeoutValue.text() != "":
+            config.TIMEOUT = float(self.inputTcTlmTimeoutValue.text()) / 1000
 
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:
@@ -193,8 +193,12 @@ class MainWindow(QWidget, Ui_Form):
             self.labelTlmChThreeValue.setText(telemetry_data)
 
     def telecommand_response_receive(self, telecommand_number, telecommand_data):
-        self.labelTelecommandResNumberValue.setText(telecommand_number)
-        self.labelTelecommandResStatus.setText(telecommand_data)
+        self.labelTcResNumberValue.setText(telecommand_number)
+        self.labelTcResStatus.setText(telecommand_data)
+
+    def telecommand_timeout(self):
+        timeout_count = int(self.labelTcResTimeoutsValue.text()) + 1
+        self.labelTcResTimeoutsValue.setText(str(timeout_count))
 
 
 app = QApplication([])

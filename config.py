@@ -19,7 +19,8 @@
 
 # Initialise Global Variables
 BAUD_RATE = 9600
-TC_TLM_RATE = 1
+TC_TLM_RATE = 0
+TIMEOUT = 0
 
 # Function Pointers
 global ptr_unpacketise

@@ -51,9 +51,6 @@ rx_listener_thread = threading.Thread(target=rx_listener, args=(ser,))
 
 
 def send(data_to_send):
-    change_baud_rate(config.BAUD_RATE)
-    print(ser.name)
-    print(ser.baudrate)
     ser.write(bytearray(str(data_to_send), "utf8"))
 
 

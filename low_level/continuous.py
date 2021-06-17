@@ -1,8 +1,10 @@
+import config
 from low_level.serial_comms import send
 import threading
 import time
 
 rt = None
+
 
 class RepeatedTimer(object):
     def __init__(self, interval, function, *args, **kwargs):
@@ -32,23 +34,27 @@ class RepeatedTimer(object):
         self.is_running = False
 
 
-def register_continuous(calls_per_second, callback, data_to_send):
+def register_continuous(calls_per_second, callback, data_to_send, message_object_database, latest_message_object):
     frequency = 1.0 / calls_per_second
     global rt
-    rt = RepeatedTimer(frequency, callback, data_to_send)  # it auto-starts, no need of rt.start()
+    rt = RepeatedTimer(frequency, callback, data_to_send, message_object_database, latest_message_object)
 
 
 def adjust_continuous(calls_per_second):
-    frequency = 1.0 / calls_per_second
     global rt
-    rt.interval = frequency
-    rt.stop()
-    rt.start()
+    if rt is RepeatedTimer:
+        frequency = 1.0 / calls_per_second
+        rt.interval = frequency
+        rt.stop()
+        rt.start()
 
 
 def continuous_stop():
     rt.stop()
 
 
-def continuous_sender(frame):
+def continuous_sender(frame, message_object_database, latest_message_object):
+    new_object = latest_message_object.__class__(latest_message_object.ID, config.TIMEOUT)
+    message_object_database.append(new_object)
+    new_object.start_timer()
     send(frame)

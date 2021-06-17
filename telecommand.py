@@ -16,22 +16,45 @@
 #  Mercury GS Telecommand Handler
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
+import config
 from low_level.packet import packetize, DataType, data_format
 from low_level.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
     telecommand_request_builder_float, telecommand_response_builder, TelecommandResponseState
+from threading import Timer
+
+telecommand_database = []
 
 
-def telecommand_register_callback(tc_update_function_ptr):
+class Telecommand:
+    def __init__(self, number, tc_timeout):
+        self.ID = number
+        self.TimerFunction = Timer(tc_timeout, self.timeout)
+
+    def start_timer(self):
+        self.TimerFunction.start()
+
+    def stop_timer(self):
+        self.TimerFunction.cancel()
+
+    def timeout(self):
+        telecommand_database[:] = [telecommand for telecommand in telecommand_database if
+                                   not tc_search_for_id_match(telecommand, self.ID)]
+        callback_telecommand_timeout()
+
+
+def telecommand_register_callback(tc_update_function_ptr, tc_timeout_function_ptr):
     global callback_telecommand_response_update
+    global callback_telecommand_timeout
     callback_telecommand_response_update = tc_update_function_ptr
+    callback_telecommand_timeout = tc_timeout_function_ptr
 
 
 def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type, is_continuous):
     try:
         telecommand_number = int(telecommand_number)
     except ValueError as err:
-        print("ERROR: ", err)
-        print("INFO: Telecommand Request Channel is invalid")
+        print(str(repr(err)))
+        print("ERROR: Telecommand Request Channel is invalid")
 
     try:
         if telecommand_data_type == "String":
@@ -48,8 +71,8 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
                                    telecommand_request_builder_integer)
         except ValueError as err:
             # Handle exception if data is not an integer
-            print("ERROR: ", err)
-            print("INFO: Telecommand Data value is not Integer")
+            print(repr(err))
+            print("ERROR: Telecommand Data value is not Integer")
         try:
             if telecommand_data_type == "Floating Point":
                 # Format the data as a double
@@ -57,20 +80,34 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
                                    telecommand_request_builder_float)
         except ValueError as err:
             # Handle exception if data is not a float
-            print("ERROR: ", err)
-            print("INFO: Telecommand Data value is not Floating Point Number")
+            print(repr(err))
+            print("ERROR: Telecommand Data value is not Floating Point Number")
 
         # Format the telecommand as a frame and send
-        packetize(data, DataType.TELECOMMAND_REQUEST.value, is_continuous)
+        telecommand_database.append(Telecommand(telecommand_number, config.TIMEOUT))
+        packetize(data, DataType.TELECOMMAND_REQUEST.value, is_continuous, telecommand_database, telecommand_database[-1])
     except UnboundLocalError as err:
-        print("ERROR: ", err)
-        print("INFO: Could not format message")
+        print(repr(err))
+        print("ERROR: Could not format message")
+
+
+def tc_search_for_id_match(telecommand, id_to_match, action=None):
+    if telecommand.ID == id_to_match:
+        if action == "STOP_TIMEOUT":
+            telecommand.stop_timer()
+        return True
+    else:
+        return False
 
 
 def tc_response(telecommand_packet):
     telecommand_data = telecommand_response_builder.unpack(telecommand_packet)
     telecommand_number = telecommand_data[0]
     telecommand_response = telecommand_data[1]
+
+    telecommand_database[:] = [telecommand for telecommand in telecommand_database if
+                               not tc_search_for_id_match(telecommand, telecommand_number, "STOP")]
+
     if telecommand_response == TelecommandResponseState.SUCCESS.value:
         telecommand_response_status = TelecommandResponseState.SUCCESS.name
     elif telecommand_response == TelecommandResponseState.FAILED.value:
@@ -83,3 +120,6 @@ def tc_response(telecommand_packet):
         telecommand_response_status = TelecommandResponseState.INVALID_COMMAND_ARGUMENT.name
 
     callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
+
+
+
