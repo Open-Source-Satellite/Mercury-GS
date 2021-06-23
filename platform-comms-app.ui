@@ -6,18 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>356</height>
+    <width>620</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OSSAT Platform Computer Comms</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabTelemetry">
       <attribute name="title">
@@ -277,52 +277,40 @@
               <property name="title">
                <string>Time Commands</string>
               </property>
-              <widget class="QPushButton" name="pushButtonSendPcTime">
-               <property name="geometry">
-                <rect>
-                 <x>9</x>
-                 <y>29</y>
-                 <width>128</width>
-                 <height>32</height>
-                </rect>
-               </property>
-               <property name="text">
-                <string>Send PC Time</string>
-               </property>
-              </widget>
-              <widget class="QWidget" name="layoutWidget">
-               <property name="geometry">
-                <rect>
-                 <x>10</x>
-                 <y>60</y>
-                 <width>377</width>
-                 <height>38</height>
-                </rect>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayoutSendTime">
-                <item>
-                 <widget class="QPushButton" name="pushButtonSendThisTime">
-                  <property name="text">
-                   <string>Send this Time :</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayoutSendTimeValues">
-                  <item alignment="Qt::AlignLeft">
-                   <widget class="QDateEdit" name="dateEditSendThisDate"/>
-                  </item>
-                  <item>
-                   <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
-                    <property name="displayFormat">
-                     <string>HH:mm:ss.zzz</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButtonSendPcTime">
+                 <property name="text">
+                  <string>Send PC Time</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayoutSendTime">
+                 <item>
+                  <widget class="QPushButton" name="pushButtonSendThisTime">
+                   <property name="text">
+                    <string>Send this Time :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayoutSendTimeValues">
+                   <item alignment="Qt::AlignLeft">
+                    <widget class="QDateEdit" name="dateEditSendThisDate"/>
+                   </item>
+                   <item>
+                    <widget class="QDateTimeEdit" name="dateTimeEditSendThisTime">
+                     <property name="displayFormat">
+                      <string>HH:mm:ss.zzz</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </widget>
             </item>
             <item>
@@ -443,8 +431,8 @@
       <attribute name="title">
        <string>FILE TRANSFER</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
         <widget class="QGroupBox" name="groupBoxToUpload">
          <property name="title">
           <string>To Upload</string>
@@ -549,7 +537,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="QGroupBox" name="groupBoxToDownload">
          <property name="title">
           <string>To Download</string>
@@ -645,7 +633,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_4">
+     <widget class="QWidget" name="tabLog">
       <attribute name="title">
        <string>LOG</string>
       </attribute>
@@ -654,8 +642,8 @@
       <attribute name="title">
        <string>CONFIG</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_9">
-       <item row="0" column="1">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
         <widget class="QGroupBox" name="groupBoxConfig">
          <property name="title">
           <string>Config</string>
@@ -816,6 +804,312 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabTest">
+      <property name="minimumSize">
+       <size>
+        <width>536</width>
+        <height>0</height>
+       </size>
+      </property>
+      <attribute name="title">
+       <string>TEST</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBoxTest">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="title">
+          <string>Test</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayoutTest">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="labelDelimiter">
+              <property name="text">
+               <string>New Frame Delimiter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutDelimiter">
+              <item>
+               <widget class="QLineEdit" name="inputDelimiter">
+                <property name="text">
+                 <string>0x55</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerDelimiter">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>13</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelReservedBytes">
+              <property name="text">
+               <string>RESERVED Bytes</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutReservedBytes">
+              <item>
+               <widget class="QLineEdit" name="inputReservedBytes1">
+                <property name="text">
+                 <string>0x00</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerReservedBytes1">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="inputReservedBytes2">
+                <property name="text">
+                 <string>0x00</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerReservedBytes2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="inputReservedBytes3">
+                <property name="text">
+                 <string>0x00</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerReservedBytes3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="0" colspan="2">
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>13</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="labelDataType">
+              <property name="text">
+               <string>Data Type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutDataType">
+              <item>
+               <widget class="QLineEdit" name="inputDataType">
+                <property name="text">
+                 <string>0x00</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerDataType">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="5" column="0" colspan="2">
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>13</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="labelDataLength">
+              <property name="text">
+               <string>Data Length</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutDataLength">
+              <item>
+               <widget class="QLineEdit" name="inputDataLength">
+                <property name="text">
+                 <string>0x03</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacerDataLength">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonTestTransmit">
+                <property name="text">
+                 <string>Transmit</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="7" column="0" colspan="2">
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>13</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="labelDataField">
+              <property name="text">
+               <string>Data Field</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutDataField">
+              <item>
+               <widget class="QLineEdit" name="inputDataField">
+                <property name="text">
+                 <string>0x01 0x02 0x03</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="9" column="0" colspan="2">
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>13</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="labelResponse">
+              <property name="text">
+               <string>Response</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutResponse">
+              <item>
+               <widget class="QLineEdit" name="outputResponse"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -829,8 +1123,8 @@
    <slot>on_send_pc_time()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>98</x>
-     <y>157</y>
+     <x>112</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
      <x>91</x>
@@ -845,8 +1139,8 @@
    <slot>on_click_this_time()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>126</x>
-     <y>188</y>
+     <x>140</x>
+     <y>215</y>
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
@@ -861,8 +1155,8 @@
    <slot>on_click_send_telecommand_request()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>100</y>
+     <x>336</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
      <x>344</x>
@@ -878,7 +1172,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>90</x>
-     <y>228</y>
+     <y>278</y>
     </hint>
     <hint type="destinationlabel">
      <x>76</x>
@@ -894,7 +1188,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>78</x>
-     <y>136</y>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
      <x>89</x>
@@ -909,8 +1203,8 @@
    <slot>on_click_download_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>293</y>
+     <x>93</x>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>36</x>
@@ -926,7 +1220,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>138</x>
-     <y>136</y>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
      <x>110</x>
@@ -957,12 +1251,12 @@
    <slot>on_continuous_toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>75</x>
-     <y>248</y>
+     <x>90</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
      <x>151</x>
-     <y>-8</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -973,12 +1267,12 @@
    <slot>on_continuous_toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>224</x>
-     <y>78</y>
+     <x>491</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>233</x>
-     <y>-2</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -989,12 +1283,12 @@
    <slot>on_select_tc_datatype()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>427</x>
-     <y>63</y>
+     <x>596</x>
+     <y>67</y>
     </hint>
     <hint type="destinationlabel">
      <x>370</x>
-     <y>-9</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1005,12 +1299,12 @@
    <slot>on_timeout_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>57</y>
+     <x>594</x>
+     <y>68</y>
     </hint>
     <hint type="destinationlabel">
      <x>415</x>
-     <y>-15</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -1026,7 +1320,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>263</x>
-     <y>-10</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonTestTransmit</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>on_click_test_transmit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>575</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>552</x>
+     <y>-6</y>
     </hint>
    </hints>
   </connection>
@@ -1044,5 +1354,6 @@
   <slot>on_continuous_toggle()</slot>
   <slot>on_select_tc_datatype()</slot>
   <slot>on_timeout_change()</slot>
+  <slot>on_click_test_transmit()</slot>
  </slots>
 </ui>

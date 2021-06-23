@@ -120,6 +120,3 @@ def tc_response(telecommand_packet):
         telecommand_response_status = TelecommandResponseState.INVALID_COMMAND_ARGUMENT.name
 
     callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
-
-
-

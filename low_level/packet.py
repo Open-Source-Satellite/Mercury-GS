@@ -1,4 +1,5 @@
-from low_level.serial_comms import frame_queue, send
+from low_level.serial_comms import frame_queue
+import low_level.serial_comms
 from low_level.frameformat import MessageFormat, DataType, struct
 import threading
 import config
@@ -59,7 +60,7 @@ def packetize(data_to_packet, data_type, is_continuous, message_object_database,
 
     packet = x55_scan(packet_packed)
     latest_message_object.start_timer()
-    send(packet)
+    low_level.serial_comms.serial_handler.serial.send(packet)
 
     if is_continuous is True:
         try:

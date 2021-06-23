@@ -1,5 +1,5 @@
 from config import TIMEOUT
-from low_level.serial_comms import send
+import low_level.serial_comms
 from threading import Timer
 import time
 
@@ -57,4 +57,4 @@ def continuous_sender(frame, message_object_database, latest_message_object):
     new_object = latest_message_object.__class__(latest_message_object.ID, TIMEOUT)
     message_object_database.append(new_object)
     new_object.start_timer()
-    send(frame)
+    low_level.serial_comms.serial_handler.serial.send(frame)

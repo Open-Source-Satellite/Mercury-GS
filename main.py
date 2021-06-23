@@ -23,6 +23,7 @@ import low_level.continuous
 import telemetry
 import telecommand
 import config
+import test
 from platform_comms_app import Ui_Form
 
 UINT_MAX = 4294967295
@@ -79,19 +80,19 @@ class MainWindow(QWidget, Ui_Form):
         self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
         self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
 
-        # Init UART
+        # Init Serial Comms
         from low_level.serial_comms import serial_comms_init
-        serial_comms_init()
+        serial_comms_init("COM19", 9600)
         # Register all callbacks
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
         from low_level.packet import packet_register_callback, packet_init
+        from test import test_register_callback
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout)
         telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
+        test_register_callback(self.test_response_receive)
         packet_init()
-        # Set COMMS Baud Rate
-        config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -137,6 +138,18 @@ class MainWindow(QWidget, Ui_Form):
 
         telemetry.tlm_request_send(tlm_channel, is_continuous)
 
+    def on_click_test_transmit(self):
+        delimiter = self.inputDelimiter.text()
+        reserved_bytes = [self.inputReservedBytes1.text(), self.inputReservedBytes2.text(), self.inputReservedBytes3.text()]
+        data_type = self.inputDataType.text()
+        data_length = self.inputDataLength.text()
+        data_field = self.inputDataField.text()
+
+        test.transmit_test_frame(delimiter, reserved_bytes, data_type, data_length, data_field)
+
+    def test_response_receive(self, test_response):
+        self.outputResponse.setText(test_response)
+
     def on_click_upload_open(self, event):
         file_dialog = QFileDialog(self)
         file_dialog.show()
@@ -159,7 +172,8 @@ class MainWindow(QWidget, Ui_Form):
         self.inputDownloadTo.setText(file_path)
 
     def on_baud_rate_change(self):
-        config.BAUD_RATE = self.comboBoxCommsBaudValue.currentText()
+        import low_level.serial_comms
+        low_level.serial_comms.serial_handler.serial.change_baud_rate = self.comboBoxCommsBaudValue.currentText()
 
     def on_tc_tlm_rate_change(self):
         if self.inputTcTlmRateValue.text() != "":
