@@ -195,7 +195,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_com_port_change(self):
         from low_level.serial_comms import change_com_port
-        config.COM_PORT = self.inputComPort.text()
+        config.COM_PORT = self.inputComPort.currentText()
         change_com_port(config.COM_PORT)
 
     def on_continuous_toggle(self, is_continuous):

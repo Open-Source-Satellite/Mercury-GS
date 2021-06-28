@@ -777,7 +777,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>10</height>
                 </size>
                </property>
               </spacer>
@@ -806,7 +806,108 @@
              <item row="2" column="1">
               <layout class="QHBoxLayout" name="horizontalLayoutComPort">
                <item>
-                <widget class="QLineEdit" name="inputComPort"/>
+                <widget class="QComboBox" name="inputComPort">
+                 <item>
+                  <property name="text">
+                   <string>COM1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM5</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM6</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM7</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM8</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM9</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM10</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM11</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM12</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM13</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM14</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM15</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM16</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM17</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM18</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM19</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>COM20</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item>
                 <spacer name="horizontalSpacerComPort">
@@ -838,7 +939,7 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
-                 <height>40</height>
+                 <height>10</height>
                 </size>
                </property>
               </spacer>
@@ -1344,17 +1445,17 @@
   </connection>
   <connection>
    <sender>inputComPort</sender>
-   <signal>textChanged(QString)</signal>
+   <signal>currentTextChanged(QString)</signal>
    <receiver>MainWindow</receiver>
    <slot>on_com_port_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>192</x>
-     <y>129</y>
+     <x>115</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
-     <x>225</x>
-     <y>-14</y>
+     <x>145</x>
+     <y>-20</y>
     </hint>
    </hints>
   </connection>

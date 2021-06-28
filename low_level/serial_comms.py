@@ -21,6 +21,8 @@ import struct
 import threading
 import time
 import serial
+
+import config
 from config import COM_PORT, BAUD_RATE
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
@@ -265,4 +267,9 @@ def flush_com_port():
 
 def change_com_port(port):
     global serial_handler
+    serial_handler.serial_comms.close()
     serial_handler.serial_comms.port = port
+    try:
+        serial_handler.serial_comms.open()
+    except serial.serialutil.SerialException as err:
+        print(repr(err))
