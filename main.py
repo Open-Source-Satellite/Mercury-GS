@@ -193,6 +193,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.error_message_box("ERROR: Invalid Timeout Value")
 
+    def on_com_port_change(self):
+        from low_level.serial_comms import change_com_port
+        config.COM_PORT = self.inputComPort.text()
+        change_com_port(config.COM_PORT)
+
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:
             low_level.continuous.continuous_stop()
