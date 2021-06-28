@@ -54,7 +54,11 @@ class SerialComms(serial.Serial):
 
     def __init__(self, port, baud_rate):
         """ Initialise serial interface, set bytesize and write_timeout values. """
-        super().__init__(port, baud_rate)
+        try:
+            super().__init__(port, baud_rate)
+        except serial.serialutil.SerialException as err:
+            print(repr(err))
+
         self.bytesize = 8
         self.write_timeout = 5
 
@@ -62,9 +66,11 @@ class SerialComms(serial.Serial):
         if self.is_open:
             self.close()
 
-        # Open COM Port if closed
-        if not self.is_open:
+        # Open COM Port
+        try:
             self.open()
+        except serial.serialutil.SerialException as err:
+            print(repr(err))
 
     def check_baud_rate(self, requested_baud_rate):
         """ Check that the baud rate requested is not already set. """
@@ -97,11 +103,12 @@ class StateMachine(threading.Thread):
         otherwise engages StateMachine.
         """
         while True:
-            if self.test_listen is True:
-                self.direct_read(serial_handler.serial_comms)
-            else:
-                self.frame_buffer.clear()
-                self.pending_frame(serial_handler.serial_comms)
+            if serial_handler.serial_comms.is_open:
+                if self.test_listen is True:
+                    self.direct_read(serial_handler.serial_comms)
+                else:
+                    self.frame_buffer.clear()
+                    self.pending_frame(serial_handler.serial_comms)
 
     def pending_frame(self, com):
         """ PENDING_FRAME State, checks for start of frame...
@@ -254,3 +261,8 @@ def change_baud_rate(requested_baud_rate):
 def flush_com_port():
     global serial_handler
     serial_handler.serial_comms.reset_output_buffer()
+
+
+def change_com_port(port):
+    global serial_handler
+    serial_handler.serial_comms.port = port
