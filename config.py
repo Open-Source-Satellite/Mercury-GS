@@ -19,8 +19,16 @@
 
 # Initialise Global Variables
 BAUD_RATE = 9600
-TC_TLM_RATE = 0
-TIMEOUT = 0
+COM_PORT = "COM19"
+TC_TLM_RATE = 1
+TIMEOUT = float(1000) / 1000
+
+
+def change_timeout(timeout):
+    """ Change the global TIMEOUT value as a float. """
+    global TIMEOUT
+    TIMEOUT = float(timeout) / 1000
+
 
 # Function Pointers
 global ptr_unpacketise

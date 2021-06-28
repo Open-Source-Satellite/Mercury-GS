@@ -1,3 +1,21 @@
+###################################################################################
+# @file test.py
+###################################################################################
+#   _  _____ ____  ____  _____
+#  | |/ /_ _/ ___||  _ \| ____|
+#  | ' / | |\___ \| |_) |  _|
+#  | . \ | |___ ) |  __/| |___
+#  |_|\_\___|____/|_|   |_____|
+###################################################################################
+# Copyright (c) 2020 KISPE Space Systems Ltd.
+#
+# Please follow the following link for the license agreement for this code:
+# www.kispe.co.uk/projectlicenses/RA2001001003
+###################################################################################
+#  Created on: 06-May-2021
+#  Mercury GS Test Interface
+#  @author: Jamie Bayley (jbayley@kispe.co.uk)
+###################################################################################
 import codecs
 from threading import Timer
 from low_level.serial_comms import direct_read_queue
@@ -33,7 +51,7 @@ class TestFrame:
         return bytes_buffer
 
     def transmit(self):
-        low_level.serial_comms.serial_handler.serial.send(self.bytes_to_send)
+        low_level.serial_comms.serial_handler.serial_comms.send(self.bytes_to_send)
         low_level.serial_comms.serial_handler.rx_listener.test_listen = True
         self.TimerFunction.start()
 
@@ -49,9 +67,14 @@ class TestFrame:
         # self.test_response.clear()
 
 
-def test_register_callback(test_response_function_ptr):
+def test_register_callback(test_response_function_ptr, exception_handler_function_ptr):
+    """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_test_response
+    global callback_exception_handler
+    # Register callback to update GUI with Test Result
     callback_test_response = test_response_function_ptr
+    # Set exception handler callback
+    callback_exception_handler = exception_handler_function_ptr
 
 
 def transmit_test_frame(delimiter, reserved_bytes, data_type, data_length, data_field):

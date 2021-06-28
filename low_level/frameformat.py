@@ -13,7 +13,7 @@
 # www.kispe.co.uk/projectlicenses/RA2001001003
 ###################################################################################
 #  Created on: 17-Aug-2020
-#  OSSAT Platform Comms message frame format
+#  OSSAT Platform Comms Protocol Frame Format
 #  @author: Ricardo Mota (ricardoflmota@gmail.com)
 ###################################################################################
 from enum import Enum
@@ -23,6 +23,7 @@ PROTOCOL_DELIMITER = 0x55
 RESERVED = bytearray.fromhex("DE AD BE")
 MAX_DATA_TYPES = 6
 
+""" Struct module Builders for message formatting. """
 telecommand_request_builder_string = struct.Struct("! I 8B")
 telecommand_request_builder_integer = struct.Struct("! I q")
 telecommand_request_builder_float = struct.Struct("! I d")
@@ -32,6 +33,7 @@ telemetry_response_builder = struct.Struct("! I Q")
 
 
 class MessageFormat:
+    """ MessageFormat class to set the bitfields for each message"""
     header = PROTOCOL_DELIMITER
     reserved1 = RESERVED[0]
     reserved2 = RESERVED[1]
@@ -44,6 +46,7 @@ class MessageFormat:
 
 
 class DataType(Enum):
+    """ DataType class for each possible data type. """
     TELECOMMAND_REQUEST = 0x01
     TELECOMMAND_RESPONSE = 0x02
     TELEMETRY_DATA = 0x03
@@ -54,6 +57,7 @@ class DataType(Enum):
 
 
 class TelecommandResponseState(Enum):
+    """ TelecommandResponseState class for each possible response state. """
     SUCCESS = 0x00
     FAILED = 0x01
     INVALID_LENGTH = 0x02
@@ -62,5 +66,6 @@ class TelecommandResponseState(Enum):
 
 
 class TelemetryResponseState(Enum):
+    """ TelemetryResponseState class for each possible response state. """
     SUCCESS = 0x00
     FAILED = 0x01

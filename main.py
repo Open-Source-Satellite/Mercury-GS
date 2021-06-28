@@ -16,15 +16,16 @@
 #  Main app entry point 
 #  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
-from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QFileDialog, QApplication, QMainWindow, QErrorMessage
 from PyQt5.QtGui import QRegExpValidator, QIntValidator, QDoubleValidator, QValidator
-from PyQt5.QtCore import QRegExp
+from PyQt5.QtCore import QRegExp, QFile
 import low_level.continuous
 import telemetry
 import telecommand
 import config
 import test
-from platform_comms_app import Ui_Form
+import sys
+from platform_comms_app import Ui_MainWindow
 
 UINT_MAX = 4294967295
 UINT_MIN = 0
@@ -68,9 +69,9 @@ class SixtyFourBitIntValidator(QValidator):
         return QValidator.Acceptable, s, pos
 
 
-class MainWindow(QWidget, Ui_Form):
+class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+        super(MainWindow, self).__init__()
         self.setupUi(self)
 
         # Set validators for GUI elements
@@ -81,17 +82,20 @@ class MainWindow(QWidget, Ui_Form):
         self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
 
         # Init Serial Comms
-        from low_level.serial_comms import serial_comms_init
+        from low_level.serial_comms import serial_comms_init, serial_comms_register_callback
         serial_comms_init("COM19", 9600)
         # Register all callbacks
         from telemetry import telemetry_register_callback
         from telecommand import telecommand_register_callback
         from low_level.packet import packet_register_callback, packet_init
         from test import test_register_callback
-        telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout)
-        telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout)
-        packet_register_callback(telemetry.tlm_response, telecommand.tc_response)
-        test_register_callback(self.test_response_receive)
+        from low_level.continuous import continuous_register_callback
+        telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout, self.error_message_box)
+        telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout, self.error_message_box)
+        packet_register_callback(telemetry.tlm_response, telecommand.tc_response, self.error_message_box)
+        test_register_callback(self.test_response_receive, self.error_message_box)
+        serial_comms_register_callback(self.error_message_box)
+        continuous_register_callback(self.error_message_box)
         packet_init()
 
     # TODO: I think there is a better way to handle events
@@ -129,7 +133,6 @@ class MainWindow(QWidget, Ui_Form):
         telecommand.tc_request_send(tc, data, datatype, is_continuous)
 
     def on_click_send_telemetry_request(self, event):
-        # labelTimeOuts
         tlm_channel = self.inputTlmAdHocChannelValue.text()
         is_continuous = self.checkBoxTlmReqContinuous.checkState() == 2
 
@@ -172,17 +175,23 @@ class MainWindow(QWidget, Ui_Form):
         self.inputDownloadTo.setText(file_path)
 
     def on_baud_rate_change(self):
-        import low_level.serial_comms
-        low_level.serial_comms.serial_handler.serial.change_baud_rate = self.comboBoxCommsBaudValue.currentText()
+        from low_level.serial_comms import change_baud_rate
+        change_baud_rate(int(self.comboBoxCommsBaudValue.currentText()))
 
     def on_tc_tlm_rate_change(self):
-        if self.inputTcTlmRateValue.text() != "":
-            config.TC_TLM_RATE = int(self.inputTcTlmRateValue.text())
-            low_level.continuous.adjust_continuous(config.TC_TLM_RATE)
+        rate_change = self.inputTcTlmRateValue.text()
+        if rate_change != "" and rate_change != "0":
+            low_level.continuous.adjust_continuous(int(rate_change))
+        else:
+            self.error_message_box("ERROR: Invalid Rate Value")
+            low_level.continuous.continuous_stop()
 
     def on_timeout_change(self):
-        if self.inputTcTlmTimeoutValue.text() != "":
-            config.TIMEOUT = float(self.inputTcTlmTimeoutValue.text()) / 1000
+        timeout_change = self.inputTcTlmTimeoutValue.text()
+        if timeout_change != "" or timeout_change != 0:
+            config.change_timeout(int(timeout_change))
+        else:
+            self.error_message_box("ERROR: Invalid Timeout Value")
 
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:
@@ -218,8 +227,11 @@ class MainWindow(QWidget, Ui_Form):
         timeout_count = int(self.labelTcResTimeoutsValue.text()) + 1
         self.labelTcResTimeoutsValue.setText(str(timeout_count))
 
+    def error_message_box(self, error_text):
+        self.statusbar.showMessage(error_text)
 
-app = QApplication([])
+
+app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
-app.exec_()
+sys.exit(app.exec())

@@ -13,7 +13,7 @@
 # www.kispe.co.uk/projectlicenses/RA2001001003
 ###################################################################################
 #  Created on: 06-May-2021
-#  Mercury GS Low Level Driver
+#  Mercury GS Serial Driver
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 import queue
@@ -21,6 +21,7 @@ import struct
 import threading
 import time
 import serial
+from config import COM_PORT, BAUD_RATE
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
 frame_queue = queue.Queue()
@@ -32,76 +33,104 @@ READING_DATA = 2
 DIRECT_READ = 3
 
 
+def serial_comms_register_callback(exception_handler_function_ptr):
+    """ Registers the callbacks for this module to pass data back to previous modules. """
+    global callback_exception_handler
+    # Set exception handler callback
+    callback_exception_handler = exception_handler_function_ptr
+
+
 class SerialHandler:
+    """ A Class to handle the serial comms and rx_listener. """
+
     def __init__(self, port, baud_rate):
+        """ Initialise the rx_listener and serial. """
         self.rx_listener = StateMachine()
-        self.serial = SerialComms(port, baud_rate)
+        self.serial_comms = SerialComms(port, baud_rate)
 
 
 class SerialComms(serial.Serial):
+    """ A Class to handle the serial comms. """
+
     def __init__(self, port, baud_rate):
+        """ Initialise serial interface, set bytesize and write_timeout values. """
         super().__init__(port, baud_rate)
         self.bytesize = 8
         self.write_timeout = 5
 
+        # Close COM Port if open
         if self.is_open:
             self.close()
 
+        # Open COM Port if closed
         if not self.is_open:
             self.open()
 
-    def change_baud_rate(self, requested_baud_rate):
+    def check_baud_rate(self, requested_baud_rate):
+        """ Check that the baud rate requested is not already set. """
         if self.baudrate is not requested_baud_rate:
             return requested_baud_rate
 
     def send(self, data_to_send):
+        """ Send data over the COM Port. """
         try:
             self.write(bytearray(str(data_to_send), "utf8"))
         except serial.serialutil.SerialTimeoutException as err:
             print(repr(err))
             print("ERROR: Write Has Timed Out")
+            callback_exception_handler("ERROR: Write Has Timed Out")
 
 
 class StateMachine(threading.Thread):
+    """ StateMachine Class for the RX_Listener running on a separate Thread. """
+
     def __init__(self):
+        """ Initialise Thread, buffer and checking variables. """
         super().__init__()
-        self.packet_buffer = bytearray()
+        self.frame_buffer = bytearray()
         self.delimiter_discarded = False
         self.test_listen = False
-        self.test_listen_finish = False
 
     def run(self):
+        """ Overloads the Thread's "run" function,
+        reads directly if Test Interface is used,
+        otherwise engages StateMachine.
+        """
         while True:
             if self.test_listen is True:
-                self.direct_read(serial_handler.serial)
+                self.direct_read(serial_handler.serial_comms)
             else:
-                self.packet_buffer.clear()
-                self.pending_frame(serial_handler.serial)
+                self.frame_buffer.clear()
+                self.pending_frame(serial_handler.serial_comms)
 
     def pending_frame(self, com):
+        """ PENDING_FRAME State, checks for start of frame...
+        (delimiter character followed by non delimiter character).
+        """
         # Check if there is incoming data
         if com.in_waiting != 0:
             try:
                 # Clear the received data buffer if it's 2 bytes
-                if len(self.packet_buffer) == 2:
-                    self.packet_buffer.clear()
+                if len(self.frame_buffer) == 2:
+                    self.frame_buffer.clear()
             except TypeError as err:
                 print("ERROR: ", err)
                 print("FIRST PASS")
 
             # Read a byte
             rx_byte = self.read_byte(com)
-            self.packet_buffer += rx_byte
+            self.frame_buffer += rx_byte
             # Check if we have received a 0x55 followed by a non-0x55
-            if (PROTOCOL_DELIMITER == self.packet_buffer[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
+            if (PROTOCOL_DELIMITER == self.frame_buffer[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
                 # This is the start of a new frame!
-                # Switch state to GATHERING_DATA and pass the 2 bytes of header data
+                # Switch state to GATHERING_DATA
                 self.gathering_header(com)
-            # Save the previous byte received if start of frame not detected
+            # Reenter PENDING_FRAME if start of frame not detected
             self.pending_frame(com)
 
     def gathering_header(self, com):
-        # Initialise Header Buffer
+        """ GATHERING_HEADER State, reads the rest of the header. """
+        # Create header bitfield buffer
         header_size = 3
         gathered_header = bytearray()
         header_count = 0
@@ -111,35 +140,39 @@ class StateMachine(threading.Thread):
             # Read a byte into Header Buffer
             gathered_header += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            gathered_header, header_count = self.x55_scan(gathered_header, header_count, com)
+            gathered_header, header_count = self.delimiter_scan_and_remove(gathered_header, header_count, com)
         self.delimiter_discarded = False
 
-        # Append gathered header onto first 2 bytes passed into this state
-        self.packet_buffer.extend(gathered_header)
+        # Append gathered header onto buffer
+        self.frame_buffer.extend(gathered_header)
         # Check if Data Type is within range
-        if self.packet_buffer[4] in range(MAX_DATA_TYPES):
-            # Data Type within range, switch to READING_DATA state and pass header data
+        if self.frame_buffer[4] in range(MAX_DATA_TYPES):
+            # Data Type within range, switch to READING_DATA state
             self.reading_data(com)
         else:
             # Data Type out of range, discard message and return to PENDING_FRAME
             self.pending_frame(com)
 
     def reading_data(self, com):
+        """ READING_DATA State, gathers the data length field and reads the rest of the frame,
+        then if frame is valid place onto queue to be processed by the packet handler Thread.
+        """
         # Create data length bitfield buffer
-        data_length_size = 4
         data_length_bytes = bytearray()
+        data_length_size = 4
         data_length_count = 0
         data_count = 0
 
-        # Iterate over Data Length Bytes
+        # Iterate over Data Length bytes
         while data_length_count < data_length_size:
             # Read a byte into Data Length Buffer
             data_length_bytes += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_length_bytes, data_length_count = self.x55_scan(data_length_bytes, data_length_count, com)
+            data_length_bytes, data_length_count = self.delimiter_scan_and_remove(data_length_bytes, data_length_count, com)
         data_length = struct.unpack("!L", data_length_bytes)[0]
 
         self.delimiter_discarded = False
+        # Create data bitfield buffer
         data_bytes = bytearray()
 
         # Iterate over Data Bytes
@@ -147,30 +180,41 @@ class StateMachine(threading.Thread):
             # Read a byte into Data Buffer
             data_bytes += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_bytes, data_count = self.x55_scan(data_bytes, data_count, com)
+            data_bytes, data_count = self.delimiter_scan_and_remove(data_bytes, data_count, com)
 
-        self.packet_buffer.extend(data_length_bytes + data_bytes)
+        # Append data length and data fields onto frame buffer
+        self.frame_buffer.extend(data_length_bytes + data_bytes)
         self.delimiter_discarded = False
 
-        frame_queue.put(self.packet_buffer)
+        # Add Frame onto queue to be processed by packet handler Thread
+        frame_queue.put(self.frame_buffer)
+        # Sleep for 1 second otherwise data can be lost in handler Thread TODO: This may need adjusting
         time.sleep(1)
 
     def direct_read(self, com):
+        """ DIRECT_READ State, entered if Test Interface is used to bypass State Machine """
+        # If there is incoming data
         if com.in_waiting != 0:
             # Read a byte
             rx_byte = self.read_byte(com)
+            # Put byte onto queue
             direct_read_queue.put(rx_byte)
 
-    def read_byte(self, com):
+    @staticmethod
+    def read_byte(com):
+        """ Read and return a byte from the COM Port """
         rx_byte = com.read(1)
         return rx_byte
 
-    def x55_scan(self, buffer, index, com):
+    def delimiter_scan_and_remove(self, buffer, index, com):
+        """ Iterate through buffer, pop off a delimiter where there are 2 consecutive delimiter values,
+        enter GATHERING_HEADER State if start of frame detected.
+        """
         # Check if this is the first byte
         if index > 0:
             # If byte is Header Value 0x55 and previous bytes is also 0x55
-            if PROTOCOL_DELIMITER is buffer[index] and PROTOCOL_DELIMITER is self.packet_buffer[index - 1]:
-                # A delimiter byte has been received, and the last byte was also a delimiter.
+            if PROTOCOL_DELIMITER is buffer[index] and PROTOCOL_DELIMITER is self.frame_buffer[index - 1]:
+                # A delimiter byte has been received, and the last byte was also a delimiter,
                 # So Discard the byte
                 buffer.pop(index)
                 # Rewind indexer to maintain stepping
@@ -178,7 +222,7 @@ class StateMachine(threading.Thread):
                 delimiter_discarded = True
             # If previous byte is a delimiter and we haven't discarded a byte
             elif PROTOCOL_DELIMITER is buffer[index - 1] and self.delimiter_discarded is False:
-                # Start of Frame detected, discard message and start again
+                # Start of Frame detected, enter GATHERING_HEADER
                 self.gathering_header(com)
             else:
                 self.delimiter_discarded = False
@@ -189,6 +233,24 @@ class StateMachine(threading.Thread):
 
 
 def serial_comms_init(port, baud_rate):
+    """ Initialise SerialHandler class instance , set COM Port and baud rate, start rx_listener Thread. """
     global serial_handler
-    serial_handler = SerialHandler(port, baud_rate)
-    serial_handler.rx_listener.start()
+    if serial_handler is not SerialHandler:
+        serial_handler = SerialHandler(port, baud_rate)
+        serial_handler.rx_listener.start()
+
+
+def serial_send(data):
+    """ Send data over the COM Port"""
+    serial_handler.serial_comms.send(data)
+
+
+def change_baud_rate(requested_baud_rate):
+    """ Change baud rate to requested rate """
+    global serial_handler
+    serial_handler.serial_comms.baudrate = serial_handler.serial_comms.check_baud_rate(requested_baud_rate)
+
+
+def flush_com_port():
+    global serial_handler
+    serial_handler.serial_comms.reset_output_buffer()
