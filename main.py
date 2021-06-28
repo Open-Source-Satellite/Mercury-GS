@@ -90,12 +90,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         from low_level.packet import packet_register_callback, packet_init
         from test import test_register_callback
         from low_level.continuous import continuous_register_callback
+        from config import config_register_callback
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout, self.error_message_box)
         telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout, self.error_message_box)
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response, self.error_message_box)
         test_register_callback(self.test_response_receive, self.error_message_box)
         serial_comms_register_callback(self.error_message_box)
         continuous_register_callback(self.error_message_box)
+        config_register_callback(self.error_message_box)
         packet_init()
 
     # TODO: I think there is a better way to handle events
@@ -189,7 +191,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_timeout_change(self):
         timeout_change = self.inputTcTlmTimeoutValue.text()
         if timeout_change != "" or timeout_change != 0:
-            config.change_timeout(int(timeout_change))
+            config.change_timeout(timeout_change)
         else:
             self.error_message_box("ERROR: Invalid Timeout Value")
 
@@ -232,8 +234,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         timeout_count = int(self.labelTcResTimeoutsValue.text()) + 1
         self.labelTcResTimeoutsValue.setText(str(timeout_count))
 
-    def error_message_box(self, error_text):
-        self.statusbar.showMessage(error_text)
+    def error_message_box(self, error_text, error_timeout=5000):
+        self.statusbar.showMessage(error_text, error_timeout)
 
 
 app = QApplication(sys.argv)
