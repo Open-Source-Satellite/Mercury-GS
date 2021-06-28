@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="OSSAT_LOGO">
+    <file>OSSAT-DEVICE-BLACK.png</file>
+    <file>OSSAT-LOGO-BLACK.jpg</file>
+  </qresource>
+</RCC>
