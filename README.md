@@ -29,7 +29,7 @@ python3 -m pip install QtPy
 Another solution is to install a full Python IDE like [Pycharm](https://www.jetbrains.com/pycharm/) and install the packages through it's package manager.
 
 ## Serial Comms Setup
-The low level drivers talk over COM port 19. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
+The low level drivers talks over a COM port that is configurable in the GUI. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
 Download a program like [com0com](http://com0com.sourceforge.net/), create a virtual pair between COM19 and COM20, and then open a terminal program like TeraTerm to listen on COM20. Settings are default 9600 baud, 8 data bits, 0 parity bits, 1 stop bit. The baudrate is configurable in the GUI on the "CONFIG" tab.
 
 ## Sending and Receiving

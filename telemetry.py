@@ -68,7 +68,7 @@ def tlm_request_send(tlm_channel, is_continuous):
     """ Check data type of Telemetry Request before formatting and send over COM Port. """
     try:
         # Add telemetry message to database to enable matching with response
-        telemetry_database.append(Telemetry(tlm_channel, config.TIMEOUT))
+        telemetry_database.append(Telemetry(int(tlm_channel), config.TIMEOUT))
         # Format the telemetry request as a frame and send
         data = data_format([int(tlm_channel)], telemetry_request_builder)
         packetize(data, DataType.TELEMETRY_REQUEST.value, is_continuous, telemetry_database, telemetry_database[-1])
