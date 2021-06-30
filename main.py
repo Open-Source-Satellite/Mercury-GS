@@ -81,6 +81,49 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
         self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp(".{0,8}"), self.inputTcDataValue))
 
+        self.tlm_response_field_channel = [self.labelTlmSlot1, self.labelTlmSlot2, self.labelTlmSlot3,
+                                           self.labelTlmSlot4, self.labelTlmSlot5, self.labelTlmSlot6,
+                                           self.labelTlmSlot7, self.labelTlmSlot8, self.labelTlmSlot9,
+                                           self.labelTlmSlot10, self.labelTlmSlot11, self.labelTlmSlot12,
+                                           self.labelTlmSlot13, self.labelTlmSlot14, self.labelTlmSlot15,
+                                           self.labelTlmSlot16, self.labelTlmSlot17, self.labelTlmSlot18,
+                                           self.labelTlmSlot19, self.labelTlmSlot20, self.labelTlmSlot21,
+                                           self.labelTlmSlot22, self.labelTlmSlot23, self.labelTlmSlot24,
+                                           self.labelTlmSlot25, self.labelTlmSlot26, self.labelTlmSlot27,
+                                           self.labelTlmSlot28, self.labelTlmSlot29, self.labelTlmSlot30,
+                                           self.labelTlmSlot31, self.labelTlmSlot32, self.labelTlmSlot33,
+                                           self.labelTlmSlot34, self.labelTlmSlot35, self.labelTlmSlot36,
+                                           self.labelTlmSlot37, self.labelTlmSlot38, self.labelTlmSlot39,
+                                           self.labelTlmSlot40]
+
+        self.tlm_response_field_value = [self.labelTlmSlot1Value, self.labelTlmSlot2Value, self.labelTlmSlot3Value,
+                                         self.labelTlmSlot4Value, self.labelTlmSlot5Value, self.labelTlmSlot6Value,
+                                         self.labelTlmSlot7Value, self.labelTlmSlot8Value, self.labelTlmSlot9Value,
+                                         self.labelTlmSlot10Value, self.labelTlmSlot11Value,
+                                         self.labelTlmSlot12Value, self.labelTlmSlot13Value,
+                                         self.labelTlmSlot14Value, self.labelTlmSlot15Value,
+                                         self.labelTlmSlot16Value, self.labelTlmSlot17Value,
+                                         self.labelTlmSlot18Value, self.labelTlmSlot19Value,
+                                         self.labelTlmSlot20Value, self.labelTlmSlot21Value,
+                                         self.labelTlmSlot22Value, self.labelTlmSlot23Value,
+                                         self.labelTlmSlot24Value, self.labelTlmSlot25Value,
+                                         self.labelTlmSlot26Value, self.labelTlmSlot27Value,
+                                         self.labelTlmSlot28Value, self.labelTlmSlot29Value,
+                                         self.labelTlmSlot30Value, self.labelTlmSlot31Value,
+                                         self.labelTlmSlot32Value, self.labelTlmSlot33Value,
+                                         self.labelTlmSlot34Value, self.labelTlmSlot35Value,
+                                         self.labelTlmSlot36Value, self.labelTlmSlot37Value,
+                                         self.labelTlmSlot38Value, self.labelTlmSlot39Value,
+                                         self.labelTlmSlot40Value]
+
+        self.tlm_response_channel_list = list()
+        self.tlm_response_channel_list = list()
+
+        for tlm_ch_slot in self.tlm_response_field_channel:
+            tlm_ch_slot.setText("")
+        for tlm_val_slot in self.tlm_response_field_value:
+            tlm_val_slot.setText("")
+
         # Init Serial Comms
         from low_level.serial_comms import serial_comms_init, serial_comms_register_callback
         serial_comms_init("COM19", 9600)
@@ -92,7 +135,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         from low_level.continuous import continuous_register_callback
         from config import config_register_callback
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout, self.error_message_box)
-        telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout, self.error_message_box)
+        telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout,
+                                      self.error_message_box)
+
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response, self.error_message_box)
         test_register_callback(self.test_response_receive, self.error_message_box)
         serial_comms_register_callback(self.error_message_box)
@@ -145,7 +190,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_click_test_transmit(self):
         delimiter = self.inputDelimiter.text()
-        reserved_bytes = [self.inputReservedBytes1.text(), self.inputReservedBytes2.text(), self.inputReservedBytes3.text()]
+        reserved_bytes = [self.inputReservedBytes1.text(), self.inputReservedBytes2.text(),
+                          self.inputReservedBytes3.text()]
         data_type = self.inputDataType.text()
         data_length = self.inputDataLength.text()
         data_field = self.inputDataField.text()
@@ -208,7 +254,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.inputTcDataValue.setValidator(None)
         self.inputTcDataValue.clear()
         if self.comboBoxTcDataType.currentText() == "String":
-            self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
+            self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp(".{0,8}"), self.inputTcDataValue))
         elif self.comboBoxTcDataType.currentText() == "Integer":
             self.inputTcDataValue.setValidator(SixtyFourBitIntValidator(self.inputTcDataValue))
         elif self.comboBoxTcDataType.currentText() == "Floating Point":

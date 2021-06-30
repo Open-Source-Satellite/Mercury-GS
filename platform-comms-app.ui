@@ -23,7 +23,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabTelemetry">
        <attribute name="title">
@@ -52,44 +52,568 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <layout class="QFormLayout" name="formLayoutTlmCh">
-             <item row="0" column="0">
-              <widget class="QLabel" name="labelTlmChOne">
-               <property name="text">
-                <string>TLM CH 1</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="labelTlmChOneValue">
+            <layout class="QGridLayout" name="gridLayoutTlmResponse">
+             <item row="1" column="1">
+              <widget class="QLabel" name="labelTlmSlot2Value">
                <property name="text">
                 <string>N/A</string>
                </property>
               </widget>
              </item>
+             <item row="3" column="1">
+              <widget class="QLabel" name="labelTlmSlot4Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelTlmSlot5">
+               <property name="text">
+                <string>TLM CH 5</string>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="labelTlmChTwo">
+              <widget class="QLabel" name="labelTlmSlot2">
                <property name="text">
                 <string>TLM CH 2</string>
                </property>
               </widget>
              </item>
+             <item row="5" column="1">
+              <widget class="QLabel" name="labelTlmSlot6Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QLabel" name="labelTlmSlot9Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="labelTlmSlot4">
+               <property name="text">
+                <string>TLM CH 4</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="labelTlmSlot8">
+               <property name="text">
+                <string>TLM CH 8</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QLabel" name="labelTlmSlot9">
+               <property name="text">
+                <string>TLM CH 9</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="labelTlmSlot1">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>TLM CH 1</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLabel" name="labelTlmSlot5Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="labelTlmChThree">
+              <widget class="QLabel" name="labelTlmSlot3">
                <property name="text">
                 <string>TLM CH 3</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="labelTlmChTwoValue">
+             <item row="5" column="0">
+              <widget class="QLabel" name="labelTlmSlot6">
+               <property name="text">
+                <string>TLM CH 6</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="labelTlmSlot7">
+               <property name="text">
+                <string>TLM CH 7</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QLabel" name="labelTlmSlot7Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QLabel" name="labelTlmSlot8Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="labelTlmSlot1Value">
                <property name="text">
                 <string>N/A</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLabel" name="labelTlmChThreeValue">
+              <widget class="QLabel" name="labelTlmSlot3Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="5">
+              <widget class="QLabel" name="labelTlmSlot28Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="6">
+              <widget class="QLabel" name="labelTlmSlot35">
+               <property name="text">
+                <string>TLM CH 35</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="5">
+              <widget class="QLabel" name="labelTlmSlot30Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="5">
+              <widget class="QLabel" name="labelTlmSlot29Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QLabel" name="labelTlmSlot21">
+               <property name="text">
+                <string>TLM CH 21</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="labelTlmSlot22">
+               <property name="text">
+                <string>TLM CH 22</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="4">
+              <widget class="QLabel" name="labelTlmSlot24">
+               <property name="text">
+                <string>TLM CH 24</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="4">
+              <widget class="QLabel" name="labelTlmSlot23">
+               <property name="text">
+                <string>TLM CH 23</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="4">
+              <widget class="QLabel" name="labelTlmSlot28">
+               <property name="text">
+                <string>TLM CH 28</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="QLabel" name="labelTlmSlot27">
+               <property name="text">
+                <string>TLM CH 27</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="4">
+              <widget class="QLabel" name="labelTlmSlot26">
+               <property name="text">
+                <string>TLM CH 26</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="4">
+              <widget class="QLabel" name="labelTlmSlot29">
+               <property name="text">
+                <string>TLM CH 29</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="4">
+              <widget class="QLabel" name="labelTlmSlot25">
+               <property name="text">
+                <string>TLM CH 25</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="labelTlmSlot11">
+               <property name="text">
+                <string>TLM CH 11</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="labelTlmSlot11Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="labelTlmSlot12">
+               <property name="text">
+                <string>TLM CH 12</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="4">
+              <widget class="QLabel" name="labelTlmSlot30">
+               <property name="text">
+                <string>TLM CH 30</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="2">
+              <widget class="QLabel" name="labelTlmSlot16">
+               <property name="text">
+                <string>TLM CH 16</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="2">
+              <widget class="QLabel" name="labelTlmSlot17">
+               <property name="text">
+                <string>TLM CH 17</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="labelTlmSlot14">
+               <property name="text">
+                <string>TLM CH 14</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QLabel" name="labelTlmSlot15">
+               <property name="text">
+                <string>TLM CH 15</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="labelTlmSlot13">
+               <property name="text">
+                <string>TLM CH 13</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QLabel" name="labelTlmSlot18">
+               <property name="text">
+                <string>TLM CH 18</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="labelTlmSlot10">
+               <property name="text">
+                <string>TLM CH 10</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="2">
+              <widget class="QLabel" name="labelTlmSlot20">
+               <property name="text">
+                <string>TLM CH 20</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="1">
+              <widget class="QLabel" name="labelTlmSlot10Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="3">
+              <widget class="QLabel" name="labelTlmSlot20Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="2">
+              <widget class="QLabel" name="labelTlmSlot19">
+               <property name="text">
+                <string>TLM CH 19</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="QLabel" name="labelTlmSlot16Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QLabel" name="labelTlmSlot14Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3">
+              <widget class="QLabel" name="labelTlmSlot15Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLabel" name="labelTlmSlot12Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLabel" name="labelTlmSlot13Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QLabel" name="labelTlmSlot22Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="5">
+              <widget class="QLabel" name="labelTlmSlot21Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="3">
+              <widget class="QLabel" name="labelTlmSlot17Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="3">
+              <widget class="QLabel" name="labelTlmSlot19Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="3">
+              <widget class="QLabel" name="labelTlmSlot18Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="5">
+              <widget class="QLabel" name="labelTlmSlot23Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="5">
+              <widget class="QLabel" name="labelTlmSlot27Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="5">
+              <widget class="QLabel" name="labelTlmSlot26Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="5">
+              <widget class="QLabel" name="labelTlmSlot25Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="5">
+              <widget class="QLabel" name="labelTlmSlot24Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="7">
+              <widget class="QLabel" name="labelTlmSlot35Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="6">
+              <widget class="QLabel" name="labelTlmSlot31">
+               <property name="text">
+                <string>TLM CH 31</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="6">
+              <widget class="QLabel" name="labelTlmSlot32">
+               <property name="text">
+                <string>TLM CH 32</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="6">
+              <widget class="QLabel" name="labelTlmSlot33">
+               <property name="text">
+                <string>TLM CH 33</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="6">
+              <widget class="QLabel" name="labelTlmSlot34">
+               <property name="text">
+                <string>TLM CH 34</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="6">
+              <widget class="QLabel" name="labelTlmSlot36">
+               <property name="text">
+                <string>TLM CH 36</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="6">
+              <widget class="QLabel" name="labelTlmSlot37">
+               <property name="text">
+                <string>TLM CH 37</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="6">
+              <widget class="QLabel" name="labelTlmSlot38">
+               <property name="text">
+                <string>TLM CH 38</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="6">
+              <widget class="QLabel" name="labelTlmSlot39">
+               <property name="text">
+                <string>TLM CH 39</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="6">
+              <widget class="QLabel" name="labelTlmSlot40">
+               <property name="text">
+                <string>TLM CH 40</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="7">
+              <widget class="QLabel" name="labelTlmSlot31Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="7">
+              <widget class="QLabel" name="labelTlmSlot32Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="7">
+              <widget class="QLabel" name="labelTlmSlot33Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="7">
+              <widget class="QLabel" name="labelTlmSlot34Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="7">
+              <widget class="QLabel" name="labelTlmSlot36Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="7">
+              <widget class="QLabel" name="labelTlmSlot37Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="7">
+              <widget class="QLabel" name="labelTlmSlot38Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="7">
+              <widget class="QLabel" name="labelTlmSlot39Value">
+               <property name="text">
+                <string>N/A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="7">
+              <widget class="QLabel" name="labelTlmSlot40Value">
                <property name="text">
                 <string>N/A</string>
                </property>
@@ -110,58 +634,36 @@
                   <property name="title">
                    <string>Last Failure</string>
                   </property>
-                  <widget class="QLabel" name="labelTlmErrChannel">
-                   <property name="geometry">
-                    <rect>
-                     <x>20</x>
-                     <y>40</y>
-                     <width>60</width>
-                     <height>16</height>
-                    </rect>
-                   </property>
-                   <property name="text">
-                    <string>Channel #</string>
-                   </property>
-                  </widget>
-                  <widget class="QLabel" name="labelTlmErrChannelValue">
-                   <property name="geometry">
-                    <rect>
-                     <x>90</x>
-                     <y>40</y>
-                     <width>60</width>
-                     <height>16</height>
-                    </rect>
-                   </property>
-                   <property name="text">
-                    <string>N/A</string>
-                   </property>
-                  </widget>
-                  <widget class="QLabel" name="labelTlmErrReason">
-                   <property name="geometry">
-                    <rect>
-                     <x>180</x>
-                     <y>40</y>
-                     <width>60</width>
-                     <height>16</height>
-                    </rect>
-                   </property>
-                   <property name="text">
-                    <string>Reason</string>
-                   </property>
-                  </widget>
-                  <widget class="QLabel" name="labelTlmErrReasonValue">
-                   <property name="geometry">
-                    <rect>
-                     <x>230</x>
-                     <y>40</y>
-                     <width>60</width>
-                     <height>16</height>
-                    </rect>
-                   </property>
-                   <property name="text">
-                    <string>N/A</string>
-                   </property>
-                  </widget>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <item>
+                    <widget class="QLabel" name="labelTlmErrChannel">
+                     <property name="text">
+                      <string>Channel #</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelTlmErrChannelValue">
+                     <property name="text">
+                      <string>N/A</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelTlmErrReason">
+                     <property name="text">
+                      <string>Reason</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="labelTlmErrReasonValue">
+                     <property name="text">
+                      <string>N/A</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                 <item row="0" column="1">
@@ -1274,8 +1776,8 @@
    <slot>on_click_send_telemetry_request()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>193</y>
+     <x>70</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>33</x>
@@ -1370,8 +1872,8 @@
    <slot>on_click_test_transmit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>573</x>
-     <y>190</y>
+     <x>113</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -1386,8 +1888,8 @@
    <slot>on_click_upload_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>63</x>
-     <y>113</y>
+     <x>71</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>70</x>
@@ -1402,8 +1904,8 @@
    <slot>on_click_upload_abort()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>106</x>
-     <y>116</y>
+     <x>113</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>97</x>
@@ -1418,8 +1920,8 @@
    <slot>on_click_download_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>59</x>
-     <y>245</y>
+     <x>67</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
      <x>79</x>
@@ -1434,8 +1936,8 @@
    <slot>on_continuous_toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>40</x>
-     <y>213</y>
+     <x>48</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -1456,6 +1958,22 @@
     <hint type="destinationlabel">
      <x>145</x>
      <y>-20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBoxTcDataType</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_select_tc_datatype()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>563</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>553</x>
+     <y>2</y>
     </hint>
    </hints>
   </connection>

@@ -21,6 +21,7 @@ import struct
 import threading
 import time
 import serial
+import config
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
 frame_queue = queue.Queue()
@@ -84,6 +85,14 @@ class SerialComms(serial.Serial):
             print(repr(err))
             print("ERROR: Write Has Timed Out")
             callback_exception_handler("ERROR: Write Has Timed Out")
+        except serial.serialutil.PortNotOpenError as err:
+            print(repr(err))
+            print("ERROR: Port" + config.COM_PORT + " Not Open")
+            callback_exception_handler("ERROR: Port" + config.COM_PORT + " Not Open")
+        except serial.serialutil.SerialException as err:
+            print(repr(err))
+            print("ERROR: The handle is invalid")
+            callback_exception_handler("ERROR: The handle is invalid")
 
 
 class StateMachine(threading.Thread):
@@ -266,6 +275,7 @@ def change_com_port(port):
     global serial_handler
     serial_handler.serial_comms.close()
     serial_handler.serial_comms.port = port
+    config.COM_PORT = port
     try:
         serial_handler.serial_comms.open()
     except serial.serialutil.SerialException as err:
