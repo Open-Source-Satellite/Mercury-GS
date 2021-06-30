@@ -79,7 +79,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.inputTcNumberValue.setValidator(UIntValidator(self.inputTcNumberValue))
         self.inputTcTlmTimeoutValue.setValidator(QIntValidator(0, 1000, self.inputTcTlmTimeoutValue))
         self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
-        self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp("[A-Za-z]{0,8}"), self.inputTcDataValue))
+        self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp(".{0,8}"), self.inputTcDataValue))
 
         # Init Serial Comms
         from low_level.serial_comms import serial_comms_init, serial_comms_register_callback
