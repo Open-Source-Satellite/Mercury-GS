@@ -21,9 +21,6 @@ import struct
 import threading
 import time
 import serial
-
-import config
-from config import COM_PORT, BAUD_RATE
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
 
 frame_queue = queue.Queue()

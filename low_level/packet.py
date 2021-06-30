@@ -19,7 +19,7 @@
 from low_level.serial_comms import frame_queue, serial_send
 from low_level.frameformat import MessageFormat, DataType, struct
 from low_level.continuous import continuous_sender, register_continuous
-from config import TC_TLM_RATE
+import config
 import threading
 
 
@@ -110,7 +110,7 @@ def packetize(data_to_packet, data_type, is_continuous, message_object_database,
 
     if is_continuous is True:
         try:
-            register_continuous(TC_TLM_RATE, continuous_sender, packet, message_object_database,
+            register_continuous(config.TC_TLM_RATE, continuous_sender, packet, message_object_database,
                                 latest_message_object)
         except ZeroDivisionError as err:
             print("\n", repr(err))
