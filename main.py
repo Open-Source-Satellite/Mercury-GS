@@ -81,48 +81,52 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
         self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp(".{0,8}"), self.inputTcDataValue))
 
-        self.tlm_response_field_channel = [self.labelTlmSlot1, self.labelTlmSlot2, self.labelTlmSlot3,
-                                           self.labelTlmSlot4, self.labelTlmSlot5, self.labelTlmSlot6,
-                                           self.labelTlmSlot7, self.labelTlmSlot8, self.labelTlmSlot9,
-                                           self.labelTlmSlot10, self.labelTlmSlot11, self.labelTlmSlot12,
-                                           self.labelTlmSlot13, self.labelTlmSlot14, self.labelTlmSlot15,
-                                           self.labelTlmSlot16, self.labelTlmSlot17, self.labelTlmSlot18,
-                                           self.labelTlmSlot19, self.labelTlmSlot20, self.labelTlmSlot21,
-                                           self.labelTlmSlot22, self.labelTlmSlot23, self.labelTlmSlot24,
-                                           self.labelTlmSlot25, self.labelTlmSlot26, self.labelTlmSlot27,
-                                           self.labelTlmSlot28, self.labelTlmSlot29, self.labelTlmSlot30,
-                                           self.labelTlmSlot31, self.labelTlmSlot32, self.labelTlmSlot33,
-                                           self.labelTlmSlot34, self.labelTlmSlot35, self.labelTlmSlot36,
-                                           self.labelTlmSlot37, self.labelTlmSlot38, self.labelTlmSlot39,
-                                           self.labelTlmSlot40]
+        self.tlm_response_field = ({"channel": self.labelTlmSlot1, "value": self.labelTlmSlot1Value},
+                                   {"channel": self.labelTlmSlot2, "value": self.labelTlmSlot2Value},
+                                   {"channel": self.labelTlmSlot3, "value": self.labelTlmSlot3Value},
+                                   {"channel": self.labelTlmSlot4, "value": self.labelTlmSlot4Value},
+                                   {"channel": self.labelTlmSlot5, "value": self.labelTlmSlot5Value},
+                                   {"channel": self.labelTlmSlot6, "value": self.labelTlmSlot6Value},
+                                   {"channel": self.labelTlmSlot7, "value": self.labelTlmSlot7Value},
+                                   {"channel": self.labelTlmSlot8, "value": self.labelTlmSlot8Value},
+                                   {"channel": self.labelTlmSlot9, "value": self.labelTlmSlot9Value},
+                                   {"channel": self.labelTlmSlot10, "value": self.labelTlmSlot10Value},
+                                   {"channel": self.labelTlmSlot11, "value": self.labelTlmSlot11Value},
+                                   {"channel": self.labelTlmSlot12, "value": self.labelTlmSlot12Value},
+                                   {"channel": self.labelTlmSlot13, "value": self.labelTlmSlot13Value},
+                                   {"channel": self.labelTlmSlot14, "value": self.labelTlmSlot14Value},
+                                   {"channel": self.labelTlmSlot15, "value": self.labelTlmSlot15Value},
+                                   {"channel": self.labelTlmSlot16, "value": self.labelTlmSlot16Value},
+                                   {"channel": self.labelTlmSlot17, "value": self.labelTlmSlot17Value},
+                                   {"channel": self.labelTlmSlot18, "value": self.labelTlmSlot18Value},
+                                   {"channel": self.labelTlmSlot19, "value": self.labelTlmSlot19Value},
+                                   {"channel": self.labelTlmSlot20, "value": self.labelTlmSlot20Value},
+                                   {"channel": self.labelTlmSlot21, "value": self.labelTlmSlot21Value},
+                                   {"channel": self.labelTlmSlot22, "value": self.labelTlmSlot22Value},
+                                   {"channel": self.labelTlmSlot23, "value": self.labelTlmSlot23Value},
+                                   {"channel": self.labelTlmSlot24, "value": self.labelTlmSlot24Value},
+                                   {"channel": self.labelTlmSlot25, "value": self.labelTlmSlot25Value},
+                                   {"channel": self.labelTlmSlot26, "value": self.labelTlmSlot26Value},
+                                   {"channel": self.labelTlmSlot27, "value": self.labelTlmSlot27Value},
+                                   {"channel": self.labelTlmSlot28, "value": self.labelTlmSlot28Value},
+                                   {"channel": self.labelTlmSlot29, "value": self.labelTlmSlot29Value},
+                                   {"channel": self.labelTlmSlot30, "value": self.labelTlmSlot30Value},
+                                   {"channel": self.labelTlmSlot31, "value": self.labelTlmSlot31Value},
+                                   {"channel": self.labelTlmSlot32, "value": self.labelTlmSlot32Value},
+                                   {"channel": self.labelTlmSlot33, "value": self.labelTlmSlot33Value},
+                                   {"channel": self.labelTlmSlot34, "value": self.labelTlmSlot34Value},
+                                   {"channel": self.labelTlmSlot35, "value": self.labelTlmSlot35Value},
+                                   {"channel": self.labelTlmSlot36, "value": self.labelTlmSlot36Value},
+                                   {"channel": self.labelTlmSlot37, "value": self.labelTlmSlot37Value},
+                                   {"channel": self.labelTlmSlot38, "value": self.labelTlmSlot38Value},
+                                   {"channel": self.labelTlmSlot39, "value": self.labelTlmSlot39Value},
+                                   {"channel": self.labelTlmSlot40, "value": self.labelTlmSlot40Value})
 
-        self.tlm_response_field_value = [self.labelTlmSlot1Value, self.labelTlmSlot2Value, self.labelTlmSlot3Value,
-                                         self.labelTlmSlot4Value, self.labelTlmSlot5Value, self.labelTlmSlot6Value,
-                                         self.labelTlmSlot7Value, self.labelTlmSlot8Value, self.labelTlmSlot9Value,
-                                         self.labelTlmSlot10Value, self.labelTlmSlot11Value,
-                                         self.labelTlmSlot12Value, self.labelTlmSlot13Value,
-                                         self.labelTlmSlot14Value, self.labelTlmSlot15Value,
-                                         self.labelTlmSlot16Value, self.labelTlmSlot17Value,
-                                         self.labelTlmSlot18Value, self.labelTlmSlot19Value,
-                                         self.labelTlmSlot20Value, self.labelTlmSlot21Value,
-                                         self.labelTlmSlot22Value, self.labelTlmSlot23Value,
-                                         self.labelTlmSlot24Value, self.labelTlmSlot25Value,
-                                         self.labelTlmSlot26Value, self.labelTlmSlot27Value,
-                                         self.labelTlmSlot28Value, self.labelTlmSlot29Value,
-                                         self.labelTlmSlot30Value, self.labelTlmSlot31Value,
-                                         self.labelTlmSlot32Value, self.labelTlmSlot33Value,
-                                         self.labelTlmSlot34Value, self.labelTlmSlot35Value,
-                                         self.labelTlmSlot36Value, self.labelTlmSlot37Value,
-                                         self.labelTlmSlot38Value, self.labelTlmSlot39Value,
-                                         self.labelTlmSlot40Value]
+        self.tlm_response_list = list()
 
-        self.tlm_response_channel_list = list()
-        self.tlm_response_channel_list = list()
-
-        for tlm_ch_slot in self.tlm_response_field_channel:
-            tlm_ch_slot.setText("")
-        for tlm_val_slot in self.tlm_response_field_value:
-            tlm_val_slot.setText("")
+        for tlm_slot in self.tlm_response_field:
+            tlm_slot["channel"].setText("")
+            tlm_slot["value"].setText("")
 
         # Init Serial Comms
         from low_level.serial_comms import serial_comms_init, serial_comms_register_callback
@@ -137,7 +141,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_timeout, self.error_message_box)
         telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout,
                                       self.error_message_box)
-
         packet_register_callback(telemetry.tlm_response, telecommand.tc_response, self.error_message_box)
         test_register_callback(self.test_response_receive, self.error_message_box)
         serial_comms_register_callback(self.error_message_box)
@@ -261,12 +264,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.inputTcDataValue.setValidator(QDoubleValidator())
 
     def telemetry_response_receive(self, telemetry_channel, telemetry_data):
-        if telemetry_channel == 1:
-            self.labelTlmChOneValue.setText(telemetry_data)
-        elif telemetry_channel == 2:
-            self.labelTlmChTwoValue.setText(telemetry_data)
-        elif telemetry_channel == 3:
-            self.labelTlmChThreeValue.setText(telemetry_data)
+
+        if not any(d.get('channel') == telemetry_channel for d in self.tlm_response_list):
+            self.tlm_response_list.append({"channel": telemetry_channel, "value": telemetry_data})
+        else:
+            for item in self.tlm_response_list:
+                if item["channel"] == telemetry_channel:
+                    item["value"] = telemetry_data
+
+        from operator import itemgetter
+        self.tlm_response_list = sorted(self.tlm_response_list, key=itemgetter("channel"))
+
+        for slot, telemetry_to_plot in zip(self.tlm_response_field, self.tlm_response_list):
+            slot["channel"].setText("TLM CH " + telemetry_to_plot["channel"])
+            slot["value"].setText(telemetry_to_plot["value"])
 
     def telecommand_response_receive(self, telecommand_number, telecommand_data):
         self.labelTcResNumberValue.setText(telecommand_number)
@@ -282,7 +293,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def error_message_box(self, error_text, error_timeout=5000):
         self.statusbar.showMessage(error_text, error_timeout)
-
 
 app = QApplication(sys.argv)
 window = MainWindow()

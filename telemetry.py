@@ -106,4 +106,4 @@ def tlm_response(telemetry_packet):
                              not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
 
     # Pass the data back up to the GUI to display
-    callback_telemetry_response_update(tlm_channel, str(tlm_data))
+    callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
