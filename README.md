@@ -11,36 +11,41 @@
 
 ## User Guide
 ## Setup
-Install [Python3](https://www.python.org/downloads/).
+Install [Python3](https://www.python.org/downloads/). 
+
+In the [scripts](../scripts) folder are a number of scripts used to build the Python environment and run Mercury GS
 
 WINDOWS:
 
-Run the batch file `build_env.bat`,
-then run `run_env.bat`
+Run the batch file `build_env.bat`, you only need to do this once.
+Then run `run_env.bat` when you want to run MercuryGS.
 
 UNIX/MACOS:
 
-Run the shell script`build_env.sh`, then run `run_env.sh`.
+Run the shell script`build_env.sh`, you only need to do this once.
+Then run `run_env.sh` when you want to run MercuryGS.
 
 ## Development Setup
 
-A minimal Python 3 installation is required, it is recommended to use [*virtualenv*](https://pypi.org/project/virtualenv/) for clean Python installation and then install [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/designer.html) bindings:
+A minimal [Python3](https://www.python.org/downloads/) installation is required, it is recommended to use [*virtualenv*](https://pypi.org/project/virtualenv/) for clean Python installation and then install [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/designer.html) bindings.
+You can either run the scripts as shown in [Setup](#setup) or manually like so: 
 
-1) Navigate to a directory where you want to set up Mercury GS
 
-1) Create a new virtual environment
+1) Clone the repo and navigate to it's directory.
+
+2) Create a new virtual environment
 ```bash
 python -m venv MercuryGSEnv
 ```
 2) Activate the virtual environment...
-   
-   For LINUX/MAC:
-```bash
-source MercuryGSEnv/bin/activate
-```
+
 For WINDOWS:
 ```batch
 call MercuryGSEnv\Scripts\activate.bat
+```
+For LINUX/MAC:
+```bash
+source MercuryGSEnv/bin/activate
 ```
 3) Install the required packages
 ```bash
