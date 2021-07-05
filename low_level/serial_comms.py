@@ -22,7 +22,7 @@ import threading
 import time
 import serial
 import config
-from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES
+from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, DataTypeSize
 
 frame_queue = queue.Queue()
 direct_read_queue = queue.Queue()
@@ -80,7 +80,7 @@ class SerialComms(serial.Serial):
     def send(self, data_to_send):
         """ Send data over the COM Port. """
         try:
-            self.write(bytearray(str(data_to_send), "utf8"))
+            self.write(data_to_send)
         except serial.serialutil.SerialTimeoutException as err:
             print(repr(err))
             print("ERROR: Write Has Timed Out")
@@ -102,7 +102,7 @@ class StateMachine(threading.Thread):
         """ Initialise Thread, buffer and checking variables. """
         super().__init__()
         self.frame_buffer = bytearray()
-        self.delimiter_discarded = False
+        self.delimiter_received = False
         self.test_listen = False
 
     def run(self):
@@ -156,7 +156,6 @@ class StateMachine(threading.Thread):
             gathered_header += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
             gathered_header, header_count = self.delimiter_scan_and_remove(gathered_header, header_count, com)
-        self.delimiter_discarded = False
 
         # Append gathered header onto buffer
         self.frame_buffer.extend(gathered_header)
@@ -183,10 +182,16 @@ class StateMachine(threading.Thread):
             # Read a byte into Data Length Buffer
             data_length_bytes += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_length_bytes, data_length_count = self.delimiter_scan_and_remove(data_length_bytes, data_length_count, com)
-        data_length = struct.unpack("!L", data_length_bytes)[0]
+            data_length_bytes, data_length_count = self.delimiter_scan_and_remove(data_length_bytes, data_length_count,
+                                                                                  com)
+        # unpacks data_length_bytes into 32 bit unsigned integer
+        try:
+            data_length = struct.unpack("!L", data_length_bytes)[0]
+        except struct.error as err:
+            print(repr(err))
+            print("ERROR: Data Length is not 4 bytes")
+            callback_exception_handler("ERROR: Data Length is not 4 bytes")
 
-        self.delimiter_discarded = False
         # Create data bitfield buffer
         data_bytes = bytearray()
 
@@ -195,11 +200,32 @@ class StateMachine(threading.Thread):
             # Read a byte into Data Buffer
             data_bytes += self.read_byte(com)
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_bytes, data_count = self.delimiter_scan_and_remove(data_bytes, data_count, com)
+            data_bytes, data_count, data_length = self.delimiter_scan_and_remove(data_bytes, data_count, com, True,
+                                                                                 data_length)
 
-        # Append data length and data fields onto frame buffer
-        self.frame_buffer.extend(data_length_bytes + data_bytes)
-        self.delimiter_discarded = False
+        invalid_frame = False
+        data_type = self.frame_buffer[4]
+        # Check the data type against the data length
+        if data_type is DataType.TELECOMMAND_REQUEST.value and data_length != DataTypeSize.TELECOMMAND_REQUEST.value:
+            invalid_frame = True
+        if data_type is DataType.TELECOMMAND_RESPONSE.value and data_length != DataTypeSize.TELECOMMAND_RESPONSE.value:
+            invalid_frame = True
+        if data_type is DataType.TELEMETRY_DATA.value and data_length != DataTypeSize.TELEMETRY_DATA.value:
+            invalid_frame = True
+        if data_type is DataType.TELEMETRY_REQUEST.value and data_length != DataTypeSize.TELEMETRY_REQUEST.value:
+            invalid_frame = True
+        if data_type is DataType.FILE_UPLOAD and data_length != DataTypeSize.FILE_UPLOAD.value:
+            invalid_frame = True
+        if data_type is DataType.FILE_DOWNLOAD and data_length != DataTypeSize.FILE_DOWNLOAD.value:
+            invalid_frame = True
+        if data_type is DataType.TELEMETRY_REQUEST_REJECTION and data_length != DataTypeSize.TELEMETRY_REQUEST_REJECTION.value:
+            invalid_frame = True
+
+        if invalid_frame is False:
+            # Append data length and data fields onto frame buffer
+            self.frame_buffer.extend(data_length_bytes + data_bytes)
+
+        self.delimiter_received = False
 
         # Add Frame onto queue to be processed by packet handler Thread
         frame_queue.put(self.frame_buffer)
@@ -221,30 +247,44 @@ class StateMachine(threading.Thread):
         rx_byte = com.read(1)
         return rx_byte
 
-    def delimiter_scan_and_remove(self, buffer, index, com):
+    def delimiter_scan_and_remove(self, buffer, index, com, data_field=False, data_length_decrement=0):
         """ Iterate through buffer, pop off a delimiter where there are 2 consecutive delimiter values,
         enter GATHERING_HEADER State if start of frame detected.
         """
-        # Check if this is the first byte
-        if index > 0:
-            # If byte is Header Value 0x55 and previous bytes is also 0x55
-            if PROTOCOL_DELIMITER is buffer[index] and PROTOCOL_DELIMITER is self.frame_buffer[index - 1]:
-                # A delimiter byte has been received, and the last byte was also a delimiter,
-                # So Discard the byte
+        # If this byte is a delimiter
+        if PROTOCOL_DELIMITER is buffer[index]:
+            # and we haven't received a prior delimiter
+            if self.delimiter_received is False:
+                # Record that this byte is a delimiter
+                self.delimiter_received = True
+            # and we've received a prior valid delimiter
+            else:
+                # Discard the byte
                 buffer.pop(index)
                 # Rewind indexer to maintain stepping
                 index -= 1
-                delimiter_discarded = True
-            # If previous byte is a delimiter and we haven't discarded a byte
-            elif PROTOCOL_DELIMITER is buffer[index - 1] and self.delimiter_discarded is False:
-                # Start of Frame detected, enter GATHERING_HEADER
+                if data_field is True:
+                    # Add to data_length decrementer HERE to then take off data_length after entire read
+                    data_length_decrement -= 1
+                # Set state to wait for next delimiter
+                self.delimiter_received = False
+        # If this byte is not a delimiter
+        else:
+            # and we have received a prior delimiter that makes this an invalid sequence
+            if self.delimiter_received is True:
+                # This is the start of a new frame!
+                # Set the frame buffer to this new frame
+                self.frame_buffer = buffer
+                # Reset received delimiter variable
+                self.delimiter_received = False
+                # Enter GATHERING_HEADER state
                 self.gathering_header(com)
-            else:
-                self.delimiter_discarded = False
         # Increment the index
         index += 1
-
-        return buffer, index
+        if data_length_decrement == 0:
+            return buffer, index
+        else:
+            return buffer, index, data_length_decrement
 
 
 def serial_comms_init(port, baud_rate):

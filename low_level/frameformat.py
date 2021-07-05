@@ -56,6 +56,17 @@ class DataType(Enum):
     TELEMETRY_REQUEST_REJECTION = 0x07
 
 
+class DataTypeSize(Enum):
+    """ DataType class for each possible data type. """
+    TELECOMMAND_REQUEST = 12
+    TELECOMMAND_RESPONSE = 5
+    TELEMETRY_DATA = 12
+    TELEMETRY_REQUEST = 4
+    FILE_UPLOAD = 0x05
+    FILE_DOWNLOAD = 0x06
+    TELEMETRY_REQUEST_REJECTION = 0x07
+
+
 class TelecommandResponseState(Enum):
     """ TelecommandResponseState class for each possible response state. """
     SUCCESS = 0x00

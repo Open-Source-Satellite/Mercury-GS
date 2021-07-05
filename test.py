@@ -18,10 +18,7 @@
 ###################################################################################
 import codecs
 from threading import Timer
-from low_level.serial_comms import direct_read_queue
-from time import sleep
 import low_level.serial_comms
-import binascii
 
 
 class TestFrame:
@@ -57,8 +54,8 @@ class TestFrame:
 
     def read_finished(self):
         low_level.serial_comms.serial_handler.rx_listener.test_listen = False
-        while direct_read_queue.qsize() > 0:
-            self.test_response += direct_read_queue.get()
+        while low_level.serial_comms.direct_read_queue.qsize() > 0:
+            self.test_response += low_level.serial_comms.direct_read_queue.get()
 
         test_response_string = self.test_response.hex("x", 1)
         test_response_string = test_response_string.replace("x", " 0x")

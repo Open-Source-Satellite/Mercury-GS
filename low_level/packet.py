@@ -17,7 +17,7 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 from low_level.serial_comms import frame_queue, serial_send
-from low_level.frameformat import MessageFormat, DataType, struct
+from low_level.frameformat import MessageFormat, DataType, struct, PROTOCOL_DELIMITER
 from low_level.continuous import continuous_sender, register_continuous
 import config
 import threading
@@ -127,17 +127,21 @@ def delimiter_scan_and_add(data_to_scan):
     # Copy data buffer into mutable bytearray
     data_editable_copy = bytearray(data_to_scan)
     header_checked = False
+    num_added_delimiters = 0
     # Iterate over bytes in data
     for index, byte in enumerate(data_to_scan):
-        if byte == 0x55:
+        if byte == PROTOCOL_DELIMITER:
             # This byte is a delimiter!
             if header_checked is False:
                 # This is the first delimiter found, I.E Start of Frame. Do not add another delimiter after it.
                 header_checked = True
             else:
                 # Add another delimiter after this
-                data_editable_copy.insert(index, 0x55)
-
+                data_editable_copy.insert(index + num_added_delimiters, PROTOCOL_DELIMITER)
+                num_added_delimiters += 1
+                if index >= 9:
+                    data_editable_copy[8] += 1 # TODO: Find a better solution, this will overflow after 255
+                    # TODO: Also index of data length may not be 8 if there are delimiters in the header
     # Copy edited bytearray back over to data buffer and return
     scanned_data = bytes(data_editable_copy)
     return scanned_data

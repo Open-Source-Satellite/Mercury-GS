@@ -1,19 +1,50 @@
 # Mercury-GS
 
 - [Mercury-GS](#mercury-gs)
+  - [User Guide](#user-guide)
+    - [Setup](#setup)
   - [Development Setup](#development-setup)
-  - [Serial Comms Setup](#serial-comms-setup)
-  - [Sending And Receiving](#sending-and-receiving)
-  - [Designing The GUI](#designing-the-gui)
-  - [Building the GUI](#building-the-gui)
+    - [Serial Comms Setup](#serial-comms-setup)
+    - [Sending And Receiving](#sending-and-receiving)
+    - [Designing The GUI](#designing-the-gui)
+    - [Building the GUI](#building-the-gui)
+
+## User Guide
+## Setup
+Install [Python3](https://www.python.org/downloads/).
+
+WINDOWS:
+
+Run the batch file `build_env.bat`,
+then run `run_env.bat`
+
+UNIX/MACOS:
+
+Run the shell script`build_env.sh`, then run `run_env.sh`.
 
 ## Development Setup
 
 A minimal Python 3 installation is required, it is recommended to use [*virtualenv*](https://pypi.org/project/virtualenv/) for clean Python installation and then install [PyQt](https://www.riverbankcomputing.com/static/Docs/PyQt5/designer.html) bindings:
 
+1) Navigate to a directory where you want to set up Mercury GS
+
+1) Create a new virtual environment
 ```bash
-python3 -m venv venv
-source venv/bin/activate # or "call venv\Scripts\activate.bat" on Windows for initialize virtual environment
+python -m venv MercuryGSEnv
+```
+2) Activate the virtual environment...
+   
+   For LINUX/MAC:
+```bash
+source MercuryGSEnv/bin/activate
+```
+For WINDOWS:
+```batch
+call MercuryGSEnv\Scripts\activate.bat
+```
+3) Install the required packages
+```bash
+pip install -r requirements.txt
 ```
 Make sure the following packages have been installed.
 ```bash

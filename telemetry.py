@@ -98,6 +98,7 @@ def tlm_response(telemetry_packet):
     """
     # Unpack the packet into bitfields
     telemetry_response = telemetry_response_builder.unpack(telemetry_packet)
+    # TODO: struct.error, unpack requires a buffer of 12 bytes. check data length
     tlm_channel = telemetry_response[0]
     tlm_data = telemetry_response[1]
 
