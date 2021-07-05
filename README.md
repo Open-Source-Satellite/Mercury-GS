@@ -11,19 +11,21 @@
 
 ## User Guide
 ## Setup
-Install [Python3](https://www.python.org/downloads/). 
+Install [Python3](https://www.python.org/downloads/).
+
+Clone the repository onto your machine. Click the "Clone" button on the Github page.
 
 In the [scripts](../scripts) folder are a number of scripts used to build the Python environment and run Mercury GS
 
 WINDOWS:
 
-Run the batch file `build_env.bat`, you only need to do this once.
-Then run `run_env.bat` when you want to run MercuryGS.
+Run the batch file [build_env.bat](../scripts/build_env.bat), you only need to do this once.
+Then execute [run_env.bat](../scripts/run_env.bat) when you want to run MercuryGS.
 
 UNIX/MACOS:
 
-Run the shell script`build_env.sh`, you only need to do this once.
-Then run `run_env.sh` when you want to run MercuryGS.
+Run the shell script [build_env.sh](../scripts/build_env.sh), you only need to do this once.
+Then execute [run_env.sh](../scripts/run_env.sh) when you want to run MercuryGS.
 
 ## Development Setup
 
