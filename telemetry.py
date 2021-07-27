@@ -108,3 +108,19 @@ def tlm_response(telemetry_packet):
 
     # Pass the data back up to the GUI to display
     callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
+
+def tlm_rejection_response(telemetry_packet):
+    """telemetry response is rejected
+    """
+    #Checking telemetry
+    telemetry_rejection_response = telemetry_response_builder.unpack(telemetry_packet)
+    
+    tlm_channel = telemetry_rejection_response[0]
+    tlm_data = telemetry_rejection_response[1]
+
+    # Search for the first element of the database where the ID matches, remove it and stop the associated timeout timer
+    telemetry_database[:] = [telemetry for telemetry in telemetry_database if
+                             not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
+    
+    # Pass the data back up to the GUI to display
+    callback_telemetry_response_update(str(tlm_channel), str(tlm_data))

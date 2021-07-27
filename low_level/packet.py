@@ -23,13 +23,16 @@ import config
 import threading
 
 
-def packet_register_callback(tlm_function_ptr, tc_function_ptr, exception_handler_function_ptr):
+def packet_register_callback(tlm_function_ptr, tlm_rejection_function_ptr, tc_function_ptr, exception_handler_function_ptr):
     """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_telemetry_response
     global callback_telecommand_response
     global callback_exception_handler
+    global callback_telemetry_rejection_response
     # Register telemetry response callback to pass telemetry packet up to module
     callback_telemetry_response = tlm_function_ptr
+    # Register telemetry response callback to pass telemetry rejection packet up to module
+    callback_telemetry_rejection_response = tlm_rejection_function_ptr
     # Register telecommand response callback to pass telecommand packet up to module
     callback_telecommand_response = tc_function_ptr
     # Register exception handler callback
@@ -62,6 +65,8 @@ class PacketHandler(threading.Thread):
             # Pass data field up to correct module depending on data type field
             if frame_data_type == DataType.TELEMETRY_DATA.value:
                 callback_telemetry_response(frame_data_bytes)
+            elif frame_data_type == DataType.TELEMETRY_REQUEST_REJECTION.value:
+                callback_telemetry_rejection_response(frame_data_type)
             elif frame_data_type == DataType.TELECOMMAND_RESPONSE.value:
                 callback_telecommand_response(frame_data_bytes)
 
