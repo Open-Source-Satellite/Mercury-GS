@@ -51,13 +51,16 @@ class Telemetry:
         callback_telemetry_timeout()
 
 
-def telemetry_register_callback(tlm_update_function_ptr, tlm_timeout_function_ptr, exception_handler_function_ptr):
+def telemetry_register_callback(tlm_update_function_ptr, tlm_rejection_update_function_ptr, tlm_timeout_function_ptr, exception_handler_function_ptr):
     """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_telemetry_response_update
     global callback_telemetry_timeout
     global callback_exception_handler
+    global callback_telemetry_rejection_response_update
     # Register callback for updating the GUI with a telemetry response
     callback_telemetry_response_update = tlm_update_function_ptr
+    # Register callback for updating the GUI with a telemetry rejection response
+    callback_telemetry_rejection_response_update = tlm_rejection_update_function_ptr    
     # Register callback for updating timeout counter when a telemetry request timeouts
     callback_telemetry_timeout = tlm_timeout_function_ptr
     # Set exception handler callback
@@ -123,4 +126,4 @@ def tlm_rejection_response(telemetry_packet):
                              not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
     
     # Pass the data back up to the GUI to display
-    callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
+    callback_telemetry_rejection_response_update(str(tlm_channel), str(tlm_data))
