@@ -17,3 +17,6 @@ venv/
 # Ignore all local history of files
 .history
 .ionide
+
+### Ignore PyCharm Files ### (JPB)
+.idea/
