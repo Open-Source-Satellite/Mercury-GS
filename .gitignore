@@ -18,5 +18,8 @@ venv/
 .history
 .ionide
 
+### Remnant from a plugin experimented with to generate a .exe (JPB) ###
+MercuryGSEnv/
+
 ### Ignore PyCharm Files ### (JPB)
 .idea/
