@@ -277,7 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             slot["value"].setText(telemetry_to_plot["value"])
 
     def telemetry_rejection_response_receive(self, telemetry_channel, telemetry_rejection_code):
-        self.labelTlmErrChannelValue.setText("TLM CH:" + telemetry_channel)
+        self.labelTlmErrChannelValue.setText(telemetry_channel)
         self.labelTlmErrReasonValue.setText(telemetry_rejection_code)
 
     def telecommand_response_receive(self, telecommand_number, telecommand_data):
