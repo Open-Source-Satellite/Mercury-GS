@@ -160,7 +160,7 @@ class StateMachine(threading.Thread):
         # Append gathered header onto buffer
         self.frame_buffer.extend(gathered_header)
         # Check if Data Type is within range
-        if self.frame_buffer[4] in range(MAX_DATA_TYPES):
+        if int(self.frame_buffer[4]) in range(MAX_DATA_TYPES):
             # Data Type within range, switch to READING_DATA state
             self.reading_data(com)
         else:

@@ -21,7 +21,7 @@ import struct
 
 PROTOCOL_DELIMITER = 0x55
 RESERVED = bytearray.fromhex("DE AD BE")
-MAX_DATA_TYPES = 6
+MAX_DATA_TYPES = 7
 
 """ Struct module Builders for message formatting. """
 telecommand_request_builder_string = struct.Struct("! I 8B")
@@ -76,7 +76,7 @@ class TelecommandResponseState(Enum):
     INVALID_COMMAND_ARGUMENT = 0x04
 
 
-class TelemetryResponseState(Enum):
+class TelemetryRejectionResponseState(Enum):
     """ TelemetryResponseState class for each possible response state. """
-    SUCCESS = 0x00
-    FAILED = 0x01
+    CHANNEL_NOT_SUPPORTED = 0x00
+    INVALID_DATA_LENGTH = 0x01
