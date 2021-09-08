@@ -66,7 +66,7 @@ class PacketHandler(threading.Thread):
             if frame_data_type == DataType.TELEMETRY_DATA.value:
                 callback_telemetry_response(frame_data_bytes)
             elif frame_data_type == DataType.TELEMETRY_REQUEST_REJECTION.value:
-                callback_telemetry_rejection_response(frame_data_type)
+                callback_telemetry_rejection_response(frame_data_bytes)
             elif frame_data_type == DataType.TELECOMMAND_RESPONSE.value:
                 callback_telecommand_response(frame_data_bytes)
 

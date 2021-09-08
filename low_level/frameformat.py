@@ -21,7 +21,7 @@ import struct
 
 PROTOCOL_DELIMITER = 0x55
 RESERVED = bytearray.fromhex("DE AD BE")
-MAX_DATA_TYPES = 7
+MAX_DATA_TYPES = 8
 
 """ Struct module Builders for message formatting. """
 telecommand_request_builder_string = struct.Struct("! I 8B")
@@ -30,6 +30,7 @@ telecommand_request_builder_float = struct.Struct("! I d")
 telecommand_response_builder = struct.Struct("! I B")
 telemetry_request_builder = struct.Struct("! I")
 telemetry_response_builder = struct.Struct("! I Q")
+telemetry_rejection_response_builder = struct.Struct("! I B")
 
 
 class MessageFormat:

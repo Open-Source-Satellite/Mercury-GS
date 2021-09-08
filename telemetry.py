@@ -19,7 +19,8 @@
 import config
 from threading import Timer
 from low_level.packet import packetize, DataType, data_format
-from low_level.frameformat import telemetry_request_builder, telemetry_response_builder
+from low_level.frameformat import telemetry_request_builder, telemetry_response_builder, \
+    telemetry_rejection_response_builder, TelemetryRejectionResponseState
 
 telemetry_database = []
 
@@ -51,7 +52,8 @@ class Telemetry:
         callback_telemetry_timeout()
 
 
-def telemetry_register_callback(tlm_update_function_ptr, tlm_rejection_update_function_ptr, tlm_timeout_function_ptr, exception_handler_function_ptr):
+def telemetry_register_callback(tlm_update_function_ptr, tlm_rejection_update_function_ptr, tlm_timeout_function_ptr,
+                                exception_handler_function_ptr):
     """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_telemetry_response_update
     global callback_telemetry_timeout
@@ -60,7 +62,7 @@ def telemetry_register_callback(tlm_update_function_ptr, tlm_rejection_update_fu
     # Register callback for updating the GUI with a telemetry response
     callback_telemetry_response_update = tlm_update_function_ptr
     # Register callback for updating the GUI with a telemetry rejection response
-    callback_telemetry_rejection_response_update = tlm_rejection_update_function_ptr    
+    callback_telemetry_rejection_response_update = tlm_rejection_update_function_ptr
     # Register callback for updating timeout counter when a telemetry request timeouts
     callback_telemetry_timeout = tlm_timeout_function_ptr
     # Set exception handler callback
@@ -112,18 +114,24 @@ def tlm_response(telemetry_packet):
     # Pass the data back up to the GUI to display
     callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
 
+
 def tlm_rejection_response(telemetry_packet):
     """telemetry response is rejected
     """
-    #Checking telemetry
-    telemetry_rejection_response = telemetry_response_builder.unpack(telemetry_packet)
-    
+    # Checking telemetry
+    telemetry_rejection_response = telemetry_rejection_response_builder.unpack(telemetry_packet)
+
     tlm_channel = telemetry_rejection_response[0]
-    tlm_data = telemetry_rejection_response[1]
+    tlm_rejection_code = telemetry_rejection_response[1]
 
     # Search for the first element of the database where the ID matches, remove it and stop the associated timeout timer
     telemetry_database[:] = [telemetry for telemetry in telemetry_database if
                              not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
-    
+
+    if tlm_rejection_code is TelemetryRejectionResponseState.CHANNEL_NOT_SUPPORTED.value:
+        tlm_rejection_message = "CHANNEL_NOT_SUPPORTED"
+    elif tlm_rejection_code is TelemetryRejectionResponseState.INVALID_DATA_LENGTH.value:
+        tlm_rejection_message = "INVALID_DATA_LENGTH"
+
     # Pass the data back up to the GUI to display
-    callback_telemetry_rejection_response_update(str(tlm_channel), str(tlm_data))
+    callback_telemetry_rejection_response_update(str(tlm_channel), tlm_rejection_message)

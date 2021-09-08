@@ -135,7 +135,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Init Serial Comms
         serial_comms_init("COM19", 9600)
         # Register all callbacks
-        telemetry_register_callback(self.telemetry_response_receive, self.telemetry_rejection_response_receive, self.telemetry_timeout, self.error_message_box)
+        telemetry_register_callback(self.telemetry_response_receive, self.telemetry_rejection_response_receive,
+                                    self.telemetry_timeout, self.error_message_box)
         telecommand_register_callback(self.telecommand_response_receive, self.telecommand_timeout,
                                       self.error_message_box)
         packet_register_callback(tlm_response, tlm_rejection_response, tc_response, self.error_message_box)
@@ -274,11 +275,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for slot, telemetry_to_plot in zip(self.tlm_response_field, self.tlm_response_list):
             slot["channel"].setText("TLM CH " + telemetry_to_plot["channel"])
             slot["value"].setText(telemetry_to_plot["value"])
-    
-    def telemetry_rejection_response_receive(self, telemetry_channel):
-        self.labelTlmErrChannelValue.setText("TLM CH:" + telemetry_channel)
-        self.labelErrChannelValue.setText("ERROR")
 
+    def telemetry_rejection_response_receive(self, telemetry_channel, telemetry_rejection_code):
+        self.labelTlmErrChannelValue.setText("TLM CH:" + telemetry_channel)
+        self.labelTlmErrReasonValue.setText(telemetry_rejection_code)
 
     def telecommand_response_receive(self, telecommand_number, telecommand_data):
         self.labelTcResNumberValue.setText(telecommand_number)
