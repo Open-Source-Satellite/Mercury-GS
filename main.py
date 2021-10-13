@@ -1,5 +1,5 @@
-################################################################################### 
-# @file main.py 
+###################################################################################
+# @file main.py
 ###################################################################################
 #   _  _____ ____  ____  _____
 #  | |/ /_ _/ ___||  _ \| ____|
@@ -12,8 +12,8 @@
 # Please follow the following link for the license agreement for this code:
 # www.kispe.co.uk/projectlicenses/RA2001001003
 ###################################################################################
-#  Created on: 17-Aug-2020 
-#  Main app entry point 
+#  Created on: 17-Aug-2020
+#  Main app entry point
 #  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
 import sys
@@ -27,9 +27,10 @@ from low_level.continuous import continuous_register_callback, adjust_continuous
 from low_level.packet import packet_register_callback, packet_init
 from low_level.serial_comms import serial_comms_init, serial_comms_register_callback, change_baud_rate, change_com_port
 from platform_comms_app import Ui_MainWindow
-from telecommand import tc_request_send, telecommand_register_callback, tc_response
+from telecommand import tc_request_send, telecommand_register_callback, tc_response, tc_time_send
 from telemetry import tlm_rejection_response, tlm_request_send, telemetry_register_callback, tlm_response
 from test import transmit_test_frame, test_register_callback
+import time
 
 UINT_MAX = 4294967295
 UINT_MIN = 0
@@ -151,9 +152,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
     def on_send_pc_time(self, event):
         # TODO: get pc time and send it.
+        tc = self.inputTcNumberValue.text()
+        unix_time = str(time.time())
+
         print('Clicked: Send PC Time')
+        print('Telecommand Number: {}'.format(tc))
+        print('Time: {}'.format(unix_time))
+
+        tc_time_send(tc, unix_time)
 
     def on_click_this_time(self, event):
+        tc  = self.inputTcNumberValue.text()
+
         date_from_ui = self.dateEditSendThisTime.dateTime()
         date_string = date_from_ui.toString(self.dateEditSendThisTime.displayFormat())
 
@@ -163,6 +173,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('Clicked: Send This Time')
         print('Date: {}'.format(date_string))
         print('Time: {}'.format(time_string))
+
+        tc_time_send(tc, time_string)
 
     def on_click_send_telecommand_request(self, event):
         tc = self.inputTcNumberValue.text()
