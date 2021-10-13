@@ -150,7 +150,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
-    def on_send_pc_time(self, event):
+    def on_click_send_pc_time(self, event):
         # TODO: get pc time and send it.
         tc = self.inputTcNumberValue.text()
         unix_time = str(time.time())
@@ -161,7 +161,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         tc_time_send(tc, unix_time)
 
-    def on_click_this_time(self, event):
+    def on_click_send_this_time(self, event):
         tc  = self.inputTcNumberValue.text()
 
         date_from_ui = self.dateEditSendThisTime.dateTime()
