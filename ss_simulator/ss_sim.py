@@ -13,7 +13,7 @@
  *  
  *  https://www.kispe.co.uk/projectlicenses/RA2001001003
  ***********************************************************************************
- *  Created on: 12-10-2021
+ *  Created on: 14-10-2021
  *  Script to simulate space station for Mercury GS                      
  *  @author: Kevin Guyll                     
  ***********************************************************************************/
@@ -21,6 +21,7 @@
 
 # doesn't recognise when a packet is too long
 # extra bytes will be seen as junk
+# modified so that responses correctly encode \x55
 
 import serial
 import struct, random, math
@@ -166,7 +167,10 @@ while True:
                     response = b'\x55\xde\xad\xbe\x02\x00\x00\x00\x05\x00\x00\x00\x05\x04'
                 else:
                     print('telecommand', telecmdno, 'not supported')
-                    response = b'\x55\xde\xad\xbe\x02\x00\x00\x00\x05' + telecmd + b'\x03'
+                    if telecmdno == 85:
+                        response = b'\x55\xde\xad\xbe\x02\x00\x00\x00\x06\x00\x00\x00UU\x03'
+                    else:
+                        response = b'\x55\xde\xad\xbe\x02\x00\x00\x00\x05' + telecmd + b'\x03'
                 ser.write(response)
         elif datatype == 4: # telemetry
             print('telemetry request')
@@ -200,7 +204,10 @@ while True:
                 elif telechanno > 19 and telechanno < 40:
                     teledata = random.randint(0,255)
                     teledatab = bytes(chr(teledata),'latin-1')
-                    response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0c' + telechan + b'\x00\x00\x00\x00\x00\x00\x00' + teledatab               
+                    if teledata == 85:  # case of \x55
+                        response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0d' + telechan + b'\x00\x00\x00\x00\x00\x00\x00UU'               
+                    else:
+                        response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0c' + telechan + b'\x00\x00\x00\x00\x00\x00\x00' + teledatab               
                     
                 # other channels respond channel not supported
                 else:
@@ -208,13 +215,19 @@ while True:
                     
                 print('telemetry channel', telechanno, response)
                 ser.write(response)
+                #sleep(5)
+                #ser.write(response)
         else:
             print('other data type')
 
     # Generate telemetry data for channel 42
     t = int(random.randint(60, 80) * (1 + math.sin(incycle)))
     x = bytes(chr(t),'latin-1')
-    response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0c\x00\x00\x00\x2a\x00\x00\x00\x00\x00\x00\x00' + x
+
+    if t == 85: # case of \x55
+        response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0d\x00\x00\x00\x2a\x00\x00\x00\x00\x00\x00\x00UU'
+    else:
+        response = b'\x55\xde\xad\xbe\x03\x00\x00\x00\x0c\x00\x00\x00\x2a\x00\x00\x00\x00\x00\x00\x00' + x
     incycle += 0.01
     if incycle >= 2 * math.pi:
         incycle = 0
