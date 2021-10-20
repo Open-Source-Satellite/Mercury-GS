@@ -17,7 +17,7 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 import config
-from low_level.serial_comms import flush_com_port, serial_send
+from low_level.comms import flush_com_port, comms_send
 from threading import Timer
 import time
 
@@ -110,4 +110,4 @@ def continuous_sender(frame, message_object_database, latest_message_object):
     # Start the time
     new_object.start_timer()
     # Send the message
-    serial_send(frame)
+    comms_send(frame)

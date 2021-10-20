@@ -25,7 +25,7 @@ from PyQt5.QtWidgets import QFileDialog, QApplication, QMainWindow
 from config import config_register_callback, change_timeout
 from low_level.continuous import continuous_register_callback, adjust_continuous, continuous_stop
 from low_level.packet import packet_register_callback, packet_init
-from low_level.serial_comms import serial_comms_init, serial_comms_register_callback, change_baud_rate, change_com_port
+from low_level.comms import comms_init, comms_register_callback, change_baud_rate, change_com_port
 from platform_comms_app import Ui_MainWindow
 from telecommand import tc_request_send, telecommand_register_callback, tc_response
 from telemetry import tlm_rejection_response, tlm_request_send, telemetry_register_callback, tlm_response
@@ -133,7 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tlm_slot["value"].setText("")
 
         # Init Serial Comms
-        serial_comms_init("COM19", 9600)
+        comms_init("COM19", 9600)
         # Register all callbacks
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_rejection_response_receive,
                                     self.telemetry_timeout, self.error_message_box)
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                       self.error_message_box)
         packet_register_callback(tlm_response, tlm_rejection_response, tc_response, self.error_message_box)
         test_register_callback(self.test_response_receive, self.error_message_box)
-        serial_comms_register_callback(self.error_message_box)
+        comms_register_callback(self.error_message_box)
         continuous_register_callback(self.error_message_box)
         config_register_callback(self.error_message_box)
         packet_init()

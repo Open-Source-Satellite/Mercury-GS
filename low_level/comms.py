@@ -1,5 +1,5 @@
 ###################################################################################
-# @file serial_comms.py
+# @file comms.py
 ###################################################################################
 #   _  _____ ____  ____  _____
 #  | |/ /_ _/ ___||  _ \| ____|
@@ -26,31 +26,31 @@ from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, 
 
 frame_queue = queue.Queue()
 direct_read_queue = queue.Queue()
-serial_handler = None
+comms_handler = None
 PENDING_FRAME = 0
 GATHERING_DATA = 1
 READING_DATA = 2
 DIRECT_READ = 3
 
 
-def serial_comms_register_callback(exception_handler_function_ptr):
+def comms_register_callback(exception_handler_function_ptr):
     """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_exception_handler
     # Set exception handler callback
     callback_exception_handler = exception_handler_function_ptr
 
 
-class SerialHandler:
-    """ A Class to handle the serial comms and rx_listener. """
+class CommsHandler:
+    """ A Class to handle the comms and rx_state_machine. """
 
     def __init__(self, port, baud_rate):
         """ Initialise the rx_listener and serial. """
-        self.rx_listener = StateMachine()
-        self.serial_comms = SerialComms(port, baud_rate)
+        self.rx_state_machine = StateMachine()
+        self.comms = SerialComms(port, baud_rate)
 
 
 class SerialComms(serial.Serial):
-    """ A Class to handle the serial comms. """
+    """ A Class to handle the serial comms through a UART. """
 
     def __init__(self, port, baud_rate):
         """ Initialise serial interface, set bytesize and write_timeout values. """
@@ -104,6 +104,7 @@ class StateMachine(threading.Thread):
         self.frame_buffer = bytearray()
         self.delimiter_received = False
         self.test_listen = False
+        self.daemon = True
 
     def run(self):
         """ Overloads the Thread's "run" function,
@@ -111,37 +112,36 @@ class StateMachine(threading.Thread):
         otherwise engages StateMachine.
         """
         while True:
-            if serial_handler.serial_comms.is_open:
+            if comms_handler.comms.is_open:
                 if self.test_listen is True:
-                    self.direct_read(serial_handler.serial_comms)
+                    self.direct_read(comms_handler.comms)
                 else:
                     self.frame_buffer.clear()
-                    self.pending_frame(serial_handler.serial_comms)
+                    self.pending_frame(comms_handler.comms)
 
     def pending_frame(self, com):
         """ PENDING_FRAME State, checks for start of frame...
         (delimiter character followed by non delimiter character).
         """
-        # Check if there is incoming data
-        if com.in_waiting != 0:
-            try:
-                # Clear the received data buffer if it's 2 bytes
-                if len(self.frame_buffer) == 2:
-                    self.frame_buffer.clear()
-            except TypeError as err:
-                print("ERROR: ", err)
-                print("FIRST PASS")
+        # Block until there is a byte to read
+        rx_byte = self.read_byte(com)
+        try:
+            # Clear the received data buffer if it's 2 bytes
+            if len(self.frame_buffer) == 2:
+                self.frame_buffer.clear()
+        except TypeError as err:
+            print("ERROR: ", err)
+            print("FIRST PASS")
 
-            # Read a byte
-            rx_byte = self.read_byte(com)
-            self.frame_buffer += rx_byte
-            # Check if we have received a 0x55 followed by a non-0x55
-            if (PROTOCOL_DELIMITER == self.frame_buffer[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
-                # This is the start of a new frame!
-                # Switch state to GATHERING_DATA
-                self.gathering_header(com)
-            # Reenter PENDING_FRAME if start of frame not detected
-            self.pending_frame(com)
+        # Add byte to the frame buffer
+        self.frame_buffer += rx_byte
+        # Check if we have received a 0x55 followed by a non-0x55
+        if (PROTOCOL_DELIMITER == self.frame_buffer[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
+            # This is the start of a new frame!
+            # Switch state to GATHERING_DATA
+            self.gathering_header(com)
+        # Reenter PENDING_FRAME if start of frame not detected
+        self.pending_frame(com)
 
     def gathering_header(self, com):
         """ GATHERING_HEADER State, reads the rest of the header. """
@@ -234,12 +234,10 @@ class StateMachine(threading.Thread):
 
     def direct_read(self, com):
         """ DIRECT_READ State, entered if Test Interface is used to bypass State Machine """
-        # If there is incoming data
-        if com.in_waiting != 0:
-            # Read a byte
-            rx_byte = self.read_byte(com)
-            # Put byte onto queue
-            direct_read_queue.put(rx_byte)
+        # Block until there is a byte to read
+        rx_byte = self.read_byte(com)
+        # Put byte onto queue
+        direct_read_queue.put(rx_byte)
 
     @staticmethod
     def read_byte(com):
@@ -287,36 +285,36 @@ class StateMachine(threading.Thread):
             return buffer, index, data_length_decrement
 
 
-def serial_comms_init(port, baud_rate):
-    """ Initialise SerialHandler class instance , set COM Port and baud rate, start rx_listener Thread. """
-    global serial_handler
-    if serial_handler is not SerialHandler:
-        serial_handler = SerialHandler(port, baud_rate)
-        serial_handler.rx_listener.start()
+def comms_init(port, baud_rate):
+    """ Initialise CommsHandler class instance , set COM Port and baud rate, start rx_listener Thread. """
+    global comms_handler
+    if comms_handler is not CommsHandler:
+        comms_handler = CommsHandler(port, baud_rate)
+        comms_handler.rx_state_machine.start()
 
 
-def serial_send(data):
+def comms_send(data):
     """ Send data over the COM Port"""
-    serial_handler.serial_comms.send(data)
+    comms_handler.comms.send(data)
 
 
 def change_baud_rate(requested_baud_rate):
     """ Change baud rate to requested rate """
-    global serial_handler
-    serial_handler.serial_comms.baudrate = serial_handler.serial_comms.check_baud_rate(requested_baud_rate)
+    global comms_handler
+    comms_handler.comms.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
 
 
 def flush_com_port():
-    global serial_handler
-    serial_handler.serial_comms.reset_output_buffer()
+    global comms_handler
+    comms_handler.comms.reset_output_buffer()
 
 
 def change_com_port(port):
-    global serial_handler
-    serial_handler.serial_comms.close()
-    serial_handler.serial_comms.port = port
+    global comms_handler
+    comms_handler.comms.close()
+    comms_handler.comms.port = port
     config.COM_PORT = port
     try:
-        serial_handler.serial_comms.open()
+        comms_handler.comms.open()
     except serial.serialutil.SerialException as err:
         print(repr(err))
