@@ -203,6 +203,7 @@ class StateMachine(threading.Thread):
             data_bytes, data_count, data_length = self.delimiter_scan_and_remove(data_bytes, data_count, com, True,
                                                                                  data_length)
 
+        self.delimiter_received = False
         invalid_frame = False
         data_type = self.frame_buffer[4]
         # Check the data type against all known data types
@@ -221,16 +222,14 @@ class StateMachine(threading.Thread):
         if invalid_frame is False:
             # Append data length and data fields onto frame buffer
             self.frame_buffer.extend(data_length_bytes + data_bytes)
+            # Add Frame onto queue to be processed by packet handler Thread
+            frame_queue.put(self.frame_buffer)
+            # Block until packet is processed in handler Thread
+            frame_queue.join()
         else:
             # Invalid frame, re-enter pending_frame() state
             self.pending_frame(com)
 
-        self.delimiter_received = False
-
-        # Add Frame onto queue to be processed by packet handler Thread
-        frame_queue.put(self.frame_buffer)
-        # Block until packet is processed in handler Thread
-        frame_queue.join()
         # Clear the frame buffer
         self.frame_buffer.clear()
 
