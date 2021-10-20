@@ -205,32 +205,34 @@ class StateMachine(threading.Thread):
 
         invalid_frame = False
         data_type = self.frame_buffer[4]
-        # Check the data type against the data length
-        if data_type is DataType.TELECOMMAND_REQUEST.value and data_length != DataTypeSize.TELECOMMAND_REQUEST.value:
+        # Check the data type against all known data types
+        if not any(x.value == data_type for x in DataType):
             invalid_frame = True
-        if data_type is DataType.TELECOMMAND_RESPONSE.value and data_length != DataTypeSize.TELECOMMAND_RESPONSE.value:
+            callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
+
+        # Get the data type name to use with comparing against the right data length
+        data_type_key = DataType(data_type).name
+
+        # Check the actual data length against the expected length for the data type
+        if data_length != DataTypeSize[data_type_key].value:
             invalid_frame = True
-        if data_type is DataType.TELEMETRY_DATA.value and data_length != DataTypeSize.TELEMETRY_DATA.value:
-            invalid_frame = True
-        if data_type is DataType.TELEMETRY_REQUEST.value and data_length != DataTypeSize.TELEMETRY_REQUEST.value:
-            invalid_frame = True
-        if data_type is DataType.FILE_UPLOAD and data_length != DataTypeSize.FILE_UPLOAD.value:
-            invalid_frame = True
-        if data_type is DataType.FILE_DOWNLOAD and data_length != DataTypeSize.FILE_DOWNLOAD.value:
-            invalid_frame = True
-        if data_type is DataType.TELEMETRY_REQUEST_REJECTION and data_length != DataTypeSize.TELEMETRY_REQUEST_REJECTION.value:
-            invalid_frame = True
+            callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
 
         if invalid_frame is False:
             # Append data length and data fields onto frame buffer
             self.frame_buffer.extend(data_length_bytes + data_bytes)
+        else:
+            # Invalid frame, re-enter pending_frame() state
+            self.pending_frame(com)
 
         self.delimiter_received = False
 
         # Add Frame onto queue to be processed by packet handler Thread
         frame_queue.put(self.frame_buffer)
-        # Sleep for 1 second otherwise data can be lost in handler Thread TODO: This may need adjusting
-        time.sleep(1)
+        # Block until packet is processed in handler Thread
+        frame_queue.join()
+        # Clear the frame buffer
+        self.frame_buffer.clear()
 
     def direct_read(self, com):
         """ DIRECT_READ State, entered if Test Interface is used to bypass State Machine """

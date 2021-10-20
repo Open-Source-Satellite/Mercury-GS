@@ -70,6 +70,8 @@ class PacketHandler(threading.Thread):
             elif frame_data_type == DataType.TELECOMMAND_RESPONSE.value:
                 callback_telecommand_response(frame_data_bytes)
 
+            frame_queue.task_done()
+
 
 def packet_init():
     """ Initialise Packet Handler class instance, which automatically starts the packet handler Thread. """
