@@ -26,6 +26,25 @@ def send_telecommand_request():
     print('DataType: {}'.format(telecommand_data_type))
     print('Is continuous: {}'.format(is_continuous))
 
+    # TODO: Talk to Jamie about connecting this to the right functions.
+
+    return 'OK'
+
+@app.route('/api/v1/telemetry/send/request', methods=['POST'])
+def send_telemetry_request():
+    body = request.json
+    tlm_channel =  body['tlm_channel']
+    is_continuous =  body['is_continuous'] 
+
+    print('Channel: {}'.format(tlm_channel))
+    print('Is continuous: {}'.format(is_continuous))
+
+    # TODO: Talk to Jamie about connecting this to the right functions.
+
+    return 'OK'
+
+@app.route('/api/v1/transmit/test', methods=['POST'])
+def transmit_test():
     return 'OK'
 
 app.run()
