@@ -252,11 +252,13 @@ class StateMachine(threading.Thread):
 
                 # Frame has been fully processed,
                 # Reset all member variables so that the state machine can process the next frame
+                self.header_count = 0
+                self.gathered_header.clear()
                 self.data_length = 0
-                self.data_length_bytes = 0
+                self.data_length_bytes.clear()
                 self.data_length_count = 0
                 self.data_length = 0
-                self.data_bytes = 0
+                self.data_bytes.clear()
                 self.data_count = 0
                 self.got_data_length = False
                 self.delimiter_received = False
