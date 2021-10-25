@@ -19,7 +19,8 @@
 import queue
 import struct
 import threading
-import time
+from enum import Enum
+
 import serial
 import config
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, DataTypeSize
@@ -95,6 +96,13 @@ class SerialComms(serial.Serial):
             callback_exception_handler("ERROR: The handle is invalid")
 
 
+class StateMachineState(Enum):
+    """ DataType class for each possible data type. """
+    PENDING_FRAME = 1
+    GATHERING_HEADER = 2
+    READING_DATA = 3
+
+
 class StateMachine(threading.Thread):
     """ StateMachine Class for the RX_Listener running on a separate Thread. """
 
@@ -105,6 +113,15 @@ class StateMachine(threading.Thread):
         self.delimiter_received = False
         self.test_listen = False
         self.daemon = True
+        self.state = StateMachineState.PENDING_FRAME.value
+        self.gathered_header = bytearray()
+        self.header_count = 0
+        self.data_length_count = 0
+        self.data_length_bytes = bytearray()
+        self.data_length = 0
+        self.got_data_length = False
+        self.data_count = 0
+        self.data_bytes = bytearray()
 
     def run(self):
         """ Overloads the Thread's "run" function,
@@ -116,15 +133,23 @@ class StateMachine(threading.Thread):
                 if self.test_listen is True:
                     self.direct_read(comms_handler.comms)
                 else:
-                    self.frame_buffer.clear()
-                    self.pending_frame(comms_handler.comms)
+                    self.run_state_machine(comms_handler.comms)
 
-    def pending_frame(self, com):
+    def run_state_machine(self, com):
+        rx_byte = self.read_byte(com)
+        if self.state == StateMachineState.PENDING_FRAME.value:
+            self.pending_frame(rx_byte)
+        elif self.state == StateMachineState.GATHERING_HEADER.value:
+            self.gathering_header(rx_byte)
+        elif self.state == StateMachineState.READING_DATA.value:
+            self.reading_data(rx_byte)
+        else:
+            self.state = StateMachineState.PENDING_FRAME.value
+
+    def pending_frame(self, rx_byte):
         """ PENDING_FRAME State, checks for start of frame...
         (delimiter character followed by non delimiter character).
         """
-        # Block until there is a byte to read
-        rx_byte = self.read_byte(com)
         try:
             # Clear the received data buffer if it's 2 bytes
             if len(self.frame_buffer) == 2:
@@ -139,99 +164,107 @@ class StateMachine(threading.Thread):
         if (PROTOCOL_DELIMITER == self.frame_buffer[0]) and (rx_byte[0] != PROTOCOL_DELIMITER):
             # This is the start of a new frame!
             # Switch state to GATHERING_DATA
-            self.gathering_header(com)
-        # Reenter PENDING_FRAME if start of frame not detected
-        self.pending_frame(com)
+            self.state = StateMachineState.GATHERING_HEADER.value
+            self.header_count = 0
+        else:
+            # Reenter PENDING_FRAME if start of frame not detected
+            pass
 
-    def gathering_header(self, com):
+    def gathering_header(self, rx_byte):
         """ GATHERING_HEADER State, reads the rest of the header. """
         # Create header bitfield buffer
         header_size = 3
-        gathered_header = bytearray()
-        header_count = 0
+        # Read a byte into Header Buffer
+        self.gathered_header += rx_byte
+        # Scan byte and previous byte for start of frame, pop off any double delimiter values
+        self.gathered_header, self.header_count = self.delimiter_scan_and_remove(self.gathered_header,
+                                                                                 self.header_count)
+        # If we've read out enough bytes of the header
+        if self.header_count == header_size:
+            # Append gathered header onto buffer
+            self.frame_buffer.extend(self.gathered_header)
+            self.gathered_header.clear()
+            # Check if Data Type is within range
+            if int(self.frame_buffer[4]) in range(MAX_DATA_TYPES):
+                # Data Type within range, switch to READING_DATA state
+                self.state = StateMachineState.READING_DATA.value
+            else:
+                # Data Type out of range, discard message and return to PENDING_FRAME
+                self.state = StateMachineState.PENDING_FRAME.value
+                self.frame_buffer.clear()
 
-        # Iterate over Header bytes
-        while header_count < header_size:
-            # Read a byte into Header Buffer
-            gathered_header += self.read_byte(com)
-            # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            gathered_header, header_count = self.delimiter_scan_and_remove(gathered_header, header_count, com)
-
-        # Append gathered header onto buffer
-        self.frame_buffer.extend(gathered_header)
-        # Check if Data Type is within range
-        if int(self.frame_buffer[4]) in range(MAX_DATA_TYPES):
-            # Data Type within range, switch to READING_DATA state
-            self.reading_data(com)
-        else:
-            # Data Type out of range, discard message and return to PENDING_FRAME
-            self.pending_frame(com)
-
-    def reading_data(self, com):
+    def reading_data(self, rx_byte):
         """ READING_DATA State, gathers the data length field and reads the rest of the frame,
         then if frame is valid place onto queue to be processed by the packet handler Thread.
         """
         # Create data length bitfield buffer
-        data_length_bytes = bytearray()
         data_length_size = 4
-        data_length_count = 0
-        data_count = 0
 
         # Iterate over Data Length bytes
-        while data_length_count < data_length_size:
+        if self.data_length_count < data_length_size:
             # Read a byte into Data Length Buffer
-            data_length_bytes += self.read_byte(com)
+            self.data_length_bytes += rx_byte
             # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_length_bytes, data_length_count = self.delimiter_scan_and_remove(data_length_bytes, data_length_count,
-                                                                                  com)
-        # unpacks data_length_bytes into 32 bit unsigned integer
-        try:
-            data_length = struct.unpack("!L", data_length_bytes)[0]
-        except struct.error as err:
-            print(repr(err))
-            print("ERROR: Data Length is not 4 bytes")
-            callback_exception_handler("ERROR: Data Length is not 4 bytes")
-
-        # Create data bitfield buffer
-        data_bytes = bytearray()
-
-        # Iterate over Data Bytes
-        while data_count < data_length:
-            # Read a byte into Data Buffer
-            data_bytes += self.read_byte(com)
-            # Scan byte and previous byte for start of frame, pop off any double delimiter values
-            data_bytes, data_count, data_length = self.delimiter_scan_and_remove(data_bytes, data_count, com, True,
-                                                                                 data_length)
-
-        self.delimiter_received = False
-        invalid_frame = False
-        data_type = self.frame_buffer[4]
-        # Check the data type against all known data types
-        if not any(x.value == data_type for x in DataType):
-            invalid_frame = True
-            callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
-
-        # Get the data type name to use with comparing against the right data length
-        data_type_key = DataType(data_type).name
-
-        # Check the actual data length against the expected length for the data type
-        if data_length != DataTypeSize[data_type_key].value:
-            invalid_frame = True
-            callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
-
-        if invalid_frame is False:
-            # Append data length and data fields onto frame buffer
-            self.frame_buffer.extend(data_length_bytes + data_bytes)
-            # Add Frame onto queue to be processed by packet handler Thread
-            frame_queue.put(self.frame_buffer)
-            # Block until packet is processed in handler Thread
-            frame_queue.join()
+            self.data_length_bytes, self.data_length_count = self.delimiter_scan_and_remove(self.data_length_bytes,
+                                                                                            self.data_length_count)
         else:
-            # Invalid frame, re-enter pending_frame() state
-            self.pending_frame(com)
+            if self.got_data_length is False:
+                # unpacks data_length_bytes into 32 bit unsigned integer
+                try:
+                    self.data_length = struct.unpack("!L", self.data_length_bytes)[0]
+                except struct.error as err:
+                    print(repr(err))
+                    print("ERROR: Data Length is not 4 bytes")
+                    callback_exception_handler("ERROR: Data Length is not 4 bytes")
+                self.got_data_length = True
 
-        # Clear the frame buffer
-        self.frame_buffer.clear()
+            # Read a byte into Data Buffer
+            self.data_bytes += rx_byte
+            # Scan byte and previous byte for start of frame, pop off any double delimiter values
+            self.data_bytes, self.data_count, self.data_length = self.delimiter_scan_and_remove(self.data_bytes,
+                                                                                                self.data_count,
+                                                                                                True,
+                                                                                                self.data_length)
+            # If we have read out enough data bytes
+            if self.data_count == self.data_length:
+                invalid_frame = False
+                data_type = self.frame_buffer[4]
+                # Check the data type against all known data types
+                if not any(x.value == data_type for x in DataType):
+                    invalid_frame = True
+                    callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
+
+                # Get the data type name to use with comparing against the right data length
+                data_type_key = DataType(data_type).name
+
+                # Check the actual data length against the expected length for the data type
+                if self.data_length != DataTypeSize[data_type_key].value:
+                    invalid_frame = True
+                    callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
+
+                if invalid_frame is False:
+                    # Append data length and data fields onto frame buffer
+                    self.frame_buffer.extend(self.data_length_bytes + self.data_bytes)
+                    # Add Frame onto queue to be processed by packet handler Thread
+                    frame_queue.put(self.frame_buffer)
+                    # Block until packet is processed in handler Thread
+                    frame_queue.join()
+
+                # Frame has been fully processed,
+                # Reset all member variables so that the state machine can process the next frame
+                self.data_length = 0
+                self.data_length_bytes = 0
+                self.data_length_count = 0
+                self.data_length = 0
+                self.data_bytes = 0
+                self.data_count = 0
+                self.got_data_length = False
+                self.delimiter_received = False
+
+                # Set state to PENDING_FRAME
+                self.state = StateMachineState.PENDING_FRAME.value
+                # Clear the frame buffer
+                self.frame_buffer.clear()
 
     def direct_read(self, com):
         """ DIRECT_READ State, entered if Test Interface is used to bypass State Machine """
@@ -246,7 +279,7 @@ class StateMachine(threading.Thread):
         rx_byte = com.read(1)
         return rx_byte
 
-    def delimiter_scan_and_remove(self, buffer, index, com, data_field=False, data_length_decrement=0):
+    def delimiter_scan_and_remove(self, buffer, index, data_field=False, data_length_decrement=0):
         """ Iterate through buffer, pop off a delimiter where there are 2 consecutive delimiter values,
         enter GATHERING_HEADER State if start of frame detected.
         """
@@ -277,7 +310,9 @@ class StateMachine(threading.Thread):
                 # Reset received delimiter variable
                 self.delimiter_received = False
                 # Enter GATHERING_HEADER state
-                self.gathering_header(com)
+                self.state = StateMachineState.GATHERING_HEADER.value
+                self.header_count = 0
+                return buffer, 0
         # Increment the index
         index += 1
         if data_length_decrement == 0:
