@@ -27,8 +27,8 @@ import serial
 import struct, random, math
 from time import sleep
 
-#port = "COM19"
-port = "COM20"
+#port = "COM1"
+port = "COM2"
 
 # timeout in 1/10 seconds (roughly)
 TIMEOUT = 10

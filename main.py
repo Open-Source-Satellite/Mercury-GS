@@ -133,7 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tlm_slot["value"].setText("")
 
         # Init Serial Comms
-        comms_init("COM19", 9600)
+        comms_init("COM1", 9600)
         # Register all callbacks
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_rejection_response_receive,
                                     self.telemetry_timeout, self.error_message_box)

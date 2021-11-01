@@ -19,7 +19,7 @@
 
 # Initialise Global Variables
 BAUD_RATE = 9600
-COM_PORT = "COM19"
+COM_PORT = "COM1"
 TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000
 
