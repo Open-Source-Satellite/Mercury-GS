@@ -1,15 +1,37 @@
 # Mercury-GS
+An Open Source Ground Station Terminal. 
 
-- [Mercury-GS](#mercury-gs)
-  - [User Guide](#user-guide)
-    - [Setup](#setup)
-  - [Development Setup](#development-setup)
-    - [Serial Comms Setup](#serial-comms-setup)
-    - [Sending And Receiving](#sending-and-receiving)
-    - [Designing The GUI](#designing-the-gui)
-    - [Building the GUI](#building-the-gui)
+For those who are new to the Space Industry and it's terminology, please refer to the [Background](#Background) section. 
+Otherwise head to [User Guide](#user-guide) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
 
-## User Guide
+## Contents
+- [User Guide](#user-guide)
+  - [Setup](#setup)
+- [Development Setup](#development-setup)
+  - [Serial Comms Setup](#serial-comms-setup)
+  - [Sending And Receiving](#sending-and-receiving)
+  - [Designing The GUI](#designing-the-gui)
+  - [Building the GUI](#building-the-gui)
+
+## Background
+Once a Spacecraft is in flight, operators will need to communicate with it. 
+This is normally facilitated via Ground Stations located around the globe that use a radar dish to send and receive packets of data.
+
+During a typical mission, a spacecraft will send stats down to the ground, which we call Telemetry.
+This could be temperature, battery charge, sensor readings, or any data point that you can think of.
+However, the spacecraft would usually only transmit the most important Telemetry by itself due to limitations with the radio link. 
+The Ground Station can request for a particular Telemetry point by sending a Telemetry Request.
+
+The Ground Station doesn't just monitor a Spacecraft's Telemetry, an operator can send commands to tell it to do things.
+This could be switching on a particular gadget, turning towards the Sun to charge batteries, 
+synchronising the on-board time to the Ground or a variety of mission specific functions.
+These are facilitated by something called a Telecommand.
+
+It is also required to download files, such as a picture that the Spacecraft has taken, 
+as well as upload to the spacecraft. This could be downloading images taken by a camera on the payload of the spacecraft
+, or uploading an Operational Timetable or code update to the spacecraft.
+
+### User Guide
 ## Setup
 Install [Python3](https://www.python.org/downloads/).
 
