@@ -17,9 +17,9 @@ Otherwise head to [User Guide](#user-guide) if you want to use the software, or 
 Once a Spacecraft is in flight, operators will need to communicate with it. 
 This is normally facilitated via Ground Stations located around the globe that use a radar dish to send and receive packets of data.
 
-During a typical mission, a spacecraft will send stats down to the ground, which we call Telemetry.
+During a typical mission, a Spacecraft will send stats down to the ground, which we call Telemetry.
 This could be temperature, battery charge, sensor readings, or any data point that you can think of.
-However, the spacecraft would usually only transmit the most important Telemetry by itself due to limitations with the radio link. 
+However, the Spacecraft would usually only transmit the most important Telemetry by itself due to limitations with the radio link. 
 The Ground Station can request for a particular Telemetry point by sending a Telemetry Request.
 
 The Ground Station doesn't just monitor a Spacecraft's Telemetry, an operator can send commands to tell it to do things.
@@ -27,9 +27,8 @@ This could be switching on a particular gadget, turning towards the Sun to charg
 synchronising the on-board time to the Ground or a variety of mission specific functions.
 These are facilitated by something called a Telecommand.
 
-It is also required to download files, such as a picture that the Spacecraft has taken, 
-as well as upload to the spacecraft. This could be downloading images taken by a camera on the payload of the spacecraft
-, or uploading an Operational Timetable or code update to the spacecraft.
+It is also required to upload and download files. This could be downloading images taken by a camera on the payload of the Spacecraft
+, or uploading an Operational Timetable or code update to the Spacecraft.
 
 ### User Guide
 ## Setup
