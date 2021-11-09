@@ -1,17 +1,22 @@
+![](gui_assets/OSSAT-LOGO-BLACK.jpg)
 # Mercury-GS
 An Open Source Ground Station Terminal. 
 
 For those who are new to the Space Industry and it's terminology, please refer to the [Background](#Background) section. 
 Otherwise head to [User Guide](#user-guide) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
 
+**NOTE: This software is not representative of what would be used for a real mission. 
+It's intent is only for testing in a lab environment.**
+
 ## Contents
-- [User Guide](#user-guide)
-  - [Setup](#setup)
-- [Development Setup](#development-setup)
+- [Background](#background)
+- [Manual](#manual)
+- [Setup](#setup)
+  - [Development Setup](#development-setup)
   - [Serial Comms Setup](#serial-comms-setup)
-  - [Sending And Receiving](#sending-and-receiving)
-  - [Designing The GUI](#designing-the-gui)
-  - [Building the GUI](#building-the-gui)
+- [Creating Test Frames](#creating-test-frames)
+- [Designing The GUI](#designing-the-gui)
+- [Building the GUI](#building-the-gui)
 
 ## Background
 Once a Spacecraft is in flight, operators will need to communicate with it. 
@@ -30,8 +35,11 @@ These are facilitated by something called a Telecommand.
 It is also required to upload and download files. This could be downloading images taken by a camera on the payload of the Spacecraft
 , or uploading an Operational Timetable or code update to the Spacecraft.
 
-### User Guide
-## Setup
+## Manual
+The manual, which describes how to use Mercury GS, is located in the repo [here](/Mercury%20GS%20Manual.docx).
+
+# Setup Guides
+## User Setup
 Install [Python3](https://www.python.org/downloads/).
 
 Clone the repository onto your machine. Click the "Clone" button on the Github page.
@@ -47,6 +55,8 @@ UNIX/MACOS:
 
 Run the shell script [build_env.sh](../scripts/build_env.sh), you only need to do this once.
 Then execute [run_env.sh](../scripts/run_env.sh) when you want to run MercuryGS.
+
+To communicate with Mercury GS via a terminal, emulating the link to a Spacecraft, follow the steps in [Serial Comms Setup](#serial-comms-setup).
 
 ## Development Setup
 
@@ -91,11 +101,9 @@ Another solution is to install a full Python IDE like [Pycharm](https://www.jetb
 The low level drivers talks over a COM port that is configurable in the GUI. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
 Download a program like [HHD Virtual Serial Port Tools](https://freevirtualserialports.com/), create a virtual pair between COM1 and COM2, and then open a terminal program like [TeraTerm](https://ttssh2.osdn.jp/index.html.en) to listen on COM2. Settings are default 9600 baud, 8 data bits, 0 parity bits, 1 stop bit. The baudrate is configurable in the GUI on the "CONFIG" tab.
 
-## Sending and Receiving
-A telemetry request can be sent by typing the requested channel into the "Channel #" box and hitting "Send TLM REQ". The request is then packetised in the frameformat denoted in the spec and sends it over COM1. This should show on TeraTerm over COM2.
-To send a message back, on TeraTerm click "File -> Send File" and navigate to the "Test Frames" folder within the repo. Select "Telemetry Request" and make sure that the "Binary" box is ticked before pressing "Open". This should send a formatted frame back to Mercury GS over COM2 -> COM1. The frame is parsed and then displayed as a value of 1 under the "Telemetry" Section of the GUI under TLM CH 1.
-I used [HHD Free Hex Editor](https://www.hhdsoftware.com/free-hex-editor) to create these "Test Frames".
-
+## Creating Test Frames
+Frames can be sent to MercuryGS via a terminal, these are located in the [Test Frames](/test_frames) folder.
+[HHD Free Hex Editor](https://www.hhdsoftware.com/free-hex-editor) was used to create these frames.
 
 ## Designing the GUI
 If you wish to edit the GUI, you will need Qt Designer.  
