@@ -3,7 +3,7 @@
 An Open Source Ground Station Terminal. 
 
 For those who are new to the Space Industry and it's terminology, please refer to the [Background](#Background) section. 
-Otherwise head to [User Guide](#user-guide) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
+Otherwise head to [User Setup](#user-setup) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
 
 **NOTE: This software is not representative of what would be used for a real mission. 
 It's intent is only for testing in a lab environment.**
@@ -12,6 +12,7 @@ It's intent is only for testing in a lab environment.**
 - [Background](#background)
 - [Manual](#manual)
 - [Setup](#setup)
+  - [User Setup](#user-setup)
   - [Development Setup](#development-setup)
   - [Serial Comms Setup](#serial-comms-setup)
 - [Creating Test Frames](#creating-test-frames)
