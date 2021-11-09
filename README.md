@@ -39,6 +39,9 @@ It is also required to upload and download files. This could be downloading imag
 ## Manual
 The manual, which describes how to use Mercury GS, is located in the repo [here](/Mercury%20GS%20Manual.docx).
 
+**NOTE: This initial version of Mercury GS only fully supports Windows. 
+Linux and MacOS support is expected after further development.** 
+
 # Setup Guides
 ## User Setup
 Install [Python3](https://www.python.org/downloads/).
@@ -99,8 +102,10 @@ python3 -m pip install QtPy
 Another solution is to install a full Python IDE like [Pycharm](https://www.jetbrains.com/pycharm/) and install the packages through it's package manager.
 
 ## Serial Comms Setup
-The low level drivers talks over a COM port that is configurable in the GUI. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
-Download a program like [HHD Virtual Serial Port Tools](https://freevirtualserialports.com/), create a virtual pair between COM1 and COM2, and then open a terminal program like [TeraTerm](https://ttssh2.osdn.jp/index.html.en) to listen on COM2. Settings are default 9600 baud, 8 data bits, 0 parity bits, 1 stop bit. The baudrate is configurable in the GUI on the "CONFIG" tab.
+The low level drivers talk over a COM port that is configurable in the GUI. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
+Download a program like [HHD Virtual Serial Port Tools](https://freevirtualserialports.com/), create a virtual pair between two ports (for example COM1 and COM2), and then open a terminal program like [TeraTerm](https://ttssh2.osdn.jp/index.html.en) to listen on one of them (COM2 for example). Settings are default 9600 baud, 8 data bits, 0 parity bits, 1 stop bit. The baudrate is configurable in the GUI on the "CONFIG" tab.
+
+**NOTE: This solution is only for Windows.**
 
 ## Creating Test Frames
 Frames can be sent to MercuryGS via a terminal, these are located in the [Test Frames](/test_frames) folder.
