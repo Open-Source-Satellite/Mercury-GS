@@ -2,7 +2,8 @@
 # Mercury-GS
 An Open Source Ground Station Terminal. 
 
-For those who are new to the Space Industry and it's terminology, please refer to the [Background](#Background) section. 
+For those who are new to the Space Industry and it's terminology, please refer to the [Background](#Background) section.
+Also refer to the [OSSAT Glossary](/OSSAT%20Glossary.pdf) for explanations of any terminology.
 Otherwise head to [User Setup](#user-setup) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
 
 **NOTE: This software is not representative of what would be used for a real mission. 
@@ -101,7 +102,7 @@ python3 -m pip install QtPy
 ```
 Another solution is to install a full Python IDE like [Pycharm](https://www.jetbrains.com/pycharm/) and install the packages through it's package manager.
 
-**NOTE: For further information, design and requirements. You can find the Specification for Mercury GS [here](/KS-DOC-01104%20OSSAT%20Mercury%20GS%20Specification_08.pdf).**
+**NOTE: For further information, design and requirements. You can find the Specification for Mercury GS [here](/OSSAT%20Mercury%20GS%20Specification_08.pdf).**
 
 ## Serial Comms Setup
 The low level drivers talk over a COM port that is configurable in the GUI. To emulate a connection with a SpaceCraft we must spoof a connection between two ports.
