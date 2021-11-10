@@ -151,18 +151,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
     def on_click_send_pc_time(self, event):
-        # TODO: get pc time and send it.
-        tc = self.inputTcNumberValue.text()
-        unix_time = str(time.time())
+        # TC number for time sending is 0.
+        tc = 0
+        unix_time = time.time();
+        unix_time_seconds = int(unix_time)
+
+        # Milliseconds takes 2 Bytes storage. So, to convert it into unsigned short, lets just take all the bits upto 16 bit.
+
+        millisec_through_sec = int((unix_time - unix_time_seconds)*1000)
+        milliseconds = (millisec_through_sec & 0xffff)
 
         print('Clicked: Send PC Time')
         print('Telecommand Number: {}'.format(tc))
         print('Time: {}'.format(unix_time))
 
-        tc_time_send(tc, unix_time)
+        tc_time_send(tc, unix_time_seconds, milliseconds)
 
     def on_click_send_this_time(self, event):
-        tc  = self.inputTcNumberValue.text()
+        # TC number for time sending is 0.
+        tc  = 0
 
         date_from_ui = self.dateEditSendThisTime.dateTime()
         date_string = date_from_ui.toString(self.dateEditSendThisTime.displayFormat())
