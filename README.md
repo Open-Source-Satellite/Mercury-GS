@@ -1,4 +1,4 @@
-![](gui_assets/OSSAT-LOGO-BLACK.jpg)
+![](gui_assets/OSSAT-LOGO-BLUE.png)
 # Mercury-GS
 An Open Source Program that allows users to interact with a Spacecraft in a lab environment, pre-launch. 
 
