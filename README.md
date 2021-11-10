@@ -20,6 +20,7 @@ Otherwise, head to [User Setup](#user-setup) if you want to use the software, or
 - [Designing The GUI](#designing-the-gui)
 - [Building the GUI](#building-the-gui)
 - [Licenses](#licenses)
+- [Get Involved](#get-involved)
 
 ## Background
 Once a Spacecraft is in flight, operators will need to communicate with it. 
@@ -136,3 +137,6 @@ To run the files built by the last step, run "main.py" either via command line o
 
 ## Licenses
 Mercury GS includes other open source software, for licensing details, see [here](/licenses).
+
+## Get Involved
+If you wish to get involved in the development of Mercury GS more directly, or any of our other developments at OSSAT, follow [this link](https://www.opensourcesatellite.org/register/) to register.
