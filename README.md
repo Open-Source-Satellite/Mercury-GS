@@ -6,10 +6,11 @@ For those who are new to the Space Industry and it's terminology, please refer t
 Also refer to the [OSSAT Glossary](/OSSAT%20Glossary.pdf) for explanations of any terminology.
 Otherwise head to [User Setup](#user-setup) if you want to use the software, or [Development Setup](#development-setup) if you want to develop.
 
-**NOTE: This software is useful for lab testing a spacecraft, pre-launch. Different software would be used to communicate with the spacecraft in orbit. The communications protocol is not suitable for in-orbit communication, see [the spec](/OSSAT%Mercur%GS%Specification_08.pdf) for further details**
+**NOTE: This software is useful for lab testing a spacecraft, pre-launch. Different software would be used to communicate with the spacecraft in orbit. The communications protocol is not suitable for in-orbit communication, see [The Spec](/OSSAT%20Mercury%20GS%20Specification_08.pdf) for further details.**
 
 ## Contents
 - [Background](#background)
+- [Mercury GS Overview](#mercury-gs-overview)
 - [Manual](#manual)
 - [Setup](#setup)
   - [User Setup](#user-setup)
@@ -18,6 +19,7 @@ Otherwise head to [User Setup](#user-setup) if you want to use the software, or 
 - [Creating Test Frames](#creating-test-frames)
 - [Designing The GUI](#designing-the-gui)
 - [Building the GUI](#building-the-gui)
+- [Licenses](#licenses)
 
 ## Background
 Once a Spacecraft is in flight, operators will need to communicate with it. 
@@ -51,6 +53,7 @@ Linux and MacOS support is expected after further development.**
 
 # Setup Guides
 ## User Setup
+If you
 Install [Python3](https://www.python.org/downloads/).
 
 Clone the repository onto your machine. Click the "Clone" button on the Github page.
@@ -129,7 +132,7 @@ To use the qt ui file from the Qt designer, we need to build it to a python file
 You can do that by running: `pyuic5 platform-comms-app.ui -o platform_comms_app.py`
 Or by running the build script from the "scripts" directory.
 The built code of the current version of Mercury GS is included in the repo, so you will only need to rebuild the GUI if you make changes to it
-To run the files built by the last step, run "main.py" either via command line or through a Python compatible IDE
+To run the files built by the last step, run "main.py" either via command line or through a Python compatible IDE.
 
 ## Licenses
 Mercury GS includes other open source software, for licensing details, see [here](/licenses).
