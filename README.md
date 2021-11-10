@@ -139,4 +139,4 @@ To run the files built by the last step, run "main.py" either via command line o
 Mercury GS includes other open source software, for licensing details, see [here](/licenses).
 
 ## Get Involved
-If you wish to get involved in the development of Mercury GS more directly, or any of our other developments at OSSAT, follow [this link](https://www.opensourcesatellite.org/register/) to register.
+If you wish to contribute directly to the development of Mercury GS, have a look at the existing Github issues and register here [this link](https://www.opensourcesatellite.org/register/).
