@@ -16,10 +16,18 @@
 #  Mercury GS Global Variables
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
+import platform
+try:
+    import RPi.GPIO as GPIO
+    RaspberryPi = True
+except(ImportError, RuntimeError):
+    RaspberryPi = False
 
 # Initialise Global Variables
+OS = platform.system()
 BAUD_RATE = 9600
-COM_PORT = "COM1"
+COM_PORT = None
+COMMS = None
 TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000
 

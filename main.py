@@ -22,7 +22,8 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator, QIntValidator, QDoubleValidator, QValidator
 from PyQt5.QtWidgets import QFileDialog, QApplication, QMainWindow
 
-from config import config_register_callback, change_timeout
+import config
+from config import config_register_callback, change_timeout, OS, COMMS, RaspberryPi
 from low_level.continuous import continuous_register_callback, adjust_continuous, continuous_stop
 from low_level.packet import packet_register_callback, packet_init
 from low_level.comms import comms_init, comms_register_callback, change_baud_rate, change_com_port
@@ -132,6 +133,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tlm_slot["channel"].setText("")
             tlm_slot["value"].setText("")
 
+        if RaspberryPi is False:
+            self.comboBoxComms.setEnabled(False)
+
         # Init Serial Comms
         comms_init("COM1", 9600)
         # Register all callbacks
@@ -145,6 +149,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         continuous_register_callback(self.error_message_box)
         config_register_callback(self.error_message_box)
         packet_init()
+
+        ### Disable UART config if Linux
+        if OS == "Linux":
+            self.comboBoxCommsBaudValue.setEnabled(False)
+            self.inputComPort.setEnabled(False)
 
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
@@ -245,6 +254,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         import config
         config.COM_PORT = self.inputComPort.currentText()
         change_com_port(config.COM_PORT)
+
+    def on_comms_change(self):
+        import config
+        config.COMMS = self.comboBoxComms.currentText()
+        if config.COMMS == "SERIAL":
+            self.comboBoxCommsBaudValue.setEnabled(True)
+            self.inputComPort.setEnabled(True)
+        elif config.COMMS == "RF69":
+            self.comboBoxCommsBaudValue.setEnabled(False)
+            self.inputComPort.setEnabled(False)
 
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:

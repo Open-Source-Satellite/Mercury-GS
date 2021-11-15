@@ -24,14 +24,47 @@ from enum import Enum
 import serial
 import config
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, DataTypeSize
+from config import OS, RaspberryPi
+try:
+    from config import GPIO
+except(ImportError):
+    pass
+
+import adafruit_rfm69
+import sys
+import signal
+
+
+if RaspberryPi is True:
+    try:
+        import board as bonnet
+        import busio
+        from digitalio import DigitalInOut, Direction, Pull
+        # Configure Packet Radio
+        CS = DigitalInOut(bonnet.CE1)
+        RESET = DigitalInOut(bonnet.D25)
+        spi = busio.SPI(bonnet.SCK, MOSI=bonnet.MOSI, MISO=bonnet.MISO)
+    except (NotImplementedError, NameError) as err:
+        print(repr(err))
+        #spi = None
+        #CS = None
+        #RESET = None
 
 frame_queue = queue.Queue()
 direct_read_queue = queue.Queue()
+incoming_byte_queue = queue.Queue()
 comms_handler = None
 PENDING_FRAME = 0
 GATHERING_DATA = 1
 READING_DATA = 2
 DIRECT_READ = 3
+DIO0_GPIO = 22
+
+
+def signal_handler(sig, frame):
+    if RaspberryPi is True:
+        GPIO.cleanup()
+    sys.exit(0)
 
 
 def comms_register_callback(exception_handler_function_ptr):
@@ -47,7 +80,31 @@ class CommsHandler:
     def __init__(self, port, baud_rate):
         """ Initialise the rx_listener and serial. """
         self.rx_state_machine = StateMachine()
-        self.comms = SerialComms(port, baud_rate)
+        if RaspberryPi is True:
+            try:
+                self.comms = RadioComms(spi, CS, RESET, 434.0)
+            except NameError:
+                pass
+        else:
+            self.comms = SerialComms(port, baud_rate)
+
+
+class RadioComms(adafruit_rfm69.RFM69):
+    """ A Class to handle the radio comms. """
+
+    def __init__(self, spi, chip_select, reset, frequency):
+        super().__init__(spi, chip_select, reset, frequency)
+        self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
+        self.is_open = True # Hack JPB
+        self.in_waiting = 0 # Hack JPB
+        self.listen()
+
+    def rx_interrupt(self, channel):
+        received_packet = self.receive(timeout=10)
+        if received_packet is not None:
+            packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+            for byte in packet_split:
+                incoming_byte_queue.put(byte)
 
 
 class SerialComms(serial.Serial):
@@ -136,7 +193,11 @@ class StateMachine(threading.Thread):
                     self.run_state_machine(comms_handler.comms)
 
     def run_state_machine(self, com):
-        rx_byte = self.read_byte(com)
+        if RaspberryPi is True:
+            rx_byte = incoming_byte_queue.get()
+        else:
+            rx_byte = self.read_byte(com)
+
         if self.state == StateMachineState.PENDING_FRAME.value:
             self.pending_frame(rx_byte)
         elif self.state == StateMachineState.GATHERING_HEADER.value:
@@ -329,6 +390,14 @@ def comms_init(port, baud_rate):
     if comms_handler is not CommsHandler:
         comms_handler = CommsHandler(port, baud_rate)
         comms_handler.rx_state_machine.start()
+
+        if OS == "Raspberry Pi":
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(DIO0_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            GPIO.add_event_detect(DIO0_GPIO, GPIO.FALLING,
+                                  callback=comms_handler.comms.rx_interrupt, bouncetime=100)
+
+        signal.signal(signal.SIGINT, signal_handler)
 
 
 def comms_send(data):
