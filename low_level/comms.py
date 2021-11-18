@@ -182,17 +182,13 @@ class StateMachine(threading.Thread):
         reads directly if Test Interface is used,
         otherwise engages StateMachine.
         """
+        return
         while True:
-            if comms_handler.serial_comms.is_open and config.COMMS == "SERIAL":
+            if comms_handler.comms.is_open:
                 if self.test_listen is True:
-                    self.direct_read(comms_handler.serial_comms)
+                    self.direct_read(comms_handler.comms)
                 else:
-                    self.run_state_machine(comms_handler.serial_comms)
-            elif config.COMMS == "RF69":
-                if self.test_listen is True:
-                    self.direct_read(comms_handler.radio_comms)
-                else:
-                    self.run_state_machine(comms_handler.radio_comms)
+                    self.run_state_machine(comms_handler.comms)
 
     def run_state_machine(self, com):
         if config.COMMS == "RF69":
@@ -405,7 +401,7 @@ def comms_init(port, baud_rate):
 def comms_send(data):
     """ Send data over the COM Port"""
     if config.COMMS == "SERIAL":
-        comms_handler.serial_comms.send(data)
+        comms_handler.comms.send(data)
     elif config.COMMS == "RF69":
         comms_handler.radio_comms.send(data)
 
@@ -413,20 +409,28 @@ def comms_send(data):
 def change_baud_rate(requested_baud_rate):
     """ Change baud rate to requested rate """
     global comms_handler
-    comms_handler.serial_comms.baudrate = comms_handler.serial_comms.check_baud_rate(requested_baud_rate)
+    comms_handler.comms.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
 
 
 def flush_com_port():
     global comms_handler
-    comms_handler.serial_comms.reset_output_buffer()
+    comms_handler.comms.reset_output_buffer()
 
 
 def change_com_port(port):
     global comms_handler
-    comms_handler.serial_comms.close()
-    comms_handler.serial_comms.port = port
+    comms_handler.comms.close()
+    comms_handler.comms.port = port
     config.COM_PORT = port
     try:
-        comms_handler.serial_comms.open()
+        comms_handler.comms.open()
     except serial.serialutil.SerialException as err:
         print(repr(err))
+
+
+def change_comms():
+    global comms_handler
+    if config.COMMS == "RF69":
+        comms_handler.comms = comms_handler.radio_comms
+    elif config.COMMS == "SERIAL":
+        comms_handler.comms = comms_handler.serial_comms
