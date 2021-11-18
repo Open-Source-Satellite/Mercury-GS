@@ -190,9 +190,9 @@ class StateMachine(threading.Thread):
                     self.run_state_machine(comms_handler.serial_comms)
             elif config.COMMS == "RF69":
                 if self.test_listen is True:
-                    self.direct_read(comms_handler.serial_comms)
+                    self.direct_read(comms_handler.radio_comms)
                 else:
-                    self.run_state_machine(comms_handler.serial_comms)
+                    self.run_state_machine(comms_handler.radio_comms)
 
     def run_state_machine(self, com):
         if config.COMMS == "RF69":

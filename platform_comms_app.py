@@ -1364,4 +1364,3 @@ class Ui_MainWindow(object):
         self.inputDataField.setText(_translate("MainWindow", "0x01 0x02 0x03"))
         self.labelResponse.setText(_translate("MainWindow", "Response"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTest), _translate("MainWindow", "TEST"))
-import gui_assets.mercury_resources_rc
