@@ -48,12 +48,12 @@ class TestFrame:
         return bytes_buffer
 
     def transmit(self):
-        low_level.comms.serial_handler.comms.send(self.bytes_to_send)
-        low_level.comms.serial_handler.rx_state_machine.test_listen = True
+        low_level.comms.comms_handler.comms.send(self.bytes_to_send)
+        low_level.comms.comms_handler.rx_state_machine.test_listen = True
         self.TimerFunction.start()
 
     def read_finished(self):
-        low_level.comms.serial_handler.rx_state_machine.test_listen = False
+        low_level.comms.comms_handler.rx_state_machine.test_listen = False
         while low_level.comms.direct_read_queue.qsize() > 0:
             self.test_response += low_level.comms.direct_read_queue.get()
 
