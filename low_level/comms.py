@@ -81,11 +81,14 @@ class CommsHandler:
         """ Initialise the rx_listener and serial. """
         self.rx_state_machine = StateMachine()
         if RaspberryPi is True:
-            try:
-                self.radio_comms = RadioComms(spi, CS, RESET, 434.0)
-            except NameError:
-                pass
-        self.serial_comms = SerialComms(port, baud_rate)
+            self.radio = RadioComms(spi, CS, RESET, 434.0)
+        self.serial = SerialComms(config.COM_PORT, config.BAUD_RATE)
+
+    def change_comms(self):
+        if config.COMMS == "RF69":
+            return self.radio
+        elif config.COMMS == "SERIAL":
+            return self.serial
 
 
 class RadioComms(adafruit_rfm69.RFM69):
@@ -94,8 +97,8 @@ class RadioComms(adafruit_rfm69.RFM69):
     def __init__(self, spi, chip_select, reset, frequency):
         super().__init__(spi, chip_select, reset, frequency)
         self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
-        self.is_open = True # Hack JPB
-        self.in_waiting = 0 # Hack JPB
+        self.is_open = True  # Hack JPB
+        self.in_waiting = 0  # Hack JPB
         self.listen()
 
     def rx_interrupt(self, channel):
@@ -120,6 +123,7 @@ class SerialComms(serial.Serial):
 
         self.bytesize = 8
         self.write_timeout = 5
+        self.rx_thread = threading.Thread(target=self.rx_loop)
 
         # Close COM Port if open
         if self.is_open:
@@ -128,8 +132,13 @@ class SerialComms(serial.Serial):
         # Open COM Port
         try:
             self.open()
+            self.rx_thread.start()
         except serial.serialutil.SerialException as err:
             print(repr(err))
+
+    def rx_loop(self):
+        rx_byte = self.read(1)
+        incoming_byte_queue.put(rx_byte)
 
     def check_baud_rate(self, requested_baud_rate):
         """ Check that the baud rate requested is not already set. """
@@ -146,7 +155,7 @@ class SerialComms(serial.Serial):
             callback_exception_handler("ERROR: Write Has Timed Out")
         except serial.serialutil.PortNotOpenError as err:
             print(repr(err))
-            print("ERROR: Port" + config.COM_PORT + " Not Open")
+            print("ERROR: Port " + config.COM_PORT + " Not Open")
             callback_exception_handler("ERROR: Port" + config.COM_PORT + " Not Open")
         except serial.serialutil.SerialException as err:
             print(repr(err))
@@ -186,19 +195,14 @@ class StateMachine(threading.Thread):
         reads directly if Test Interface is used,
         otherwise engages StateMachine.
         """
-        return
         while True:
-            if comms_handler.comms.is_open:
-                if self.test_listen is True:
-                    self.direct_read(comms_handler.comms)
-                else:
-                    self.run_state_machine(comms_handler.comms)
+            if self.test_listen is True:
+                self.direct_read()
+            else:
+                self.run_state_machine()
 
-    def run_state_machine(self, com):
-        if config.COMMS == "RF69":
-            rx_byte = incoming_byte_queue.get()
-        else:
-            rx_byte = self.read_byte(com)
+    def run_state_machine(self):
+        rx_byte = incoming_byte_queue.get()
 
         if self.state == StateMachineState.PENDING_FRAME.value:
             self.pending_frame(rx_byte)
@@ -393,48 +397,41 @@ def comms_init(port, baud_rate):
         comms_handler = CommsHandler(port, baud_rate)
         comms_handler.rx_state_machine.start()
 
-        if OS == "Raspberry Pi":
+        if RaspberryPi is True:
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(DIO0_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.add_event_detect(DIO0_GPIO, GPIO.FALLING,
-                                  callback=comms_handler.radio_comms.rx_interrupt, bouncetime=100)
+                                  callback=comms_handler.radio.rx_interrupt, bouncetime=100)
 
         signal.signal(signal.SIGINT, signal_handler)
 
 
 def comms_send(data):
     """ Send data over the COM Port"""
-    if config.COMMS == "SERIAL":
-        comms_handler.comms.send(data)
-    elif config.COMMS == "RF69":
-        comms_handler.radio_comms.send(data)
+    global comms_handler
+    if config.COMMS == "RF69":
+        comms_handler.radio.send(data)
+    elif config.COMMS == "SERIAL":
+        comms_handler.serial.send(data)
 
 
 def change_baud_rate(requested_baud_rate):
     """ Change baud rate to requested rate """
     global comms_handler
-    comms_handler.comms.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
+    comms_handler.serial.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
 
 
 def flush_com_port():
     global comms_handler
-    comms_handler.comms.reset_output_buffer()
+    comms_handler.serial.reset_output_buffer()
 
 
 def change_com_port(port):
     global comms_handler
-    comms_handler.comms.close()
-    comms_handler.comms.port = port
+    comms_handler.serial.close()
+    comms_handler.serial.port = port
     config.COM_PORT = port
     try:
-        comms_handler.comms.open()
+        comms_handler.serial.open()
     except serial.serialutil.SerialException as err:
         print(repr(err))
-
-
-def change_comms():
-    global comms_handler
-    if config.COMMS == "RF69":
-        comms_handler.comms = comms_handler.radio_comms
-    elif config.COMMS == "SERIAL":
-        comms_handler.comms = comms_handler.serial_comms

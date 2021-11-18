@@ -26,7 +26,7 @@ import config
 from config import config_register_callback, change_timeout, OS, COMMS, RaspberryPi
 from low_level.continuous import continuous_register_callback, adjust_continuous, continuous_stop
 from low_level.packet import packet_register_callback, packet_init
-from low_level.comms import comms_init, comms_register_callback, change_baud_rate, change_com_port, change_comms
+from low_level.comms import comms_init, comms_register_callback, change_baud_rate, change_com_port
 from platform_comms_app import Ui_MainWindow
 from telecommand import tc_request_send, telecommand_register_callback, tc_response
 from telemetry import tlm_rejection_response, tlm_request_send, telemetry_register_callback, tlm_response
@@ -264,8 +264,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif config.COMMS == "RF69":
             self.comboBoxCommsBaudValue.setEnabled(False)
             self.inputComPort.setEnabled(False)
-
-        change_comms()
 
     def on_continuous_toggle(self, is_continuous):
         if is_continuous is False:
