@@ -94,14 +94,18 @@ class RadioComms(adafruit_rfm69.RFM69):
     def __init__(self, spi, chip_select, reset, frequency):
         super().__init__(spi, chip_select, reset, frequency)
         self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
+        self.is_open = True # Hack JPB
+        self.in_waiting = 0 # Hack JPB
         self.listen()
 
     def rx_interrupt(self, channel):
         received_packet = self.receive(timeout=10)
         if received_packet is not None:
-            packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
-            for byte in packet_split:
-                incoming_byte_queue.put(byte)
+            print("RECEIVED: " + str(received_packet))
+            frame_queue.put(received_packet)
+            # packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+            # for byte in packet_split:
+            # incoming_byte_queue.put(byte)
 
 
 class SerialComms(serial.Serial):
