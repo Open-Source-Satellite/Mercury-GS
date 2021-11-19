@@ -24,3 +24,7 @@ MercuryGSEnv/
 ### Ignore PyCharm Files ### (JPB)
 .idea/
 mercuryDev
+
+### Ignore COM.
+COM19
+COM20

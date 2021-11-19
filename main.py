@@ -31,6 +31,8 @@ from telecommand import tc_request_send, telecommand_register_callback, tc_respo
 from telemetry import tlm_rejection_response, tlm_request_send, telemetry_register_callback, tlm_response
 from test import transmit_test_frame, test_register_callback
 import time
+from datetime import datetime
+from utils import epoch_to_sec
 
 UINT_MAX = 4294967295
 UINT_MIN = 0
@@ -154,12 +156,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # TC number for time sending is 0.
         tc = 0
         unix_time = time.time();
-        unix_time_seconds = int(unix_time)
 
-        # Milliseconds takes 2 Bytes storage. So, to convert it into unsigned short, lets just take all the bits upto 16 bit.
-
-        millisec_through_sec = int((unix_time - unix_time_seconds)*1000)
-        milliseconds = (millisec_through_sec & 0xffff)
+        unix_time_seconds, milliseconds = epoch_to_sec(unix_time)
 
         print('Clicked: Send PC Time')
         print('Telecommand Number: {}'.format(tc))
@@ -171,17 +169,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # TC number for time sending is 0.
         tc  = 0
 
-        date_from_ui = self.dateEditSendThisTime.dateTime()
-        date_string = date_from_ui.toString(self.dateEditSendThisTime.displayFormat())
-
         time_from_ui = self.dateTimeEditSendThisTime.dateTime()
         time_string = time_from_ui.toString(self.dateTimeEditSendThisTime.displayFormat())
 
-        print('Clicked: Send This Time')
-        print('Date: {}'.format(date_string))
+        date_from_ui = self.dateEditSendThisDate.dateTime()
+        date_string = date_from_ui.toString(self.dateEditSendThisDate.displayFormat())
+
+        # Preprocessing of date and time string is required before converting it into epoch time.
+
+        datetime_string = date_string + " " + time_string
+        datetime_object = datetime.strptime(datetime_string, '%d/%m/%y %H:%M:%S.%f')
+        unix_time = (datetime_object - datetime(1970, 1, 1)).total_seconds()
+
+
+        unix_time_seconds, milliseconds = epoch_to_sec(unix_time)
+
+        print('clicked: send this time')
+        print('date: {}'.format(date_string))
         print('Time: {}'.format(time_string))
 
-        tc_time_send(tc, time_string)
+        tc_time_send(tc, unix_time_seconds, milliseconds)
 
     def on_click_send_telecommand_request(self, event):
         tc = self.inputTcNumberValue.text()
