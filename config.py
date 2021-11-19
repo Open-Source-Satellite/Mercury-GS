@@ -27,7 +27,7 @@ except(ImportError, RuntimeError):
 OS = platform.system()
 BAUD_RATE = 9600
 COM_PORT = "COM1"
-COMMS = "RF69"
+COMMS = "SERIAL"
 TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000
 

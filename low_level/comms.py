@@ -409,7 +409,7 @@ def comms_init(port, baud_rate):
 def comms_send(data):
     """ Send data over the COM Port"""
     global comms_handler
-    if config.COMMS == "RF69":
+    if config.COMMS == "RF69" and RaspberryPi is True:
         comms_handler.radio.send(data)
     elif config.COMMS == "SERIAL":
         comms_handler.serial.send(data)
