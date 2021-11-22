@@ -178,9 +178,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Preprocessing of date and time string is required before converting it into epoch time.
 
         datetime_string = date_string + " " + time_string
-        datetime_object = datetime.strptime(datetime_string, '%d/%m/%y %H:%M:%S.%f')
+        datetime_object = datetime.strptime(datetime_string, '%d/%m/%Y %H:%M:%S.%f')
         unix_time = (datetime_object - datetime(1970, 1, 1)).total_seconds()
-
 
         unix_time_seconds, milliseconds = epoch_to_sec(unix_time)
 
