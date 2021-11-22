@@ -1174,6 +1174,8 @@ class Ui_MainWindow(object):
         self.checkBoxTlmReqContinuous.clicked['bool'].connect(MainWindow.on_continuous_toggle) # type: ignore
         self.inputComPort.currentTextChanged['QString'].connect(MainWindow.on_com_port_change) # type: ignore
         self.comboBoxTcDataType.currentTextChanged['QString'].connect(MainWindow.on_select_tc_datatype) # type: ignore
+        self.pushButtonSendPcTime.clicked.connect(MainWindow.on_click_send_pc_time)
+        self.pushButtonSendThisTime.clicked.connect(MainWindow.on_click_send_this_time)
         self.comboBoxComms.currentIndexChanged['int'].connect(MainWindow.on_comms_change) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

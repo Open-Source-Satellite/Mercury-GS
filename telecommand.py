@@ -20,7 +20,7 @@ import struct
 import config
 from low_level.packet import packetize, DataType, data_format
 from low_level.frameformat import telecommand_request_builder_string, telecommand_request_builder_integer, \
-    telecommand_request_builder_float, telecommand_response_builder, TelecommandResponseState
+    telecommand_request_builder_float, telecommand_response_builder, telecommand_time_builder_string, TelecommandResponseState
 from threading import Timer
 
 telecommand_database = []
@@ -158,3 +158,25 @@ def tc_response(telecommand_packet):
 
     # Pass the status back up to the GUI to display
     callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
+
+def tc_time_send(telecommand_number, unix_time_seconds, millisec_through_sec):
+    try:
+        # Here, 2 bytes are reserved.
+        time_data = data_format([telecommand_number, unix_time_seconds, *bytes("  ", "ascii"), millisec_through_sec],telecommand_time_builder_string)
+    except struct.error as err:
+        print(repr(err))
+        print("ERROR: Telecommand Time is not a valid data type")
+        type_error = "Telecommand Time is not a valid data type"
+
+    try:
+        # Add telecommand time to database to enable matching with response
+        telecommand_database.append(Telecommand(telecommand_number, config.TIMEOUT))
+        # Format the telecommand as a frame and send.
+        # is_continious is set to 0.
+        packetize(time_data, DataType.TELECOMMAND_REQUEST.value, 0 , telecommand_database,
+                  telecommand_database[-1])
+    except UnboundLocalError as err:
+        print(repr(err))
+        print("ERROR: Could not format message")
+        callback_exception_handler("ERROR: Could not format message, " + type_error)
+

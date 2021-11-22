@@ -1,5 +1,5 @@
-################################################################################### 
-# @file main.py 
+###################################################################################
+# @file main.py
 ###################################################################################
 #   _  _____ ____  ____  _____
 #  | |/ /_ _/ ___||  _ \| ____|
@@ -12,8 +12,8 @@
 # Please follow the following link for the license agreement for this code:
 # www.kispe.co.uk/projectlicenses/RA2001001003
 ###################################################################################
-#  Created on: 17-Aug-2020 
-#  Main app entry point 
+#  Created on: 17-Aug-2020
+#  Main app entry point
 #  @author: Ricardo Mota (ricardoflmota@gmail.com), Dennis Lien (dennis.lien.o@gmail.com)
 ###################################################################################
 import sys
@@ -28,9 +28,12 @@ from low_level.continuous import continuous_register_callback, adjust_continuous
 from low_level.packet import packet_register_callback, packet_init
 from low_level.comms import comms_init, comms_register_callback, change_baud_rate, change_com_port
 from platform_comms_app import Ui_MainWindow
-from telecommand import tc_request_send, telecommand_register_callback, tc_response
+from telecommand import tc_request_send, telecommand_register_callback, tc_response, tc_time_send
 from telemetry import tlm_rejection_response, tlm_request_send, telemetry_register_callback, tlm_response
 from test import transmit_test_frame, test_register_callback
+import time
+from datetime import datetime
+from utils import epoch_to_sec
 
 UINT_MAX = 4294967295
 UINT_MIN = 0
@@ -153,20 +156,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
-    def on_send_pc_time(self, event):
-        # TODO: get pc time and send it.
-        print('Clicked: Send PC Time')
+    def on_click_send_pc_time(self, event):
+        # TC number for time sending is 0.
+        tc = 0
+        unix_time = time.time();
 
-    def on_click_this_time(self, event):
-        date_from_ui = self.dateEditSendThisTime.dateTime()
-        date_string = date_from_ui.toString(self.dateEditSendThisTime.displayFormat())
+        unix_time_seconds, milliseconds = epoch_to_sec(unix_time)
+
+        print('Clicked: Send PC Time')
+        print('Telecommand Number: {}'.format(tc))
+        print('Time: {}'.format(unix_time))
+
+        tc_time_send(tc, unix_time_seconds, milliseconds)
+
+    def on_click_send_this_time(self, event):
+        # TC number for time sending is 0.
+        tc  = 0
 
         time_from_ui = self.dateTimeEditSendThisTime.dateTime()
         time_string = time_from_ui.toString(self.dateTimeEditSendThisTime.displayFormat())
 
-        print('Clicked: Send This Time')
-        print('Date: {}'.format(date_string))
+        date_from_ui = self.dateEditSendThisDate.dateTime()
+        date_string = date_from_ui.toString(self.dateEditSendThisDate.displayFormat())
+
+        # Preprocessing of date and time string is required before converting it into epoch time.
+
+        datetime_string = date_string + " " + time_string
+        datetime_object = datetime.strptime(datetime_string, '%d/%m/%Y %H:%M:%S.%f')
+        unix_time = (datetime_object - datetime(1970, 1, 1)).total_seconds()
+
+        unix_time_seconds, milliseconds = epoch_to_sec(unix_time)
+
+        print('clicked: send this time')
+        print('date: {}'.format(date_string))
         print('Time: {}'.format(time_string))
+
+        tc_time_send(tc, unix_time_seconds, milliseconds)
 
     def on_click_send_telecommand_request(self, event):
         tc = self.inputTcNumberValue.text()

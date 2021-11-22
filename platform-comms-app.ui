@@ -26,7 +26,7 @@
        <string/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabTelemetry">
        <attribute name="title">
@@ -2366,8 +2366,8 @@
    <slot>on_tc_tlm_rate_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>302</x>
-     <y>61</y>
+     <x>113</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>337</x>
@@ -2382,8 +2382,8 @@
    <slot>on_timeout_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>505</x>
-     <y>59</y>
+     <x>113</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>484</x>
@@ -2478,8 +2478,8 @@
    <slot>on_com_port_change()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>115</x>
-     <y>101</y>
+     <x>113</x>
+     <y>60</y>
     </hint>
     <hint type="destinationlabel">
      <x>145</x>
@@ -2504,6 +2504,34 @@
    </hints>
   </connection>
   <connection>
+   <sender>pushButtonSendPcTime</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_send_pc_time()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>-10</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButtonSendThisTime</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_click_send_this_time()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>223</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>408</y>
    <sender>comboBoxComms</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>MainWindow</receiver>
@@ -2533,6 +2561,8 @@
   <slot>on_continuous_toggle()</slot>
   <slot>on_select_tc_datatype()</slot>
   <slot>on_com_port_change()</slot>
+  <slot>on_click_send_pc_time()</slot>
+  <slot>on_click_send_this_time()</slot>
   <slot>on_comms_change()</slot>
  </slots>
 </ui>
