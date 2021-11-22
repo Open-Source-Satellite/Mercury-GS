@@ -17,6 +17,7 @@
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
 import platform
+# Try to import RaspberryPi GPIO library, this is to use the RF69 radio module on a Raspberry Pi.
 try:
     import RPi.GPIO as GPIO
     RaspberryPi = True
