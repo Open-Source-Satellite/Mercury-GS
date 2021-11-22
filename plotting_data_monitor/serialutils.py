@@ -27,7 +27,7 @@ import re, itertools
 #import _winreg as winreg
 import winreg
 
-   
+
 def full_port_name(portname):
     """ Given a port-name (of the form COM7, 
         COM12, CNCA0, etc.) returns a full 

@@ -24,14 +24,48 @@ from enum import Enum
 import serial
 import config
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, DataTypeSize
+from config import RaspberryPi
+try:
+    # If this succeeds then we are using a Raspberry Pi
+    from config import GPIO
+except ImportError:
+    pass
+
+import adafruit_rfm69
+import sys
+import signal
+
+
+if RaspberryPi is True:
+    try:
+        import board as bonnet
+        import busio
+        from digitalio import DigitalInOut, Direction, Pull
+        # Configure Packet Radio
+        CS = DigitalInOut(bonnet.CE1)
+        RESET = DigitalInOut(bonnet.D25)
+        spi = busio.SPI(bonnet.SCK, MOSI=bonnet.MOSI, MISO=bonnet.MISO)
+    except (NotImplementedError, NameError) as err:
+        print(repr(err))
+        #spi = None
+        #CS = None
+        #RESET = None
 
 frame_queue = queue.Queue()
 direct_read_queue = queue.Queue()
+incoming_byte_queue = queue.Queue()
 comms_handler = None
 PENDING_FRAME = 0
 GATHERING_DATA = 1
 READING_DATA = 2
 DIRECT_READ = 3
+DIO0_GPIO = 22
+
+
+def signal_handler(sig, frame):
+    if RaspberryPi is True:
+        GPIO.cleanup()
+    sys.exit(0)
 
 
 def comms_register_callback(exception_handler_function_ptr):
@@ -47,7 +81,29 @@ class CommsHandler:
     def __init__(self, port, baud_rate):
         """ Initialise the rx_listener and serial. """
         self.rx_state_machine = StateMachine()
-        self.comms = SerialComms(port, baud_rate)
+        if RaspberryPi is True:
+            self.radio = RadioComms(spi, CS, RESET, 434.0)
+        self.serial = SerialComms(config.COM_PORT, config.BAUD_RATE)
+
+
+class RadioComms(adafruit_rfm69.RFM69):
+    """ A Class to handle the radio comms. """
+
+    def __init__(self, spi, chip_select, reset, frequency):
+        super().__init__(spi, chip_select, reset, frequency)
+        self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
+        self.is_open = True  # Hack JPB
+        self.in_waiting = 0  # Hack JPB
+        self.listen()
+
+    def rx_interrupt(self, channel):
+        received_packet = self.receive(timeout=10)
+        if received_packet is not None:
+            print("RECEIVED: " + str(received_packet))
+            frame_queue.put(received_packet)
+            # packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+            # for byte in packet_split:
+            # incoming_byte_queue.put(byte)
 
 
 class SerialComms(serial.Serial):
@@ -62,6 +118,7 @@ class SerialComms(serial.Serial):
 
         self.bytesize = 8
         self.write_timeout = 5
+        self.rx_thread = threading.Thread(target=self.rx_loop)
 
         # Close COM Port if open
         if self.is_open:
@@ -70,8 +127,13 @@ class SerialComms(serial.Serial):
         # Open COM Port
         try:
             self.open()
+            self.rx_thread.start()
         except serial.serialutil.SerialException as err:
             print(repr(err))
+
+    def rx_loop(self):
+        rx_byte = self.read(1)
+        incoming_byte_queue.put(rx_byte)
 
     def check_baud_rate(self, requested_baud_rate):
         """ Check that the baud rate requested is not already set. """
@@ -88,7 +150,7 @@ class SerialComms(serial.Serial):
             callback_exception_handler("ERROR: Write Has Timed Out")
         except serial.serialutil.PortNotOpenError as err:
             print(repr(err))
-            print("ERROR: Port" + config.COM_PORT + " Not Open")
+            print("ERROR: Port " + config.COM_PORT + " Not Open")
             callback_exception_handler("ERROR: Port" + config.COM_PORT + " Not Open")
         except serial.serialutil.SerialException as err:
             print(repr(err))
@@ -129,14 +191,14 @@ class StateMachine(threading.Thread):
         otherwise engages StateMachine.
         """
         while True:
-            if comms_handler.comms.is_open:
-                if self.test_listen is True:
-                    self.direct_read(comms_handler.comms)
-                else:
-                    self.run_state_machine(comms_handler.comms)
+            if self.test_listen is True:
+                self.direct_read()
+            else:
+                self.run_state_machine()
 
-    def run_state_machine(self, com):
-        rx_byte = self.read_byte(com)
+    def run_state_machine(self):
+        rx_byte = incoming_byte_queue.get()
+
         if self.state == StateMachineState.PENDING_FRAME.value:
             self.pending_frame(rx_byte)
         elif self.state == StateMachineState.GATHERING_HEADER.value:
@@ -330,29 +392,41 @@ def comms_init(port, baud_rate):
         comms_handler = CommsHandler(port, baud_rate)
         comms_handler.rx_state_machine.start()
 
+        if RaspberryPi is True:
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(DIO0_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            GPIO.add_event_detect(DIO0_GPIO, GPIO.FALLING,
+                                  callback=comms_handler.radio.rx_interrupt, bouncetime=100)
+
+        signal.signal(signal.SIGINT, signal_handler)
+
 
 def comms_send(data):
     """ Send data over the COM Port"""
-    comms_handler.comms.send(data)
+    global comms_handler
+    if config.COMMS == "RF69" and RaspberryPi is True:
+        comms_handler.radio.send(data)
+    elif config.COMMS == "SERIAL":
+        comms_handler.serial.send(data)
 
 
 def change_baud_rate(requested_baud_rate):
     """ Change baud rate to requested rate """
     global comms_handler
-    comms_handler.comms.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
+    comms_handler.serial.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
 
 
 def flush_com_port():
     global comms_handler
-    comms_handler.comms.reset_output_buffer()
+    comms_handler.serial.reset_output_buffer()
 
 
 def change_com_port(port):
     global comms_handler
-    comms_handler.comms.close()
-    comms_handler.comms.port = port
+    comms_handler.serial.close()
+    comms_handler.serial.port = port
     config.COM_PORT = port
     try:
-        comms_handler.comms.open()
+        comms_handler.serial.open()
     except serial.serialutil.SerialException as err:
         print(repr(err))

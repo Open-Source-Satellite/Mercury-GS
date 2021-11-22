@@ -16,10 +16,19 @@
 #  Mercury GS Global Variables
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
+import platform
+# Try to import RaspberryPi GPIO library, this is to use the RF69 radio module on a Raspberry Pi.
+try:
+    import RPi.GPIO as GPIO
+    RaspberryPi = True
+except(ImportError, RuntimeError):
+    RaspberryPi = False
 
 # Initialise Global Variables
+OS = platform.system()
 BAUD_RATE = 9600
 COM_PORT = "COM1"
+COMMS = "SERIAL"
 TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000
 
