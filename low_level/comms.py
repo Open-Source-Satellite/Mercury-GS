@@ -24,8 +24,9 @@ from enum import Enum
 import serial
 import config
 from low_level.frameformat import PROTOCOL_DELIMITER, MAX_DATA_TYPES, DataType, DataTypeSize
-from config import OS, RaspberryPi
+from config import RaspberryPi
 try:
+    # If this succeeds then we are using a Raspberry Pi
     from config import GPIO
 except ImportError:
     pass
@@ -83,12 +84,6 @@ class CommsHandler:
         if RaspberryPi is True:
             self.radio = RadioComms(spi, CS, RESET, 434.0)
         self.serial = SerialComms(config.COM_PORT, config.BAUD_RATE)
-
-    def change_comms(self):
-        if config.COMMS == "RF69":
-            return self.radio
-        elif config.COMMS == "SERIAL":
-            return self.serial
 
 
 class RadioComms(adafruit_rfm69.RFM69):
