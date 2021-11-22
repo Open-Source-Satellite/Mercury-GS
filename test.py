@@ -18,7 +18,7 @@
 ###################################################################################
 import codecs
 from threading import Timer
-import low_level.serial_comms
+import low_level.comms
 
 
 class TestFrame:
@@ -48,14 +48,14 @@ class TestFrame:
         return bytes_buffer
 
     def transmit(self):
-        low_level.serial_comms.serial_handler.serial_comms.send(self.bytes_to_send)
-        low_level.serial_comms.serial_handler.rx_listener.test_listen = True
+        low_level.comms.comms_handler.comms.send(self.bytes_to_send)
+        low_level.comms.comms_handler.rx_state_machine.test_listen = True
         self.TimerFunction.start()
 
     def read_finished(self):
-        low_level.serial_comms.serial_handler.rx_listener.test_listen = False
-        while low_level.serial_comms.direct_read_queue.qsize() > 0:
-            self.test_response += low_level.serial_comms.direct_read_queue.get()
+        low_level.comms.comms_handler.rx_state_machine.test_listen = False
+        while low_level.comms.direct_read_queue.qsize() > 0:
+            self.test_response += low_level.comms.direct_read_queue.get()
 
         test_response_string = self.test_response.hex("x", 1)
         test_response_string = test_response_string.replace("x", " 0x")

@@ -22,6 +22,9 @@
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="toolTip">
+       <string/>
+      </property>
       <property name="currentIndex">
        <number>1</number>
       </property>
@@ -1764,26 +1767,12 @@
                </property>
               </spacer>
              </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="labelConfigFile">
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelComPort">
                <property name="text">
-                <string>Config file</string>
+                <string>Com Port</string>
                </property>
               </widget>
-             </item>
-             <item row="4" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayoutConfigFile" stretch="0,0">
-               <item>
-                <widget class="QLineEdit" name="inputConfigFilePath"/>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButtonOpenConfigFilePath">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </item>
              <item row="2" column="1">
               <layout class="QHBoxLayout" name="horizontalLayoutComPort">
@@ -1906,13 +1895,6 @@
                </item>
               </layout>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="labelComPort">
-               <property name="text">
-                <string>Com Port</string>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="0" colspan="2">
               <spacer name="verticalSpacer_7">
                <property name="orientation">
@@ -1925,6 +1907,70 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="labelConfigFile">
+               <property name="text">
+                <string>Config file</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayoutConfigFile" stretch="0,0">
+               <item>
+                <widget class="QLineEdit" name="inputConfigFilePath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonOpenConfigFilePath">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="5" column="0" colspan="2">
+              <spacer name="verticalSpacer_8">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="labelComms">
+               <property name="text">
+                <string>Comms</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QComboBox" name="comboBoxComms">
+               <property name="mouseTracking">
+                <bool>true</bool>
+               </property>
+               <property name="toolTip">
+                <string>RF69 is only compatible with Raspberry Pi.</string>
+               </property>
+               <property name="whatsThis">
+                <string/>
+               </property>
+               <item>
+                <property name="text">
+                 <string>SERIAL</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>RF69</string>
+                </property>
+               </item>
+              </widget>
              </item>
             </layout>
            </item>
@@ -2257,11 +2303,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>90</x>
-     <y>237</y>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>33</x>
-     <y>-9</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2277,7 +2323,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
-     <y>-4</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2293,7 +2339,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>351</x>
-     <y>-2</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2309,7 +2355,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>116</x>
-     <y>-13</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2341,7 +2387,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>484</x>
-     <y>-2</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2352,12 +2398,12 @@
    <slot>on_click_test_transmit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>60</y>
+     <x>594</x>
+     <y>191</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
-     <y>-6</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2368,12 +2414,12 @@
    <slot>on_click_upload_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>60</y>
+     <x>78</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>70</x>
-     <y>-7</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2384,12 +2430,12 @@
    <slot>on_click_upload_abort()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>60</y>
+     <x>138</x>
+     <y>120</y>
     </hint>
     <hint type="destinationlabel">
      <x>97</x>
-     <y>-18</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2400,8 +2446,8 @@
    <slot>on_click_download_open()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>71</y>
+     <x>83</x>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>79</x>
@@ -2417,7 +2463,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>71</x>
-     <y>257</y>
+     <y>248</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -2437,7 +2483,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>145</x>
-     <y>-20</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2486,6 +2532,18 @@
     <hint type="destinationlabel">
      <x>205</x>
      <y>408</y>
+   <sender>comboBoxComms</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_comms_change()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>29</y>
     </hint>
    </hints>
   </connection>
@@ -2505,5 +2563,6 @@
   <slot>on_com_port_change()</slot>
   <slot>on_click_send_pc_time()</slot>
   <slot>on_click_send_this_time()</slot>
+  <slot>on_comms_change()</slot>
  </slots>
 </ui>

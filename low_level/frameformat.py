@@ -66,7 +66,7 @@ class DataTypeSize(Enum):
     TELEMETRY_REQUEST = 4
     FILE_UPLOAD = 0x05
     FILE_DOWNLOAD = 0x06
-    TELEMETRY_REQUEST_REJECTION = 0x07
+    TELEMETRY_REQUEST_REJECTION = 5
 
 
 class TelecommandResponseState(Enum):

@@ -1,5 +1,5 @@
 ###################################################################################
-# @file serial_comms.py
+# @file comms.py
 ###################################################################################
 #   _  _____ ____  ____  _____
 #  | |/ /_ _/ ___||  _ \| ____|
@@ -16,7 +16,7 @@
 #  Mercury GS Protocol Formatting and Packet Handling
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
-from low_level.serial_comms import frame_queue, serial_send
+from low_level.comms import frame_queue, comms_send
 from low_level.frameformat import MessageFormat, DataType, struct, PROTOCOL_DELIMITER
 from low_level.continuous import continuous_sender, register_continuous
 import config
@@ -70,6 +70,8 @@ class PacketHandler(threading.Thread):
             elif frame_data_type == DataType.TELECOMMAND_RESPONSE.value:
                 callback_telecommand_response(frame_data_bytes)
 
+            frame_queue.task_done()
+
 
 def packet_init():
     """ Initialise Packet Handler class instance, which automatically starts the packet handler Thread. """
@@ -111,7 +113,7 @@ def packetize(data_to_packet, data_type, is_continuous, message_object_database,
     # Start the Timeout timer for this message
     latest_message_object.start_timer()
     # Send the message
-    serial_send(packet)
+    comms_send(packet)
 
     if is_continuous is True:
         try:
