@@ -771,9 +771,11 @@ class Ui_MainWindow(object):
         self.horizontalLayoutSendTimeValues = QtWidgets.QHBoxLayout()
         self.horizontalLayoutSendTimeValues.setObjectName("horizontalLayoutSendTimeValues")
         self.dateEditSendThisDate = QtWidgets.QDateEdit(self.groupBoxTimeCommands)
+        self.dateEditSendThisDate.setTimeSpec(QtCore.Qt.UTC)
         self.dateEditSendThisDate.setObjectName("dateEditSendThisDate")
         self.horizontalLayoutSendTimeValues.addWidget(self.dateEditSendThisDate, 0, QtCore.Qt.AlignLeft)
         self.dateTimeEditSendThisTime = QtWidgets.QDateTimeEdit(self.groupBoxTimeCommands)
+        self.dateTimeEditSendThisTime.setTimeSpec(QtCore.Qt.UTC)
         self.dateTimeEditSendThisTime.setObjectName("dateTimeEditSendThisTime")
         self.horizontalLayoutSendTimeValues.addWidget(self.dateTimeEditSendThisTime)
         self.horizontalLayoutSendTime.addLayout(self.horizontalLayoutSendTimeValues)
@@ -1174,9 +1176,9 @@ class Ui_MainWindow(object):
         self.checkBoxTlmReqContinuous.clicked['bool'].connect(MainWindow.on_continuous_toggle) # type: ignore
         self.inputComPort.currentTextChanged['QString'].connect(MainWindow.on_com_port_change) # type: ignore
         self.comboBoxTcDataType.currentTextChanged['QString'].connect(MainWindow.on_select_tc_datatype) # type: ignore
-        self.pushButtonSendPcTime.clicked.connect(MainWindow.on_click_send_pc_time)
-        self.pushButtonSendThisTime.clicked.connect(MainWindow.on_click_send_this_time)
         self.comboBoxComms.currentIndexChanged['int'].connect(MainWindow.on_comms_change) # type: ignore
+        self.pushButtonSendPcTime.clicked.connect(MainWindow.on_click_send_pc_time) # type: ignore
+        self.pushButtonSendThisTime.clicked.connect(MainWindow.on_click_send_this_time) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1366,3 +1368,4 @@ class Ui_MainWindow(object):
         self.inputDataField.setText(_translate("MainWindow", "0x01 0x02 0x03"))
         self.labelResponse.setText(_translate("MainWindow", "Response"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabTest), _translate("MainWindow", "TEST"))
+import gui_assets.mercury_resources_rc
