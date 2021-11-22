@@ -139,7 +139,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if RaspberryPi is False:
             self.comboBoxComms.setEnabled(False)
 
-        self.dateEditSendThisDate.setDisplayFormat("dd.MM.yyyy")
+        self.dateEditSendThisDate.setDisplayFormat("dd/MM/yyyy")
 
         # Init Serial Comms
         comms_init("COM1", 9600)
