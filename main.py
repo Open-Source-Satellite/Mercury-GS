@@ -150,11 +150,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         config_register_callback(self.error_message_box)
         packet_init()
 
-        # Disable UART config if Linux TODO: Make this compatible, tty etc as well as COM
-        if OS == "Linux":
-            self.comboBoxCommsBaudValue.setEnabled(False)
-            self.inputComPort.setEnabled(False)
-
     # TODO: I think there is a better way to handle events
     # There is event handlers and signals, not sure what to use.
     # https://www.learnpyqt.com/tutorials/signals-slots-events/
