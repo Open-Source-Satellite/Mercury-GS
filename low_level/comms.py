@@ -97,13 +97,13 @@ class RadioComms(adafruit_rfm69.RFM69):
         self.listen()
 
     def rx_interrupt(self, channel):
-        received_packet = self.receive(timeout=10)
-        if received_packet is not None:
-            print("RECEIVED: " + str(received_packet))
-            frame_queue.put(received_packet)
-            # packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
-            # for byte in packet_split:
-            # incoming_byte_queue.put(byte)
+        if (self.payload_ready() == True):
+            received_packet = self.receive(timeout=10)
+            if received_packet is not None:
+                print("RECEIVED: " + str(received_packet))
+                packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+                for byte in packet_split:
+                    incoming_byte_queue.put(byte)
 
 
 class SerialComms(serial.Serial):
@@ -394,8 +394,8 @@ def comms_init(port, baud_rate):
 
         if RaspberryPi is True:
             GPIO.setmode(GPIO.BCM)
-            GPIO.setup(DIO0_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            GPIO.add_event_detect(DIO0_GPIO, GPIO.FALLING,
+            GPIO.setup(DIO0_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
+            GPIO.add_event_detect(DIO0_GPIO, GPIO.RISING,
                                   callback=comms_handler.radio.rx_interrupt, bouncetime=100)
 
         signal.signal(signal.SIGINT, signal_handler)

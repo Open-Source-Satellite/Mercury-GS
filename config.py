@@ -33,6 +33,7 @@ TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000
 
 
+
 def config_register_callback(exception_handler_function_ptr):
     """ Registers the callbacks for this module to pass data back to previous modules. """
     global callback_exception_handler
