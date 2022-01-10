@@ -32,6 +32,8 @@ telecommand_time_builder_string = struct.Struct("! I I 2B H")
 telemetry_request_builder = struct.Struct("! I")
 telemetry_response_builder = struct.Struct("! I Q")
 telemetry_rejection_response_builder = struct.Struct("! I B")
+time_packet_builder = struct.Struct("! I Q")
+time_delta_packet_builder = struct.Struct("! I q")
 
 
 class MessageFormat:

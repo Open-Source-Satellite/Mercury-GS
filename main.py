@@ -89,46 +89,46 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.inputTlmAdHocChannelValue.setValidator(UIntValidator(self.inputTlmAdHocChannelValue))
         self.inputTcDataValue.setValidator(QRegExpValidator(QRegExp(".{0,8}"), self.inputTcDataValue))
 
-        self.tlm_response_field = ({"channel": self.labelTlmSlot1, "value": self.labelTlmSlot1Value},
-                                   {"channel": self.labelTlmSlot2, "value": self.labelTlmSlot2Value},
-                                   {"channel": self.labelTlmSlot3, "value": self.labelTlmSlot3Value},
-                                   {"channel": self.labelTlmSlot4, "value": self.labelTlmSlot4Value},
-                                   {"channel": self.labelTlmSlot5, "value": self.labelTlmSlot5Value},
-                                   {"channel": self.labelTlmSlot6, "value": self.labelTlmSlot6Value},
-                                   {"channel": self.labelTlmSlot7, "value": self.labelTlmSlot7Value},
-                                   {"channel": self.labelTlmSlot8, "value": self.labelTlmSlot8Value},
-                                   {"channel": self.labelTlmSlot9, "value": self.labelTlmSlot9Value},
-                                   {"channel": self.labelTlmSlot10, "value": self.labelTlmSlot10Value},
-                                   {"channel": self.labelTlmSlot11, "value": self.labelTlmSlot11Value},
-                                   {"channel": self.labelTlmSlot12, "value": self.labelTlmSlot12Value},
-                                   {"channel": self.labelTlmSlot13, "value": self.labelTlmSlot13Value},
-                                   {"channel": self.labelTlmSlot14, "value": self.labelTlmSlot14Value},
-                                   {"channel": self.labelTlmSlot15, "value": self.labelTlmSlot15Value},
-                                   {"channel": self.labelTlmSlot16, "value": self.labelTlmSlot16Value},
-                                   {"channel": self.labelTlmSlot17, "value": self.labelTlmSlot17Value},
-                                   {"channel": self.labelTlmSlot18, "value": self.labelTlmSlot18Value},
-                                   {"channel": self.labelTlmSlot19, "value": self.labelTlmSlot19Value},
-                                   {"channel": self.labelTlmSlot20, "value": self.labelTlmSlot20Value},
-                                   {"channel": self.labelTlmSlot21, "value": self.labelTlmSlot21Value},
-                                   {"channel": self.labelTlmSlot22, "value": self.labelTlmSlot22Value},
-                                   {"channel": self.labelTlmSlot23, "value": self.labelTlmSlot23Value},
-                                   {"channel": self.labelTlmSlot24, "value": self.labelTlmSlot24Value},
-                                   {"channel": self.labelTlmSlot25, "value": self.labelTlmSlot25Value},
-                                   {"channel": self.labelTlmSlot26, "value": self.labelTlmSlot26Value},
-                                   {"channel": self.labelTlmSlot27, "value": self.labelTlmSlot27Value},
-                                   {"channel": self.labelTlmSlot28, "value": self.labelTlmSlot28Value},
-                                   {"channel": self.labelTlmSlot29, "value": self.labelTlmSlot29Value},
-                                   {"channel": self.labelTlmSlot30, "value": self.labelTlmSlot30Value},
-                                   {"channel": self.labelTlmSlot31, "value": self.labelTlmSlot31Value},
-                                   {"channel": self.labelTlmSlot32, "value": self.labelTlmSlot32Value},
-                                   {"channel": self.labelTlmSlot33, "value": self.labelTlmSlot33Value},
-                                   {"channel": self.labelTlmSlot34, "value": self.labelTlmSlot34Value},
-                                   {"channel": self.labelTlmSlot35, "value": self.labelTlmSlot35Value},
-                                   {"channel": self.labelTlmSlot36, "value": self.labelTlmSlot36Value},
-                                   {"channel": self.labelTlmSlot37, "value": self.labelTlmSlot37Value},
-                                   {"channel": self.labelTlmSlot38, "value": self.labelTlmSlot38Value},
-                                   {"channel": self.labelTlmSlot39, "value": self.labelTlmSlot39Value},
-                                   {"channel": self.labelTlmSlot40, "value": self.labelTlmSlot40Value})
+        self.tlm_response_field = ({"channel": self.labelTlmSlot1, "name": "TLM CH ", "value": self.labelTlmSlot1Value},
+                                   {"channel": self.labelTlmSlot2, "name": "TLM CH ", "value": self.labelTlmSlot2Value},
+                                   {"channel": self.labelTlmSlot3, "name": "TLM CH ", "value": self.labelTlmSlot3Value},
+                                   {"channel": self.labelTlmSlot4, "name": "TLM CH ", "value": self.labelTlmSlot4Value},
+                                   {"channel": self.labelTlmSlot5, "name": "TLM CH ", "value": self.labelTlmSlot5Value},
+                                   {"channel": self.labelTlmSlot6, "name": "TLM CH ", "value": self.labelTlmSlot6Value},
+                                   {"channel": self.labelTlmSlot7, "name": "TLM CH ", "value": self.labelTlmSlot7Value},
+                                   {"channel": self.labelTlmSlot8, "name": "TLM CH ", "value": self.labelTlmSlot8Value},
+                                   {"channel": self.labelTlmSlot9, "name": "TLM CH ", "value": self.labelTlmSlot9Value},
+                                   {"channel": self.labelTlmSlot10, "name": "TLM CH ", "value": self.labelTlmSlot10Value},
+                                   {"channel": self.labelTlmSlot11, "name": "TLM CH ", "value": self.labelTlmSlot11Value},
+                                   {"channel": self.labelTlmSlot12, "name": "TLM CH ", "value": self.labelTlmSlot12Value},
+                                   {"channel": self.labelTlmSlot13, "name": "TLM CH ", "value": self.labelTlmSlot13Value},
+                                   {"channel": self.labelTlmSlot14, "name": "TLM CH ", "value": self.labelTlmSlot14Value},
+                                   {"channel": self.labelTlmSlot15, "name": "TLM CH ", "value": self.labelTlmSlot15Value},
+                                   {"channel": self.labelTlmSlot16, "name": "TLM CH ", "value": self.labelTlmSlot16Value},
+                                   {"channel": self.labelTlmSlot17, "name": "TLM CH ", "value": self.labelTlmSlot17Value},
+                                   {"channel": self.labelTlmSlot18, "name": "TLM CH ", "value": self.labelTlmSlot18Value},
+                                   {"channel": self.labelTlmSlot19, "name": "TLM CH ", "value": self.labelTlmSlot19Value},
+                                   {"channel": self.labelTlmSlot20, "name": "TLM CH ", "value": self.labelTlmSlot20Value},
+                                   {"channel": self.labelTlmSlot21, "name": "TLM CH ", "value": self.labelTlmSlot21Value},
+                                   {"channel": self.labelTlmSlot22, "name": "TLM CH ", "value": self.labelTlmSlot22Value},
+                                   {"channel": self.labelTlmSlot23, "name": "TLM CH ", "value": self.labelTlmSlot23Value},
+                                   {"channel": self.labelTlmSlot24, "name": "TLM CH ", "value": self.labelTlmSlot24Value},
+                                   {"channel": self.labelTlmSlot25, "name": "TLM CH ", "value": self.labelTlmSlot25Value},
+                                   {"channel": self.labelTlmSlot26, "name": "TLM CH ", "value": self.labelTlmSlot26Value},
+                                   {"channel": self.labelTlmSlot27, "name": "TLM CH ", "value": self.labelTlmSlot27Value},
+                                   {"channel": self.labelTlmSlot28, "name": "TLM CH ", "value": self.labelTlmSlot28Value},
+                                   {"channel": self.labelTlmSlot29, "name": "TLM CH ", "value": self.labelTlmSlot29Value},
+                                   {"channel": self.labelTlmSlot30, "name": "TLM CH ", "value": self.labelTlmSlot30Value},
+                                   {"channel": self.labelTlmSlot31, "name": "TLM CH ", "value": self.labelTlmSlot31Value},
+                                   {"channel": self.labelTlmSlot32, "name": "TLM CH ", "value": self.labelTlmSlot32Value},
+                                   {"channel": self.labelTlmSlot33, "name": "TLM CH ", "value": self.labelTlmSlot33Value},
+                                   {"channel": self.labelTlmSlot34, "name": "TLM CH ", "value": self.labelTlmSlot34Value},
+                                   {"channel": self.labelTlmSlot35, "name": "TLM CH ", "value": self.labelTlmSlot35Value},
+                                   {"channel": self.labelTlmSlot36, "name": "TLM CH ", "value": self.labelTlmSlot36Value},
+                                   {"channel": self.labelTlmSlot37, "name": "TLM CH ", "value": self.labelTlmSlot37Value},
+                                   {"channel": self.labelTlmSlot38, "name": "TLM CH ", "value": self.labelTlmSlot38Value},
+                                   {"channel": self.labelTlmSlot39, "name": "TLM CH ", "value": self.labelTlmSlot39Value},
+                                   {"channel": self.labelTlmSlot40, "name": "TLM CH ", "value": self.labelTlmSlot40Value})
 
         self.tlm_response_list = list()
 
@@ -301,10 +301,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif self.comboBoxTcDataType.currentText() == "Floating Point":
             self.inputTcDataValue.setValidator(QDoubleValidator())
 
-    def telemetry_response_receive(self, telemetry_channel, telemetry_data):
+    def telemetry_response_receive(self, telemetry_channel, telemetry_name, telemetry_data):
 
         if not any(d.get('channel') == telemetry_channel for d in self.tlm_response_list):
-            self.tlm_response_list.append({"channel": telemetry_channel, "value": telemetry_data})
+            self.tlm_response_list.append({"channel": telemetry_channel,"name": telemetry_name , "value": telemetry_data})
         else:
             for item in self.tlm_response_list:
                 if item["channel"] == telemetry_channel:
@@ -314,7 +314,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tlm_response_list = sorted(self.tlm_response_list, key=itemgetter("channel"))
 
         for slot, telemetry_to_plot in zip(self.tlm_response_field, self.tlm_response_list):
-            slot["channel"].setText("TLM CH " + telemetry_to_plot["channel"])
+            if telemetry_to_plot["name"] != None:
+                slot["channel"].setText(telemetry_to_plot["name"])
+            else:
+                slot["channel"].setText("TLM CH " + telemetry_to_plot["channel"])
             slot["value"].setText(telemetry_to_plot["value"])
 
     def telemetry_rejection_response_receive(self, telemetry_channel, telemetry_rejection_code):

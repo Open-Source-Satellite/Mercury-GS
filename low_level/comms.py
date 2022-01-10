@@ -97,11 +97,12 @@ class RadioComms(adafruit_rfm69.RFM69):
         self.listen()
 
     def rx_interrupt(self, channel):
-        if (self.payload_ready() == True):
+        if self.payload_ready():
             received_packet = self.receive(timeout=10)
             if received_packet is not None:
                 print("RECEIVED: " + str(received_packet))
                 packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+                #frame_queue.put(received_packet)
                 for byte in packet_split:
                     incoming_byte_queue.put(byte)
 
@@ -184,6 +185,7 @@ class StateMachine(threading.Thread):
         self.got_data_length = False
         self.data_count = 0
         self.data_bytes = bytearray()
+        self.reset_state = False
 
     def run(self):
         """ Overloads the Thread's "run" function,
@@ -234,6 +236,7 @@ class StateMachine(threading.Thread):
 
     def gathering_header(self, rx_byte):
         """ GATHERING_HEADER State, reads the rest of the header. """
+        self.reset_state = False
         # Create header bitfield buffer
         header_size = 3
         # Read a byte into Header Buffer
@@ -242,18 +245,26 @@ class StateMachine(threading.Thread):
         self.gathered_header, self.header_count = self.delimiter_scan_and_remove(self.gathered_header,
                                                                                  self.header_count)
         # If we've read out enough bytes of the header
-        if self.header_count == header_size:
+        if self.header_count == header_size and self.reset_state is False:
             # Append gathered header onto buffer
             self.frame_buffer.extend(self.gathered_header)
             self.gathered_header.clear()
-            # Check if Data Type is within range
-            if int(self.frame_buffer[4]) in range(MAX_DATA_TYPES):
-                # Data Type within range, switch to READING_DATA state
-                self.state = StateMachineState.READING_DATA.value
-            else:
-                # Data Type out of range, discard message and return to PENDING_FRAME
+
+            try:
+                # Check if Data Type is within range
+                if int(self.frame_buffer[4]) in range(MAX_DATA_TYPES):
+                    # Data Type within range, switch to READING_DATA state
+                    self.state = StateMachineState.READING_DATA.value
+                else:
+                    # Data Type out of range, discard message and return to PENDING_FRAME
+                    self.state = StateMachineState.PENDING_FRAME.value
+                    self.frame_buffer.clear()
+                    self.clear_member_variables()
+            except IndexError:
+                # Gathering Header Error, no data byte detected, discard message and return to PENDING_FRAME
                 self.state = StateMachineState.PENDING_FRAME.value
                 self.frame_buffer.clear()
+                self.clear_member_variables()
 
     def reading_data(self, rx_byte):
         """ READING_DATA State, gathers the data length field and reads the rest of the frame,
@@ -288,21 +299,26 @@ class StateMachine(threading.Thread):
                                                                                                 True,
                                                                                                 self.data_length)
             # If we have read out enough data bytes
-            if self.data_count == self.data_length:
+            if self.data_count == self.data_length and self.reset_state is False:
                 invalid_frame = False
                 data_type = self.frame_buffer[4]
                 # Check the data type against all known data types
                 if not any(x.value == data_type for x in DataType):
                     invalid_frame = True
-                    callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
+                    #callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
 
-                # Get the data type name to use with comparing against the right data length
-                data_type_key = DataType(data_type).name
+                if invalid_frame is False:
+                    try:
+                        # Get the data type name to use with comparing against the right data length
+                        data_type_key = DataType(data_type).name
 
-                # Check the actual data length against the expected length for the data type
-                if self.data_length != DataTypeSize[data_type_key].value:
-                    invalid_frame = True
-                    callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
+                        # Check the actual data length against the expected length for the data type
+                        if self.data_length != DataTypeSize[data_type_key].value:
+                            invalid_frame = True
+                            #callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
+                    except ValueError:
+                        invalid_frame = True
+                        #callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
 
                 if invalid_frame is False:
                     # Append data length and data fields onto frame buffer
@@ -314,16 +330,7 @@ class StateMachine(threading.Thread):
 
                 # Frame has been fully processed,
                 # Reset all member variables so that the state machine can process the next frame
-                self.header_count = 0
-                self.gathered_header.clear()
-                self.data_length = 0
-                self.data_length_bytes.clear()
-                self.data_length_count = 0
-                self.data_length = 0
-                self.data_bytes.clear()
-                self.data_count = 0
-                self.got_data_length = False
-                self.delimiter_received = False
+                self.clear_member_variables()
 
                 # Set state to PENDING_FRAME
                 self.state = StateMachineState.PENDING_FRAME.value
@@ -342,6 +349,19 @@ class StateMachine(threading.Thread):
         """ Read and return a byte from the COM Port """
         rx_byte = com.read(1)
         return rx_byte
+
+    def clear_member_variables(self):
+        self.header_count = 0
+        self.gathered_header.clear()
+        self.data_length = 0
+        self.data_length_bytes.clear()
+        self.data_length_count = 0
+        self.data_length = 0
+        self.data_bytes.clear()
+        self.data_count = 0
+        self.got_data_length = False
+        self.delimiter_received = False
+        self.reset_state = False
 
     def delimiter_scan_and_remove(self, buffer, index, data_field=False, data_length_decrement=0):
         """ Iterate through buffer, pop off a delimiter where there are 2 consecutive delimiter values,
@@ -370,16 +390,19 @@ class StateMachine(threading.Thread):
             if self.delimiter_received is True:
                 # This is the start of a new frame!
                 # Set the frame buffer to this new frame
-                self.frame_buffer = buffer
-                # Reset received delimiter variable
-                self.delimiter_received = False
+                self.frame_buffer = buffer[-2:]
+                # Clear member variables
+                self.clear_member_variables()
+                self.reset_state = True
                 # Enter GATHERING_HEADER state
                 self.state = StateMachineState.GATHERING_HEADER.value
-                self.header_count = 0
-                return buffer, 0
+                if data_field is False:
+                    return buffer, 0
+                else:
+                    return buffer, 0, 0
         # Increment the index
         index += 1
-        if data_length_decrement == 0:
+        if data_field is False:
             return buffer, index
         else:
             return buffer, index, data_length_decrement
@@ -405,7 +428,7 @@ def comms_send(data):
     """ Send data over the COM Port"""
     global comms_handler
     if config.COMMS == "RF69" and RaspberryPi is True:
-        comms_handler.radio.send(data)
+        comms_handler.radio.send(data, keep_listening=True)
     elif config.COMMS == "SERIAL":
         comms_handler.serial.send(data)
 

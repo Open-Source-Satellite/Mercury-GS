@@ -16,11 +16,15 @@
 #  Mercury GS Telemetry Handler
 #  @author: Jamie Bayley (jbayley@kispe.co.uk)
 ###################################################################################
+from datetime import datetime, timedelta
+
 import config
 from threading import Timer
 from low_level.packet import packetize, DataType, data_format
 from low_level.frameformat import telemetry_request_builder, telemetry_response_builder, \
-    telemetry_rejection_response_builder, TelemetryRejectionResponseState
+    telemetry_rejection_response_builder, TelemetryRejectionResponseState, time_packet_builder, \
+    time_delta_packet_builder
+from utils import unix_to_datetime
 
 telemetry_database = []
 
@@ -106,13 +110,52 @@ def tlm_response(telemetry_packet):
     # TODO: struct.error, unpack requires a buffer of 12 bytes. check data length
     tlm_channel = telemetry_response[0]
     tlm_data = telemetry_response[1]
+    tlm_name = None
+
+    if tlm_channel == 1 or tlm_channel == 4:
+        unpacked_time_packet = time_packet_builder.unpack(telemetry_packet)
+        date_time = unix_to_datetime(unpacked_time_packet[1])
+        tlm_data = date_time
+        if tlm_channel == 1:
+            tlm_name = "Spacecraft Time: "
+            tlm_sys_time_channel = 2
+            tlm_sys_time_name = "System Time: "
+            tlm_sys_time_value = datetime.now()
+            callback_telemetry_response_update(str(tlm_sys_time_channel), tlm_sys_time_name, str(tlm_sys_time_value))
+            tlm_dif_time_channel = 3
+            tlm_dif_time_name = "Time Difference: "
+            if tlm_sys_time_value > tlm_data:
+                tlm_dif_time_value = tlm_sys_time_value - tlm_data
+            else:
+                tlm_dif_time_value = tlm_data - tlm_sys_time_value
+            callback_telemetry_response_update(str(tlm_dif_time_channel), tlm_dif_time_name, str(tlm_dif_time_value))
+        elif tlm_channel == 4:
+            tlm_name = "Stimulus Time: "
+    elif tlm_channel == 5:
+        unpacked_time_delta_packet = time_delta_packet_builder.unpack(telemetry_packet)
+        tlm_data = unpacked_time_delta_packet[1]
+        tlm_name = "Initial Time Delta: "
+    elif tlm_channel == 6:
+        tlm_name = "Time Until Syncd: "
+    elif tlm_channel == 7:
+        tlm_name = "TSYNC State: "
+        if tlm_data == 0:
+            tlm_data = "AWAITING_SYNC"
+        if tlm_data == 1:
+            tlm_data = "SYNCING_FROM_GROUND"
+        if tlm_data == 2:
+            tlm_data = "SYNCING_FROM_GPS"
+        if tlm_data == 3:
+            tlm_data = "GROUND_SYNCD"
+        if tlm_data == 4:
+            tlm_data = "GPS_SYNCD"
 
     # Search for the first element of the database where the ID matches, remove it and stop the associated timeout timer
     telemetry_database[:] = [telemetry for telemetry in telemetry_database if
                              not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
 
     # Pass the data back up to the GUI to display
-    callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
+    callback_telemetry_response_update(str(tlm_channel), tlm_name,  str(tlm_data))
 
 
 def tlm_rejection_response(telemetry_packet):
