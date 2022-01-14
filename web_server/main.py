@@ -21,11 +21,12 @@ def send_telecommand_request():
     telecommand_data_type = body['telecommand_data_type']
     is_continuous = body['is_continuous']
 
+    print('============mercury py==============')
     print('TC: {}'.format(telecommand_number))
     print('Data: {}'.format(telecommand_data))
     print('DataType: {}'.format(telecommand_data_type))
     print('Is continuous: {}'.format(is_continuous))
-
+    print('==========================')
     # TODO: Talk to Jamie about connecting this to the right functions.
 
     return 'OK'
@@ -36,9 +37,10 @@ def send_telemetry_request():
     tlm_channel =  body['tlm_channel']
     is_continuous =  body['is_continuous'] 
 
+    print('============mercury py==============')
     print('Channel: {}'.format(tlm_channel))
     print('Is continuous: {}'.format(is_continuous))
-
+    print('==========================')
     # TODO: Talk to Jamie about connecting this to the right functions.
 
     return 'OK'
