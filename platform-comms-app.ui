@@ -1289,6 +1289,9 @@
                    <layout class="QHBoxLayout" name="horizontalLayoutSendTimeValues">
                     <item alignment="Qt::AlignLeft">
                      <widget class="QDateEdit" name="dateEditSendThisDate">
+                      <property name="currentSection">
+                       <enum>QDateTimeEdit::MonthSection</enum>
+                      </property>
                       <property name="timeSpec">
                        <enum>Qt::UTC</enum>
                       </property>

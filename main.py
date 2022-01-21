@@ -142,7 +142,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.dateEditSendThisDate.setDisplayFormat("dd/MM/yyyy")
 
         # Init Serial Comms
-        comms_init("COM1", 9600)
+        self.inputComPort.addItem("COM21")
+        comms_init("COM21", 115200)
         # Register all callbacks
         telemetry_register_callback(self.telemetry_response_receive, self.telemetry_rejection_response_receive,
                                     self.telemetry_timeout, self.error_message_box)

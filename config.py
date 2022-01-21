@@ -26,8 +26,8 @@ except(ImportError, RuntimeError):
 
 # Initialise Global Variables
 OS = platform.system()
-BAUD_RATE = 9600
-COM_PORT = "COM1"
+BAUD_RATE = 115200
+COM_PORT = "COM21"
 COMMS = "SERIAL"
 TC_TLM_RATE = 1
 TIMEOUT = float(1000) / 1000

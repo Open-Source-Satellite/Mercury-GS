@@ -119,7 +119,6 @@ class SerialComms(serial.Serial):
 
         self.bytesize = 8
         self.write_timeout = 5
-        self.rx_thread = threading.Thread(target=self.rx_loop)
 
         # Close COM Port if open
         if self.is_open:
@@ -128,13 +127,13 @@ class SerialComms(serial.Serial):
         # Open COM Port
         try:
             self.open()
-            self.rx_thread.start()
         except serial.serialutil.SerialException as err:
             print(repr(err))
 
     def rx_loop(self):
         rx_byte = self.read(1)
-        incoming_byte_queue.put(rx_byte)
+        if rx_byte != b'':
+            incoming_byte_queue.put(rx_byte)
 
     def check_baud_rate(self, requested_baud_rate):
         """ Check that the baud rate requested is not already set. """
@@ -199,16 +198,20 @@ class StateMachine(threading.Thread):
                 self.run_state_machine()
 
     def run_state_machine(self):
-        rx_byte = incoming_byte_queue.get()
-
-        if self.state == StateMachineState.PENDING_FRAME.value:
-            self.pending_frame(rx_byte)
-        elif self.state == StateMachineState.GATHERING_HEADER.value:
-            self.gathering_header(rx_byte)
-        elif self.state == StateMachineState.READING_DATA.value:
-            self.reading_data(rx_byte)
+        if RaspberryPi is True:
+            rx_byte = incoming_byte_queue.get()
         else:
-            self.state = StateMachineState.PENDING_FRAME.value
+            rx_byte = self.read_byte(comms_handler.serial)
+
+        if rx_byte != b'':
+            if self.state == StateMachineState.PENDING_FRAME.value:
+                self.pending_frame(rx_byte)
+            elif self.state == StateMachineState.GATHERING_HEADER.value:
+                self.gathering_header(rx_byte)
+            elif self.state == StateMachineState.READING_DATA.value:
+                self.reading_data(rx_byte)
+            else:
+                self.state = StateMachineState.PENDING_FRAME.value
 
     def pending_frame(self, rx_byte):
         """ PENDING_FRAME State, checks for start of frame...
@@ -436,7 +439,7 @@ def comms_send(data):
 def change_baud_rate(requested_baud_rate):
     """ Change baud rate to requested rate """
     global comms_handler
-    comms_handler.serial.baudrate = comms_handler.comms.check_baud_rate(requested_baud_rate)
+    comms_handler.serial.baudrate = comms_handler.serial.check_baud_rate(requested_baud_rate)
 
 
 def flush_com_port():
@@ -446,10 +449,8 @@ def flush_com_port():
 
 def change_com_port(port):
     global comms_handler
-    comms_handler.serial.close()
-    comms_handler.serial.port = port
-    config.COM_PORT = port
     try:
-        comms_handler.serial.open()
+        comms_handler.serial.port = port
+        config.COM_PORT = port
     except serial.serialutil.SerialException as err:
         print(repr(err))
