@@ -49,7 +49,7 @@ class Telemetry:
         telemetry_database[:] = [telemetry for telemetry in telemetry_database if
                                  not tlm_search_for_id_match(telemetry, self.ID)]
         # Increment the timeout counter
-        callback_telemetry_timeout()
+        # callback_telemetry_timeout()
 
 
 def telemetry_register_callback(tlm_update_function_ptr, tlm_rejection_update_function_ptr, tlm_timeout_function_ptr,
@@ -80,11 +80,11 @@ def tlm_request_send(tlm_channel, is_continuous):
     except UnboundLocalError as err:
         print("ERROR: ", err)
         print("INFO: Could not format message")
-        callback_exception_handler("ERROR: Could not format message")
+        # callback_exception_handler("ERROR: Could not format message")
     except ValueError as err:
         print("ERROR: ", err)
         print("INFO: Telemetry Request Channel is invalid")
-        callback_exception_handler("ERROR: Telemetry Request Channel is invalid")
+        # callback_exception_handler("ERROR: Telemetry Request Channel is invalid")
 
 
 def tlm_search_for_id_match(telemetry, id_to_match, action=None):
@@ -112,7 +112,7 @@ def tlm_response(telemetry_packet):
                              not tlm_search_for_id_match(telemetry, tlm_channel, "STOP_TIMEOUT")]
 
     # Pass the data back up to the GUI to display
-    callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
+    # callback_telemetry_response_update(str(tlm_channel), str(tlm_data))
 
 
 def tlm_rejection_response(telemetry_packet):
@@ -134,4 +134,4 @@ def tlm_rejection_response(telemetry_packet):
         tlm_rejection_message = "INVALID_DATA_LENGTH"
 
     # Pass the data back up to the GUI to display
-    callback_telemetry_rejection_response_update(str(tlm_channel), tlm_rejection_message)
+    # callback_telemetry_rejection_response_update(str(tlm_channel), tlm_rejection_message)

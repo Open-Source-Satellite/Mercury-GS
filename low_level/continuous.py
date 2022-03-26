@@ -91,7 +91,7 @@ def adjust_continuous(calls_per_second):
     except ZeroDivisionError as err:
         print("\n", repr(err))
         print("ERROR: Rate is 0, cannot run continuously")
-        callback_exception_handler("ERROR: Rate is 0, cannot run continuously")
+        # callback_exception_handler("ERROR: Rate is 0, cannot run continuously")
 
 
 def continuous_stop():

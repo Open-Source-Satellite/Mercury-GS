@@ -122,7 +122,7 @@ def packetize(data_to_packet, data_type, is_continuous, message_object_database,
         except ZeroDivisionError as err:
             print("\n", repr(err))
             print("ERROR: Rate is 0, cannot run continuously")
-            callback_exception_handler("ERROR: Rate is 0, cannot run continuously")
+            # callback_exception_handler("ERROR: Rate is 0, cannot run continuously")
 
 
 def delimiter_scan_and_add(data_to_scan):

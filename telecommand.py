@@ -50,7 +50,7 @@ class Telecommand:  # A Class for each Telecommand
         telecommand_database[:] = [telecommand for telecommand in telecommand_database if
                                    not tc_search_for_id_match(telecommand, self.ID)]
         # Increment the timeout counter
-        callback_telecommand_timeout()
+        # callback_telecommand_timeout()
 
 
 def telecommand_register_callback(tc_update_function_ptr, tc_timeout_function_ptr, exception_handler_function_ptr):
@@ -74,7 +74,7 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
     except ValueError as err:
         print(str(repr(err)))
         print("ERROR: Telecommand Request Channel is invalid")
-        callback_exception_handler("Telecommand Request Channel is invalid")
+        # callback_exception_handler("Telecommand Request Channel is invalid")
 
     try:
         if telecommand_data_type == "String":
@@ -118,7 +118,7 @@ def tc_request_send(telecommand_number, telecommand_data, telecommand_data_type,
     except UnboundLocalError as err:
         print(repr(err))
         print("ERROR: Could not format message")
-        callback_exception_handler("ERROR: Could not format message, " + type_error)
+        # callback_exception_handler("ERROR: Could not format message, " + type_error)
 
 
 def tc_search_for_id_match(telecommand, id_to_match, action=None):
@@ -157,7 +157,7 @@ def tc_response(telecommand_packet):
         telecommand_response_status = TelecommandResponseState.INVALID_COMMAND_ARGUMENT.name
 
     # Pass the status back up to the GUI to display
-    callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
+    # callback_telecommand_response_update(str(telecommand_number), telecommand_response_status)
 
 def tc_time_send(telecommand_number, unix_time_seconds, millisec_through_sec):
     try:
@@ -178,5 +178,5 @@ def tc_time_send(telecommand_number, unix_time_seconds, millisec_through_sec):
     except UnboundLocalError as err:
         print(repr(err))
         print("ERROR: Could not format message")
-        callback_exception_handler("ERROR: Could not format message, " + type_error)
+        # callback_exception_handler("ERROR: Could not format message, " + type_error)
 
