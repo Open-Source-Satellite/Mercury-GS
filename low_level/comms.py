@@ -31,7 +31,11 @@ try:
 except ImportError:
     pass
 
-import adafruit_rfm69
+# If this succeeds then we are using a RFM69
+try:
+    import adafruit_rfm69
+except ImportError:
+    pass
 import sys
 import signal
 
@@ -86,26 +90,28 @@ class CommsHandler:
         self.serial = SerialComms(config.COM_PORT, config.BAUD_RATE)
 
 
-class RadioComms(adafruit_rfm69.RFM69):
-    """ A Class to handle the radio comms. """
+try:
+    class RadioComms(adafruit_rfm69.RFM69):
+        """ A Class to handle the radio comms. """
 
-    def __init__(self, spi, chip_select, reset, frequency):
-        super().__init__(spi, chip_select, reset, frequency)
-        self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
-        self.is_open = True  # Hack JPB
-        self.in_waiting = 0  # Hack JPB
-        self.listen()
+        def __init__(self, spi, chip_select, reset, frequency):
+            super().__init__(spi, chip_select, reset, frequency)
+            self.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
+            self.is_open = True  # Hack JPB
+            self.in_waiting = 0  # Hack JPB
+            self.listen()
 
-    def rx_interrupt(self, channel):
-        if self.payload_ready():
-            received_packet = self.receive(timeout=10)
-            if received_packet is not None:
-                print("RECEIVED: " + str(received_packet))
-                packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
-                #frame_queue.put(received_packet)
-                for byte in packet_split:
-                    incoming_byte_queue.put(byte)
-
+        def rx_interrupt(self, channel):
+            if self.payload_ready():
+                received_packet = self.receive(timeout=10)
+                if received_packet is not None:
+                    print("RECEIVED: " + str(received_packet))
+                    packet_split = struct.unpack(str(len(received_packet)) + "c", received_packet)
+                    #frame_queue.put(received_packet)
+                    for byte in packet_split:
+                        incoming_byte_queue.put(byte)
+except NameError:
+    pass
 
 class SerialComms(serial.Serial):
     """ A Class to handle the serial comms through a UART. """
