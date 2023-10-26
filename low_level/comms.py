@@ -154,15 +154,15 @@ class SerialComms(serial.Serial):
         except serial.serialutil.SerialTimeoutException as err:
             print(repr(err))
             print("ERROR: Write Has Timed Out")
-            callback_exception_handler("ERROR: Write Has Timed Out")
+            # callback_exception_handler("ERROR: Write Has Timed Out")
         except serial.serialutil.PortNotOpenError as err:
             print(repr(err))
             print("ERROR: Port " + config.COM_PORT + " Not Open")
-            callback_exception_handler("ERROR: Port" + config.COM_PORT + " Not Open")
+            # callback_exception_handler("ERROR: Port" + config.COM_PORT + " Not Open")
         except serial.serialutil.SerialException as err:
             print(repr(err))
             print("ERROR: The handle is invalid")
-            callback_exception_handler("ERROR: The handle is invalid")
+            # callback_exception_handler("ERROR: The handle is invalid")
 
 
 class StateMachineState(Enum):
@@ -284,7 +284,7 @@ class StateMachine(threading.Thread):
                 except struct.error as err:
                     print(repr(err))
                     print("ERROR: Data Length is not 4 bytes")
-                    callback_exception_handler("ERROR: Data Length is not 4 bytes")
+                    # callback_exception_handler("ERROR: Data Length is not 4 bytes")
                 self.got_data_length = True
 
             # Read a byte into Data Buffer
@@ -301,7 +301,7 @@ class StateMachine(threading.Thread):
                 # Check the data type against all known data types
                 if not any(x.value == data_type for x in DataType):
                     invalid_frame = True
-                    callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
+                    # callback_exception_handler("ERROR: Frame Data Type Field does not match actual type.")
 
                 # Get the data type name to use with comparing against the right data length
                 data_type_key = DataType(data_type).name
@@ -309,7 +309,7 @@ class StateMachine(threading.Thread):
                 # Check the actual data length against the expected length for the data type
                 if self.data_length != DataTypeSize[data_type_key].value:
                     invalid_frame = True
-                    callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
+                    # callback_exception_handler("ERROR: Frame Data Length Field does not match actual length.")
 
                 if invalid_frame is False:
                     # Append data length and data fields onto frame buffer
@@ -405,7 +405,7 @@ def comms_init(port, baud_rate):
             GPIO.add_event_detect(DIO0_GPIO, GPIO.RISING,
                                   callback=comms_handler.radio.rx_interrupt, bouncetime=100)
 
-        signal.signal(signal.SIGINT, signal_handler)
+        # signal.signal(signal.SIGINT, signal_handler)
 
 
 def comms_send(data):
